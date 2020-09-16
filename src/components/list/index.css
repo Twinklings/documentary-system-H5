@@ -1,0 +1,27 @@
+.list-item{
+    /* width: 100%; */
+    position: relative;
+    display: flex;
+    flex: 1 1;
+    align-self: stretch;
+    /* padding-right: 15px; */
+    overflow: hidden;
+    align-items: center;
+    height: 35px;
+    line-height: 35px;
+}
+.list-left-title{
+    flex-basis: 60px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #888;
+    line-height: 1.5;
+}
+.list-right-content{
+    flex: 1 1;
+    text-align: right;
+    color: #000;
+    line-height: 1.5;
+}
