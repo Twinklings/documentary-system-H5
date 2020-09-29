@@ -1,0 +1,18 @@
+.box{
+    background: #ffffff;
+}
+.bannerImg{
+    width: 100%;
+}
+.boxContent{
+    padding: 0 20px;
+}
+.form-title{
+    font-weight: bold;
+}
+.am-list-item .am-input-control input{
+    text-align: left;
+}
+.am-list-item.am-input-item{
+    padding-left: 0 !important;
+}

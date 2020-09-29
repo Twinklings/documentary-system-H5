@@ -5,6 +5,8 @@ import Success from '../pages/success';
 import Modify from '../pages/modify';
 import LogisticsList from '../pages/logisticsList';
 
+import FakeAuthorization from '../pages/fakeAuthorization';
+
 const BasicRoute = () => (
     <HashRouter>
         <Switch>
@@ -13,6 +15,9 @@ const BasicRoute = () => (
             <Route exact path="/success" component={Success}/>
             <Route exact path="/modify" component={Modify}/>
             <Route exact path="/logisticsList" component={LogisticsList}/>
+
+            <Route exact path="/fakeAuthorization" component={FakeAuthorization}/>
+            
         </Switch>
     </HashRouter>
 );
