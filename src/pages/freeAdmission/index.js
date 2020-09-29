@@ -1,22 +1,24 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { List, Button, WhiteSpace, Modal, Toast, InputItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
 
-import { getUrlParam } from '../../utils/utils'
+import {getUrlParam, validationEmpty, getLogisticsCompany} from '../../utils/utils'
 
+// import {getWeChatConfig, getOrderDetails, confirm, viewLogistics} from '../../servers/api'
+
+
+import axios from 'axios'
 import './index.css'
 
 const history = createHashHistory();
 const Item = List.Item;
 const Brief = Item.Brief;
 
-function FakeAuthorization(props) {
+function FreeAdmission(props) {
 
     const [visible,setVisible] = useState(true);
-
-    const divRef = useRef();
 
     useEffect(() => {
       document.title = '订单详情';
@@ -60,12 +62,6 @@ function FakeAuthorization(props) {
             // })
           } else {
             Toast.info('表单验证失败');
-            const scrollHeight = divRef.current.scrollHeight;//里面div的实际高度 
-            const height = divRef.current.clientHeight;  //网页可见高度
-            const maxScrollTop = scrollHeight - height;
-            console.log(height,maxScrollTop)
-            divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-            // window.scrollTop(maxScrollTop > 0 ? maxScrollTop : 0,0)
           }
         });
       }
@@ -82,9 +78,11 @@ function FakeAuthorization(props) {
 
     return (
       
-        <div className={"box"} style={visible?{display:"block"}:{}} ref={divRef}>
-            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625000833113010.jpg' />
-            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625000907693451.jpg' />
+        <div className={"box"} style={visible?{display:"block"}:{}}>
+            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625001049414761.jpg' />
+            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20180529115915361498.png' />
+            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20180529115950993484.png' />
+            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20180529120037103761.png' />
             <div className={"boxContent"}>
                 <p className={"form-title"}>在线申请中</p>
                 <p>已有2048人申请</p>
@@ -119,7 +117,6 @@ function FakeAuthorization(props) {
                         moneyKeyboardAlign={"left"}
                     />
                 </List>
-                
             </div>
             <div className={"footer"}>
             <WhiteSpace />
@@ -132,4 +129,4 @@ function FakeAuthorization(props) {
    );
 }
 
-export default createForm()(FakeAuthorization)
+export default createForm()(FreeAdmission)
