@@ -34,12 +34,12 @@ function LogisticsList() {
               _datas.name = getLogisticsCompany().result[_datas.type];
               
               if(_datas.datalist && _datas.datalist.length <= 0){
-                Toast.info('订单正在准备，请耐心等待发货。', 1);
+                Toast.info('订单正在准备，请耐心等待发货。', 30);
               }
               console.log(_datas.datalist)
               setLogisticsList(_datas);
             }else{
-              Toast.info('订单正在准备，请耐心等待发货。', 3);
+              Toast.info('订单正在准备，请耐心等待发货。', 30);
             }
             
           })

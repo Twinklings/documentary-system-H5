@@ -35,9 +35,9 @@ export function update(params) {
 // 查看物流信息
 export function viewLogistics(params) {
   return request({
-    url:"http://wuliu.mianyabao.cn/wechatsalesman/getLogistics?out_order_no=mf20200814112948277845",
+    // url:"http://wuliu.mianyabao.cn/wechatsalesman/getLogistics?out_order_no=mf20200814112948277845",
 
-    // url:serverIP+"/wechatsalesman/getLogistics?out_order_no="+params,
+    url:serverIP+"/wechatsalesman/getLogistics?out_order_no="+params,
     method:'post',
   })
 }

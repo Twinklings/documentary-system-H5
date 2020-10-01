@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { List, Button, WhiteSpace, Modal, Toast } from 'antd-mobile';
 // import {Flex,WhiteSpace} from 'antd-mobile'
 import { createHashHistory } from 'history'; // 如果是hash路由
+import QRCode  from 'qrcode.react';
 
 import {getUrlParam, validationEmpty, getLogisticsCompany} from '../../utils/utils'
 import {getWeChatConfig, getOrderDetails, confirm, viewLogistics} from '../../servers/api'
@@ -111,7 +112,8 @@ function Details() {
           },
           {
             title:"免押金额",
-            name:_data.pay_amount+"元"
+            name:_data.pay_amount,
+            type:"pay_amount"
           },
           {
             title:"交易单号",
@@ -157,7 +159,7 @@ function Details() {
 
     input.setAttribute('id','copyId');
 
-    input.value= logistics_url
+    input.value= val
 
     document.querySelector('body').appendChild(input)
 
@@ -220,16 +222,16 @@ function Details() {
           <ListItem
             data={details}
           />
-          <div className={"list-item"}>
+          {/* <div className={"list-item"}>
               <div className={"list-left-title"}>物流地址</div>
               <div className={"list-right-content"}>
               <a style={{ color: '#108ee9' }}
-                onClick={copyArticle}
+                onClick={()=>{copyArticle(logistics_url)}}
               >复制</a>
               </div>
-          </div>
+          </div> */}
           <div className={"list-item"}>
-              <div className={"list-left-title"}>物流地址</div>
+              <div className={"list-left-title"}>物流信息</div>
               <div className={"list-right-content"}>
               <a style={{ color: '#108ee9' }}
                 onClick={getLogistics}
@@ -246,10 +248,14 @@ function Details() {
           </div>
         </div>
         <div className={"operation"}>
-          
-
-          
+          <QRCode
+                value={logistics_url}  //value参数为生成二维码的链接
+                size={100} //二维码的宽高尺寸
+                fgColor="#000000"  //二维码的颜色
+          />
+          <p style={{lineHeight:'6px',height:"6px"}}>扫码查看物流信息</p>
         </div>
+
         <div className={"detailsFooter"}>
           {
             confirm_tag === 0 ? (
@@ -269,7 +275,14 @@ function Details() {
               </div>
             ) :""
           }
+          <Button 
+          onClick={()=>{
+            let text = initializationData.user_name+","+initializationData.user_phone+","+initializationData.user_address
+            copyArticle(text)}}
+        >复制发货信息</Button><WhiteSpace />
         </div>
+        
+
         <Modal
           visible={visibleModal}
           transparent
