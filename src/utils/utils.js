@@ -64,3 +64,38 @@ export function getLogisticsCompany() {
       }
   }
 }
+
+// josn转url
+
+export function conversionFormat(param) {
+    param = JSON.stringify(param)
+    console.log(param)
+    return param.replace("{","").replace("}","").replace(/\",\"/g,"&").replace(/,\"/g,"&").replace(/:/g,"=").replace(/\":\"/g,"=").replace(/\"/g,"");
+}
+
+// 生成随机码
+export function randomCode(length) {
+    var arr = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+							"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+                            0,1,2,3,4,5,6,7,8,9];
+    let key = "";
+    for(let i=0; i<length; i++){
+        key += arr[Math.floor((Math.random()*62))]
+    }
+    return key;
+}
+export function getUrlCode(name) {
+    let url = window.location.href.split("?")[1]
+    
+    if(url){
+      var vars = url.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == name){
+          return pair[1];
+        }
+      }
+      return "false";
+    }
+    return "false";
+  }
