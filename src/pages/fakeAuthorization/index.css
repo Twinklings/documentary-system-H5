@@ -45,3 +45,8 @@
     width: 120px;
     font-size: 15px;
 }
+.prompt_content{
+    text-align: center;
+    line-height: 30px;
+    font-size: 18px;
+}

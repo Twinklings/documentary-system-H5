@@ -3,12 +3,13 @@ import { conversionFormat } from '../utils/utils'
 
 let serverIP = "http://47.102.204.79:80";
 
-// export function getWeChatConfig(id) {
-//     return request({
-//       url:serverIP+"/wechatsalesman/WeChatConfig/"+id,
-//       method:'get',
-//     })
-//   }
+export function getWeChatConfig(params) {
+    return request({
+      url:"/wechat/config",
+      method:'POST',
+      data:params
+    })
+  }
 
 // 初始化接口
 export function init(params) {

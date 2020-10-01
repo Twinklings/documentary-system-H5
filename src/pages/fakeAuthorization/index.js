@@ -3,11 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
+import VConsole from 'vconsole';
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import { init, getvcode, sendcode } from '../../servers/authorizationApi'
-import { getWeChatConfig } from '../../servers/api'
+import { init, getvcode, sendcode, getWeChatConfig } from '../../servers/authorizationApi'
 
 import './index.css'
 
@@ -20,7 +20,7 @@ let name = "";
 let time = 60;
 
 function FakeAuthorization(props) {
-
+    
     const [visible,setVisible] = useState(true);
 
     const [initParam,setInitParam] = useState({});
@@ -29,8 +29,6 @@ function FakeAuthorization(props) {
 
     const [countDown,setCountDown] = useState(60);
     
-    const [code,setCode] = useState(60);
-    
     const divRef = useRef();
 
     const [randomkey , setRandomkey] = useState("");
@@ -38,6 +36,10 @@ function FakeAuthorization(props) {
     const [cityData , setCityData] = useState([]);
 
     const [cityName , setCityName] = useState([]);
+
+    const [browserType , setBrowserType] = useState(false);
+
+    
 
     const getName = (data) => {
         
@@ -75,33 +77,31 @@ function FakeAuthorization(props) {
     
 
     useEffect(() => {
-      document.title = '订单详情';
-      let code = getUrlParam('code');// 这是获取请求路径中带code字段参数的方法
-      let belongs = getUrlParam('belongs');// 这是获取请求路径中带code字段参数的方法
-      let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
-      var local = window.location.href;//获取当前页面路径，即回调地址
-      setCode(code);
-    //   if(getUrlCode('code') === 'false'){
-    //     setVisible(false);
-    //     getWeChatConfig(getUrlParam('order')).then(response=>{
-    //       console.log(response)
-    //       const {appid,STATE,redirect_uri} = response;
-    //       let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_base&state=${STATE}#wechat_redirect`
-    //       window.location.href = url
-    //     })
-    //   }else{
-    //     if(validationEmpty(getUrlCode('code'))){
-    //       alert("请关闭窗口从新进入")
-    //     }else{
-    //       let param = window.location.href.split("?")[1];
-    //       console.log(param.split("#")[0]);
-          // 初始化数据接口
-            getInit();
-            // 获取验证码图片
-            getImgCode()
-    //     }
-    //   }
+        new VConsole();
 
+        document.title = '订单详情';
+        let dept_id = getUrlParam('dept_id');// 这是获取请求路径中带code字段参数的方法
+        let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
+        let orderNo = getUrlParam('orderNo');// 这是获取请求路径中带code字段参数的方法
+        let userName = getUrlParam('userName');// 这是获取请求路径中带code字段参数的方法
+
+    //   "188612_1311240882671874049_wanggang_99"
+        if (/MicroMessenger/.test(window.navigator.userAgent)) {
+            // 微信
+            setBrowserType(1)
+        } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+            // 支付宝
+            setBrowserType(2)
+        }else{
+            
+        }
+      
+        let param = window.location.href.split("?")[1];
+        console.log(param.split("#")[0]);
+          // 初始化数据接口
+        getInit(dept_id,orderNo,userName,payAmount);
+        // 获取验证码图片
+        getImgCode()
         
     }, [])
 
@@ -113,8 +113,11 @@ function FakeAuthorization(props) {
         })
     }
 
-    const getInit = () => {
-        init({parameter:"188612_1311240882671874049_wanggang_99"}).then(res=>{
+    const getInit = (dept_id,orderNo,userName,payAmount) => {
+        let param = [dept_id,orderNo,userName,payAmount];
+        param = param.join("_");
+        console.log(param,"param")
+        init({parameter:param}).then(res=>{
             console.log(res.data,"res")
             setInitParam({
                 ...res.data,
@@ -122,6 +125,91 @@ function FakeAuthorization(props) {
             })
         })
     } 
+
+    const selectAddress = () => {
+        if (/MicroMessenger/.test(window.navigator.userAgent)) {
+            var signUrl = window.location.href.split('#')[0];
+            var channel_id = "";
+            var datas = { channel_id: channel_id, signUrl: signUrl };
+            getWeChatConfig(datas).then(data_suscee=>{
+                var dataJson = JSON.parse(JSON.stringify(data_suscee));
+                console.log(data_suscee,"data_suscee")
+                let appidG = dataJson.appid;
+                let timestampG = dataJson.timestamp;
+                let nonceStrG = dataJson.nonceStr;
+                let signatureG = dataJson.signature;
+                let channel_id = dataJson.channel_id;
+                window.wx.config({
+                    debug: true,
+                    appId: dataJson.appid,
+                    timestamp: dataJson.timestamp,
+                    nonceStr: dataJson.nonceStr,
+                    signature: dataJson.signature,
+                    jsApiList: ["getNetworkType","openLocation","getLocation","openBusinessView","openAddress","getBrandWCPayRequest","closeWindow"]
+                })
+                getShippingaddress();
+            })
+            // $.ajax({
+            //     url: "/wechat/config",
+            //     async : false,
+            //     type : "POST",
+            //     contentType : 'application/json',
+            //     dataType : 'json',
+            //     data :JSON.stringify(datas),
+            //     success: function (data_suscee) {
+            //         globalStatus = true;
+            //         var dataJson = JSON.parse(JSON.stringify(data_suscee));
+            //         var signUrls = window.location.href.split('#')[0];
+            //         appidG = dataJson.appid;
+            //         timestampG = dataJson.timestamp;
+            //         nonceStrG = dataJson.nonceStr;
+            //         signatureG = dataJson.signature;
+            //         channel_id = dataJson.channel_id;
+            //         wx.config({
+            //             debug: true,
+            //             appId: dataJson.appid,
+            //             timestamp: dataJson.timestamp,
+            //             nonceStr: dataJson.nonceStr,
+            //             signature: dataJson.signature,
+            //             jsApiList: ["getNetworkType","openLocation","getLocation","openBusinessView","openAddress","getBrandWCPayRequest","closeWindow"]
+            //         })
+            //         getShippingaddress();
+            //     },
+            //     fail:function(){
+            //         ZENG.msgbox.show("请退出从新扫码", 1, 2000);
+            //     }
+            // });
+        } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+            window.am.selectAddress(function (data) {
+                console.log(data,"data")
+            })
+        }
+    }
+
+    const getShippingaddress = () => {
+        console.log(window.wx)
+        window.wx.ready(function(){
+            console.log("---")
+            window.wx.openAddress({
+                success: function (res) {
+                    // userName = res.userName; // 收货人姓名
+                    // postalCode = res.postalCode; // 邮编
+                    // provinceName = res.provinceName; // 国标收货地址第一级地址（省）
+                    // cityName = res.cityName; // 国标收货地址第二级地址（市）
+                    // countryName = res.countryName; // 国标收货地址第三级地址（国家）
+                    // detailInfo = res.detailInfo; // 详细收货地址信息
+                    // nationalCode = res.nationalCode; // 收货地址国家码
+                    // telNumber = res.telNumber; // 收货人手机号码
+                    // addWechatAddress(res);
+                    console.log(res,"微信地址")
+                    
+                },
+                fail: function(res){
+                    console.log(res,res.errMsg);
+                }
+            });
+        });
+    }
 
     const onSubmit = () =>{
         props.form.validateFields({ force: true }, (error) => {
@@ -195,6 +283,9 @@ function FakeAuthorization(props) {
     return (
       
         <div className={"box"} style={visible?{display:"block"}:{}} ref={divRef}>
+            <div className={"prompt_content"}>
+                {initParam.prompt_content}
+            </div>
             <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625000833113010.jpg' />
             <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625000907693451.jpg' />
             <div className={"boxContent"}>
@@ -286,6 +377,7 @@ function FakeAuthorization(props) {
                         title="选择地区"
                             {...getFieldProps('city', {
                         })}
+                        value={cityData}
                         onOk={(e) => setCityData(e)}
                     >
                         <List.Item arrow="horizontal">请选择地区</List.Item>
@@ -306,7 +398,15 @@ function FakeAuthorization(props) {
                     >
                     </InputItem>
                 </List>
-                
+                {
+                    browserType?(
+                    <Button 
+                        type="primary"
+                        onClick={selectAddress}
+                    >{browserType === 1 ? "获取微信地址":"获取淘宝地址"}</Button>
+                    ):""
+                }
+                <WhiteSpace />
             </div>
             <div className={"footer"}>
             <WhiteSpace />
