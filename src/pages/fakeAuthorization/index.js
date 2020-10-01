@@ -182,6 +182,16 @@ function FakeAuthorization(props) {
         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
             window.am.selectAddress(function (data) {
                 console.log(data,"data")
+                let _data = data.address.split("-")
+                props.form.setFieldsValue(
+                    {
+                        phone:data.mobilePhone,
+                        user_name:data.fullname,
+                        address:_data[_data.length-1],
+                    }
+                );
+                setCityName(`${data.prov}s${data.city}s${data.area}`)
+                
             })
         }
     }
