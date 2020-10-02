@@ -4,6 +4,7 @@ import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker } from
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
 import VConsole from 'vconsole';
+import $ from 'jquery'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
@@ -56,6 +57,7 @@ function FakeAuthorization(props) {
     }
 
     useEffect(()=>{
+        console.log(cityData,cityData.length,"cityDatacityData")
         if(cityData.length === 3){
             name = ""
             for(let i=0; i<CITY.length; i++){
@@ -85,10 +87,28 @@ function FakeAuthorization(props) {
         let orderNo = getUrlParam('orderNo');// 这是获取请求路径中带code字段参数的方法
         let userName = getUrlParam('userName');// 这是获取请求路径中带code字段参数的方法
 
+
+        // var signUrl = window.location.href.split('#')[0];
+        //     var channel_id = "";
+        //     var _datas = { channel_id: channel_id, signUrl: signUrl };
+        // $.ajax({
+        //     url: "/wechat/config",
+        //     async : false,
+        //     type : "POST",
+        //     contentType : 'application/json',
+        //     dataType : 'json',
+        //     data :JSON.stringify(_datas),
+        //     success: function (data_suscee) {
+        //         console.log(data_suscee,"data_suscee")
+        //     },
+        //     fail:function(){
+        //     }
+        // });
+
     //   "188612_1311240882671874049_wanggang_99"
         if (/MicroMessenger/.test(window.navigator.userAgent)) {
             // 微信
-            setBrowserType(1)
+            // setBrowserType(1)
         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
             // 支付宝
             setBrowserType(2)
@@ -128,56 +148,56 @@ function FakeAuthorization(props) {
 
     const selectAddress = () => {
         if (/MicroMessenger/.test(window.navigator.userAgent)) {
-            var signUrl = window.location.href.split('#')[0];
-            var channel_id = "";
-            var datas = { channel_id: channel_id, signUrl: signUrl };
-            getWeChatConfig(datas).then(data_suscee=>{
-                var dataJson = JSON.parse(JSON.stringify(data_suscee));
-                console.log(data_suscee,"data_suscee")
-                let appidG = dataJson.appid;
-                let timestampG = dataJson.timestamp;
-                let nonceStrG = dataJson.nonceStr;
-                let signatureG = dataJson.signature;
-                let channel_id = dataJson.channel_id;
-                window.wx.config({
-                    debug: true,
-                    appId: dataJson.appid,
-                    timestamp: dataJson.timestamp,
-                    nonceStr: dataJson.nonceStr,
-                    signature: dataJson.signature,
-                    jsApiList: ["getNetworkType","openLocation","getLocation","openBusinessView","openAddress","getBrandWCPayRequest","closeWindow"]
-                })
-                getShippingaddress();
-            })
+            // var signUrl = window.location.href.split('#')[0];
+            // var channel_id = "";
+            // var _datas = { channel_id: channel_id, signUrl: signUrl };
+            // getWeChatConfig(_datas).then(data_suscee=>{
+            //     var dataJson = JSON.parse(JSON.stringify(data_suscee));
+            //     console.log(data_suscee,"data_suscee")
+            //     let appidG = dataJson.appid;
+            //     let timestampG = dataJson.timestamp;
+            //     let nonceStrG = dataJson.nonceStr;
+            //     let signatureG = dataJson.signature;
+            //     let channel_id = dataJson.channel_id;
+            //     window.wx.config({
+            //         debug: true,
+            //         appId: dataJson.appid,
+            //         timestamp: dataJson.timestamp,
+            //         nonceStr: dataJson.nonceStr,
+            //         signature: dataJson.signature,
+            //         jsApiList: ["getNetworkType","openLocation","getLocation","openBusinessView","openAddress","getBrandWCPayRequest","closeWindow"]
+            //     })
+            //     getShippingaddress();
+            // })
             // $.ajax({
-            //     url: "/wechat/config",
+            //     url: "http://47.102.204.79:80/wechat/config",
             //     async : false,
             //     type : "POST",
             //     contentType : 'application/json',
             //     dataType : 'json',
-            //     data :JSON.stringify(datas),
+            //     data :JSON.stringify(_datas),
             //     success: function (data_suscee) {
-            //         globalStatus = true;
             //         var dataJson = JSON.parse(JSON.stringify(data_suscee));
-            //         var signUrls = window.location.href.split('#')[0];
-            //         appidG = dataJson.appid;
-            //         timestampG = dataJson.timestamp;
-            //         nonceStrG = dataJson.nonceStr;
-            //         signatureG = dataJson.signature;
-            //         channel_id = dataJson.channel_id;
-            //         wx.config({
+            //         console.log(dataJson,data_suscee,"dataJson")
+            // //         var signUrls = window.location.href.split('#')[0];
+            //         // appidG = dataJson.appid;
+            //         // timestampG = dataJson.timestamp;
+            //         // nonceStrG = dataJson.nonceStr;
+            //         // signatureG = dataJson.signature;
+            //         // channel_id = dataJson.channel_id;
+            //         window.wx.config({
             //             debug: true,
             //             appId: dataJson.appid,
             //             timestamp: dataJson.timestamp,
             //             nonceStr: dataJson.nonceStr,
             //             signature: dataJson.signature,
-            //             jsApiList: ["getNetworkType","openLocation","getLocation","openBusinessView","openAddress","getBrandWCPayRequest","closeWindow"]
+            //             jsApiList: ["openAddress"]
             //         })
-            //         getShippingaddress();
-            //     },
-            //     fail:function(){
-            //         ZENG.msgbox.show("请退出从新扫码", 1, 2000);
-            //     }
+                    // getShippingaddress();
+                // },
+                // fail:function(){
+                //     // ZENG.msgbox.show("请退出从新扫码", 1, 2000);
+                // }
             // });
         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
             window.am.selectAddress(function (data) {
@@ -190,11 +210,45 @@ function FakeAuthorization(props) {
                         address:_data[_data.length-1],
                     }
                 );
-                setCityName(`${data.prov}s${data.city}s${data.area}`)
-                
+                getProv(data.addressCode,"1")
             })
         }
     }
+
+    let datas = []
+
+    // 设置地址
+    const getProv = (addressCode,time) => {
+        for(let i=0; i<CITY.length; i++){
+            if(CITY[i].children){
+                getCity(CITY[i],CITY[i].children,addressCode,time)
+            }
+        }
+    }
+
+    const getCity = (nextData,data,addressCode,time) => {
+        for(let i=0; i<data.length; i++){
+            if(data[i].value === addressCode){
+                if(time === "1"){
+                    datas[2] = data[i].value.toString()
+                }
+                if(time === "2"){
+                    datas[0] = nextData.value.toString()
+                    datas[1] = data[i].value.toString();
+                    setCityData(datas)
+                    props.form.setFieldsValue(
+                        {
+                            city:datas,
+                        }
+                    );
+                }
+                getProv(nextData.value,"2")
+            }else if(data[i].children){
+                getCity(data[i],data[i].children,addressCode,time)
+            }
+        }
+    }
+    
 
     const getShippingaddress = () => {
         console.log(window.wx)
@@ -212,7 +266,6 @@ function FakeAuthorization(props) {
                     // telNumber = res.telNumber; // 收货人手机号码
                     // addWechatAddress(res);
                     console.log(res,"微信地址")
-                    
                 },
                 fail: function(res){
                     console.log(res,res.errMsg);
@@ -252,7 +305,7 @@ function FakeAuthorization(props) {
         if (!(/^1[3456789]\d{9}$/.test(props.form.getFieldsValue().phone))) {
             return Toast.info('请输入正确的手机号格式');
         }
-        if (initParam.isImgCode && validationEmpty(props.form.getFieldsValue().imgCode)) {
+        if (initParam.image_captcha_status === 1 && validationEmpty(props.form.getFieldsValue().imgCode)) {
             return Toast.info('请输入图片验证码');
         }
         
@@ -331,7 +384,7 @@ function FakeAuthorization(props) {
                         moneyKeyboardAlign={"left"}
                     />
                     {
-                        initParam.isImgCode?(
+                        initParam.image_captcha_status === 1?(
                             <div style={{"position":"relative"}}>
                                 <InputItem
                                     {...getFieldProps('imgCode', {
@@ -389,9 +442,22 @@ function FakeAuthorization(props) {
                         })}
                         value={cityData}
                         onOk={(e) => setCityData(e)}
+                        // onDismiss={e => setCityData(e)}
+                        // onChange={e => setCityData(e)}
                     >
                         <List.Item arrow="horizontal">请选择地区</List.Item>
                     </Picker>
+                    {/* <Picker extra="请选择(可选)"
+                        data={district}
+                        title="Areas"
+                        {...getFieldProps('district', {
+                            initialValue: ['340000', '341500', '341502'],
+                        })}
+                        onOk={e => console.log('ok', e)}
+                        onDismiss={e => console.log('dismiss', e)}
+                        >
+                        <List.Item arrow="horizontal">Multiple & cascader</List.Item>
+                        </Picker> */}
                     <InputItem
                         {...getFieldProps('address', {
                             rules: [
@@ -413,7 +479,7 @@ function FakeAuthorization(props) {
                     <Button 
                         type="primary"
                         onClick={selectAddress}
-                    >{browserType === 1 ? "获取微信地址":"获取淘宝地址"}</Button>
+                    >{browserType === 1 ? "":"获取淘宝地址"}</Button>
                     ):""
                 }
                 <WhiteSpace />
