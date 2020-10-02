@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker } from 'antd-mobile';
+import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
 import VConsole from 'vconsole';
@@ -8,7 +8,7 @@ import $ from 'jquery'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import { init, getvcode, sendcode, getWeChatConfig } from '../../servers/authorizationApi'
+import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder } from '../../servers/authorizationApi'
 
 import './index.css'
 
@@ -23,6 +23,8 @@ let time = 60;
 function FakeAuthorization(props) {
     
     const [visible,setVisible] = useState(true);
+
+    const [sendSMS,setSendSMS] = useState(false);
 
     const [initParam,setInitParam] = useState({});
 
@@ -40,14 +42,14 @@ function FakeAuthorization(props) {
 
     const [browserType , setBrowserType] = useState(false);
 
-    
+    const [addressParameters , setAddressParameters] = useState(false);
 
     const getName = (data) => {
         
         for(let i=0; i<data.length; i++){
             if(cityData.indexOf(data[i].value) != -1){
                 console.log(data[i].label)
-                name+=data[i].label
+                name+=`_${data[i].label}`
                 setCityName(name)
             }
             if(data[i].children){
@@ -63,7 +65,7 @@ function FakeAuthorization(props) {
             for(let i=0; i<CITY.length; i++){
                 if(cityData.indexOf(CITY[i].value) != -1){
                     console.log(CITY[i].label)
-                    name+=CITY[i].label
+                    name+= `${CITY[i].label}`
                     setCityName(name);
                 }
                 if(CITY[i].children){
@@ -82,44 +84,27 @@ function FakeAuthorization(props) {
         new VConsole();
 
         document.title = '订单详情';
-        let dept_id = getUrlParam('dept_id');// 这是获取请求路径中带code字段参数的方法
-        let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
-        let orderNo = getUrlParam('orderNo');// 这是获取请求路径中带code字段参数的方法
-        let userName = getUrlParam('userName');// 这是获取请求路径中带code字段参数的方法
+        let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
+        console.log(parameter,"parameter")
+        let addressParam = parameter.split("_")
+        setAddressParameters({
+            tenant_id:addressParam[0],
+            dept_id:addressParam[1],
+            salesman:addressParam[2],
+            pay_amount:addressParam[3],
+        })
 
 
-        // var signUrl = window.location.href.split('#')[0];
-        //     var channel_id = "";
-        //     var _datas = { channel_id: channel_id, signUrl: signUrl };
-        // $.ajax({
-        //     url: "/wechat/config",
-        //     async : false,
-        //     type : "POST",
-        //     contentType : 'application/json',
-        //     dataType : 'json',
-        //     data :JSON.stringify(_datas),
-        //     success: function (data_suscee) {
-        //         console.log(data_suscee,"data_suscee")
-        //     },
-        //     fail:function(){
-        //     }
-        // });
-
-    //   "188612_1311240882671874049_wanggang_99"
         if (/MicroMessenger/.test(window.navigator.userAgent)) {
             // 微信
             // setBrowserType(1)
         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
             // 支付宝
             setBrowserType(2)
-        }else{
-            
         }
-      
-        let param = window.location.href.split("?")[1];
-        console.log(param.split("#")[0]);
-          // 初始化数据接口
-        getInit(dept_id,orderNo,userName,payAmount);
+
+        // 初始化数据接口
+        getInit(parameter);
         // 获取验证码图片
         getImgCode()
         
@@ -133,16 +118,18 @@ function FakeAuthorization(props) {
         })
     }
 
-    const getInit = (dept_id,orderNo,userName,payAmount) => {
-        let param = [dept_id,orderNo,userName,payAmount];
-        param = param.join("_");
-        console.log(param,"param")
-        init({parameter:param}).then(res=>{
-            console.log(res.data,"res")
-            setInitParam({
-                ...res.data,
-                isImgCode:true
-            })
+    const getInit = (parameter) => {
+        console.log(parameter,"parameter")
+        init({parameter}).then(res=>{
+            if(res.code === 200){
+                console.log(res.data,"res")
+                setInitParam({
+                    ...res.data,
+                    isImgCode:true
+                })
+            }else{
+                Toast.fail(res.message);
+            }
         })
     } 
 
@@ -275,20 +262,61 @@ function FakeAuthorization(props) {
     }
 
     const onSubmit = () =>{
+        // if(!sendSMS){
+        //     return Toast.fail("请先发送短信验证码！");
+        // }
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {
             let form = props.form.getFieldsValue()
             console.log(form,cityName,"formformform")
-            // update(param).then(response=>{
-            //   history.push('/success');
-            // })
+            let cityPark = cityName.split("_");
+            console.log(cityPark)
+            let param = {
+                "user_name": form.user_name,
+                "user_phone": form.phone,
+                "user_address": form.address,
+                "pay_amount": addressParameters.pay_amount,
+                "salesman": addressParameters.salesman,
+                "province": cityPark[0],
+                "city": cityPark[1],
+                "area": cityPark[2],
+                "county": "",
+                "openid": "",
+                "wechat_id": "",
+                "code": form.code,
+                "tenant_id": addressParameters.tenant_id,
+                "dept_id": addressParameters.dept_id,
+            }
+            console.log(param,"formformform")
+            placeAnOrder(param).then(response=>{
+                if(response.code === 200){
+                    Toast.success(response.message);
+                    history.push('/fakeAuthorization/success');
+                }else{
+                    Toast.fail(response.message);
+                }
+            })
           } else {
-            Toast.info('表单验证失败');
             const scrollHeight = divRef.current.scrollHeight;//里面div的实际高度 
             const height = divRef.current.clientHeight;  //网页可见高度
             const maxScrollTop = scrollHeight - height;
-            console.log(height,maxScrollTop)
             divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+            
+
+            if(error.user_name || error.phone || error.address){
+                return Toast.fail('表单验证失败');
+            }
+
+            if(initParam.image_captcha_status === 1 && error.imgCode){
+                return Toast.info(error.imgCode.errors[0].message);
+            }
+            if(error.code){
+                return Toast.info(error.code.errors[0].message);
+            }
+            if(error.city){
+                return Toast.info(error.city.errors[0].message);
+            }
+            
           }
         });
       }
@@ -308,6 +336,8 @@ function FakeAuthorization(props) {
         if (initParam.image_captcha_status === 1 && validationEmpty(props.form.getFieldsValue().imgCode)) {
             return Toast.info('请输入图片验证码');
         }
+
+        setSendSMS(true)
         
         sendVerificationCode(props.form.getFieldsValue().phone);
     }
@@ -322,8 +352,9 @@ function FakeAuthorization(props) {
         }).then(res=>{
             if(res.code === 200){
                 updateCountdown();
+                Toast.info(res.data);
             }else{
-                Toast.info(res.message);
+                Toast.fail(res.message);
             }
         })
     }
@@ -357,6 +388,7 @@ function FakeAuthorization(props) {
                 <List>
                     <InputItem
                         {...getFieldProps('user_name', {
+                            // initialValue:"谢文欣",
                             rules: [
                                 { required: true, message: '请输入您的姓名' },
                             ],
@@ -368,13 +400,17 @@ function FakeAuthorization(props) {
                         }}
                         placeholder="请输入您的姓名"
                         moneyKeyboardAlign={"left"}
-                    />
+                        labelNumber={4}
+                    >姓名</InputItem>
+
                     <InputItem
                         {...getFieldProps('phone', {
+                            // initialValue:"17353134887",
                             rules: [
                                 { required: true, validator: validatePhone },
                             ],
                         })}
+                        title="手机"
                         clear
                         error={!!getFieldError('phone')}
                         onErrorClick={() => {
@@ -382,11 +418,13 @@ function FakeAuthorization(props) {
                         }}
                         placeholder="请输入手机"
                         moneyKeyboardAlign={"left"}
-                    />
+                        labelNumber={4}
+                    >手机</InputItem>
                     {
                         initParam.image_captcha_status === 1?(
                             <div style={{"position":"relative"}}>
                                 <InputItem
+                                    title="图片验证码"
                                     {...getFieldProps('imgCode', {
                                         rules: [
                                             { required: true, message: '请输入图片验证码' },
@@ -399,7 +437,9 @@ function FakeAuthorization(props) {
                                     }}
                                     placeholder="请输入图片验证码"
                                     moneyKeyboardAlign={"left"}
+                                    labelNumber={4}
                                 >
+                                验证码
                                 </InputItem>
                                 <img 
                                     className={"codeImg"} 
@@ -412,9 +452,10 @@ function FakeAuthorization(props) {
                     
                     <div style={{"position":"relative"}}>
                         <InputItem
+                            title="验证码"
                             {...getFieldProps('code', {
                                 rules: [
-                                    { required: true, message: '请输入验证码' },
+                                    { required: true, max: 6, min: 6, message: '请输入6位验证码' },
                                 ],
                             })}
                             clear
@@ -424,7 +465,9 @@ function FakeAuthorization(props) {
                             }}
                             placeholder="请输入验证码"
                             moneyKeyboardAlign={"left"}
+                            labelNumber={4}
                         >
+                            验证码
                         </InputItem>
                         <Button 
                             className={"codeImg"}
@@ -439,40 +482,36 @@ function FakeAuthorization(props) {
                         data={CITY}
                         title="选择地区"
                             {...getFieldProps('city', {
+                            rules: [
+                                { required: true, message: '请选择地区' },
+                            ],
                         })}
                         value={cityData}
-                        onOk={(e) => setCityData(e)}
-                        // onDismiss={e => setCityData(e)}
-                        // onChange={e => setCityData(e)}
+                        onPickerChange={(e) => setCityData(e)}
+                        // onOk={(e) => setCityData(e)}
+                        labelNumber={4}
                     >
-                        <List.Item arrow="horizontal">请选择地区</List.Item>
+                        <List.Item arrow="horizontal">地区</List.Item>
                     </Picker>
-                    {/* <Picker extra="请选择(可选)"
-                        data={district}
-                        title="Areas"
-                        {...getFieldProps('district', {
-                            initialValue: ['340000', '341500', '341502'],
-                        })}
-                        onOk={e => console.log('ok', e)}
-                        onDismiss={e => console.log('dismiss', e)}
-                        >
-                        <List.Item arrow="horizontal">Multiple & cascader</List.Item>
-                        </Picker> */}
-                    <InputItem
+                    <TextareaItem
                         {...getFieldProps('address', {
+                            // initialValue:"涉外商务区",
                             rules: [
                                 { required: true, message: '请输入详细地址' },
                             ],
                         })}
-                        clear
+                        title="地址"
+                        placeholder="请输入详细地址"
                         error={!!getFieldError('address')}
                         onErrorClick={() => {
                             Toast.info(getFieldError('address').join(';'));
                         }}
-                        placeholder="请输入详细地址"
-                        moneyKeyboardAlign={"left"}
-                    >
-                    </InputItem>
+                        // data-seed="logId"
+                        rows={2}
+                        autoHeight
+                        labelNumber={4}
+                        // ref={el => this.customFocusInst = el}
+                    />
                 </List>
                 {
                     browserType?(

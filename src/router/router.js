@@ -6,6 +6,8 @@ import Modify from '../pages/modify';
 import LogisticsList from '../pages/logisticsList';
 
 import FakeAuthorization from '../pages/fakeAuthorization';
+import FakeAuthorizationSuccess from '../pages/fakeAuthorization/success/index';
+
 import FreeAdmission from '../pages/freeAdmission';
 
 const BasicRoute = () => (
@@ -18,6 +20,7 @@ const BasicRoute = () => (
             <Route exact path="/logisticsList" component={LogisticsList}/>
 
             <Route exact path="/fakeAuthorization" component={FakeAuthorization}/>
+            <Route exact path="/fakeAuthorization/success" component={FakeAuthorizationSuccess}/>
             <Route exact path="/freeAdmission" component={FreeAdmission}/>
             
         </Switch>

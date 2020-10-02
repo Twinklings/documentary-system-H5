@@ -9,7 +9,7 @@ export function getWeChatConfig(params) {
       method:'POST',
       data:params
     })
-  }
+}
 
 // 初始化接口
 export function init(params) {
@@ -33,4 +33,12 @@ export function getvcode(key) {
       url:serverIP+"/validation/getvcode/"+key,
       method:'get',
     })
+}
+// 下单接口
+export function placeAnOrder(params) {
+  return request({
+    url:serverIP+"/placeorder/saveOrder",
+    method:'post',
+    data:params
+  })
 }
