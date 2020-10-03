@@ -1,0 +1,360 @@
+html{
+    /* font-size: 10px; */
+    margin: 0px atuo;
+}
+p{
+    height: auto !important;
+}
+body {
+    margin: 0px atuo;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    background-color: rgb(245, 245, 245) !important;
+    overflow-y: hidden !important;
+    overflow-X: hidden !important;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.green{
+    color: #07c160;
+}
+.setAddr{
+    padding: 6px 0;
+}
+.text{
+    text-align: center;
+    text-decoration: line-through;
+}
+.item{
+    background: #ffffff;
+    padding: 10px;
+    color: #696969;
+    overflow: auto;
+    margin-bottom: 6px;
+}
+.wxtips{
+    border: 1px solid #07c160;
+    border-radius: 4px;
+    height: 54px;
+    line-height: 54px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+.wxtips img{
+    float: left;
+    width: 36px;
+    margin: 9px 0 0 9px;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 64px;
+    background-color: #fff;
+    z-index: 99;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.footer .bnt .lease {
+    display: inline-block;
+    margin-top: 10px;
+    width: 300px;
+    height: 44px;
+    color: #fff;
+    border-radius: 22px;
+    background-color: #07c160;
+    text-align: center;
+    font-size: 1rem;
+}
+.footer .bnt .lease span{
+    display: inline-block;
+    padding: 4px 0;
+}
+.tip{
+    font-size: 12px;
+}
+.textarea{
+    background-color: rgb(245, 245, 245) !important;
+    border: 0;
+    width: 100%;
+    height: 60px;
+    margin-top: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    resize: none;
+    font-size: 13px;
+}
+.goodImg{
+    width: 90px;
+    height: 90px;
+    padding-right: 10px;
+}
+.goodD{
+    padding-right: 10px;
+    line-height: 24px;
+    font-size: 13px;
+}
+.flex{
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+}
+.flex_item{
+    flex: 1;
+}
+.describe{
+    line-height: 24px;
+    margin-bottom: 52px;
+}
+/* <!-- 地址的样式 --> */
+.botton{
+    margin-top: 10px;
+    padding: 0 3%;
+}
+.botton .getWX{
+    border: 1px solid #3DC778;
+    color: #3DC778;
+    background: transparent;
+}
+
+.weui-cells {
+    margin-top: 0px;
+    background-color: #fff;
+    line-height: 1.47058824;
+    /* font-size: 17px; */
+    overflow: hidden;
+    position: relative;
+}
+.weui-cell {
+    padding: 0 15px;
+    line-height: 40px;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+.weui-cell__bd {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+.weui-label {
+    display: block;
+    width: 68px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.weui-cell__ft {
+    text-align: right;
+    color: #999;
+}
+.weui-input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    background-color: transparent;
+    font-size: inherit;
+    color: inherit;
+    height: 40px;
+    line-height: 40px;
+}
+.weui-textarea {
+    display: block;
+    border: 0;
+    resize: none;
+    width: 100%;
+    color: inherit;
+    line-height: inherit;
+    outline: 0;
+    font-size: 16px;
+}
+.weui-btn{
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: #3DC778;
+    border: none;
+    margin-top: 4px;
+    color: #fff;
+    font-size: 16px;
+}
+.loading{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.2);
+    z-index: 2222;
+    text-align: center;
+}
+.loading img{
+    width: 32px;
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%);
+}
+.weui-form__control-area{
+    font-size: 14px;
+}
+.agreement{
+    font-size: 14px;
+    margin-left: 30px;
+    height: 20px;
+    line-height: 20px;
+}
+.agreement span{
+    color: #3DC778;
+}
+.agreementBox{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.2);
+    z-index: 2223;
+}
+.agreementBox .box{
+    background: #ffffff;
+    padding: 16px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.agreementBox .box .texts{
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    right: 0;
+    bottom: 75px;
+    padding-right: 16px;
+}
+.agreementBox .box .close{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 34px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.2);
+    color: #fff;
+}
+.agreementBox .box .close span{
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    display: contents;
+}
+.agreementBox p{
+    text-indent: 2rem;
+    margin: 0;
+    padding-bottom: 14px;
+}
+.select{
+    overflow: auto;
+    float: left;
+}
+.select img{
+    width: 20px;
+    float: left;
+}
+.alert,.alert_tips{
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.4);
+    z-index: 2223;
+}
+.alert_box{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background: #ffffff;
+    width: 300px;
+    border-radius: 8px;
+}
+.alert_box .alert_title{
+    text-align: center;
+    line-height: 50px;
+    font-weight: 700;
+    margin-top: 14px;
+}
+.alert_box .alert_content{
+    text-align: center;
+    line-height: 30px;
+    width: 260px;
+    margin: 0 auto;
+    color: #696969;
+}
+.alert_box .alert_footer{
+    position: relative;
+}
+.alert_box .alert_footer div{
+    width: 50%;
+    float: left;
+    text-align: center;
+    height: 52px;
+    line-height: 52px;
+    margin-top: 26px;
+    border-top: 1px solid #eaeaea;
+    font-weight: 700;
+}
+.alert_box .alert_footer span{
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    top: 26px;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 52px;
+    background-color: #eaeaea;
+}
+.alert_box .alert_footer .determine{
+    color: #07c160;
+}
+.alert_tips_content{
+    text-align: center;
+    line-height: 30px;
+    width: 260px;
+    margin: 0 auto;
+    color: #696969;
+}
+.alert_tips_footer div{
+    border-top: 1px solid #eaeaea;
+    color: #07c160;
+    text-align: center;
+    height: 52px;
+    line-height: 52px;
+    margin-top: 26px;
+    font-weight: 700;
+}

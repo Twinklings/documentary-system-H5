@@ -7,6 +7,8 @@ import LogisticsList from '../pages/logisticsList';
 
 import FakeAuthorization from '../pages/fakeAuthorization';
 import FakeAuthorizationSuccess from '../pages/fakeAuthorization/success/index';
+import FakeAuthorizationWeixin from '../pages/fakeAuthorization/order/weixin';
+import FakeAuthorizationAlipay from '../pages/fakeAuthorization/order/alipay';
 
 import FreeAdmission from '../pages/freeAdmission';
 
@@ -21,6 +23,10 @@ const BasicRoute = () => (
 
             <Route exact path="/fakeAuthorization" component={FakeAuthorization}/>
             <Route exact path="/fakeAuthorization/success" component={FakeAuthorizationSuccess}/>
+            <Route exact path="/fakeAuthorization/weixin" component={FakeAuthorizationWeixin}/>
+            <Route exact path="/fakeAuthorization/alipay" component={FakeAuthorizationAlipay}/>
+
+            
             <Route exact path="/freeAdmission" component={FreeAdmission}/>
             
         </Switch>

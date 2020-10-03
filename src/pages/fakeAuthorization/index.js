@@ -8,9 +8,11 @@ import $ from 'jquery'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder } from '../../servers/authorizationApi'
+import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder, smsCertification } from '../../servers/authorizationApi'
 
 import './index.css'
+import afterSale from './img/afterSale.svg'
+import complaint from './img/complaint.svg'
 
 const history = createHashHistory();
 const Item = List.Item;
@@ -288,14 +290,23 @@ function FakeAuthorization(props) {
                 "dept_id": addressParameters.dept_id,
             }
             console.log(param,"formformform")
-            placeAnOrder(param).then(response=>{
-                if(response.code === 200){
-                    Toast.success(response.message);
-                    history.push('/fakeAuthorization/success');
+
+            smsCertification(param).then(res=>{
+                if(res.code === 200){
+                    sessionStorage.saveParam = JSON.stringify(param)
+                    if (/MicroMessenger/.test(window.navigator.userAgent)) {
+                        // 微信
+                        history.push('/fakeAuthorization/weixin');
+                    } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+                        // 支付宝
+                        history.push('/fakeAuthorization/alipay');
+                    }
                 }else{
-                    Toast.fail(response.message);
+                    Toast.fail(res.message);
                 }
             })
+
+            
           } else {
             const scrollHeight = divRef.current.scrollHeight;//里面div的实际高度 
             const height = divRef.current.clientHeight;  //网页可见高度
@@ -362,7 +373,6 @@ function FakeAuthorization(props) {
     const updateCountdown = () =>{
         setTimeout(()=>{
             time --;
-            console.log(time,"time")
             if(time != 0){
                 updateCountdown();
             }else{
@@ -370,6 +380,16 @@ function FakeAuthorization(props) {
             }
             setCountDown(time)
         },1000)
+    }
+
+    const myCall = (type) => {
+        if(type === 1){
+            //联系售后
+            window.location.href = `tel://${initParam.after_phone}`;  
+        }else{
+            //投诉电话
+            window.location.href = `tel://${initParam.aftersales_phone}`; 
+        }
     }
 
     const { getFieldProps, getFieldError } = props.form;
@@ -488,7 +508,7 @@ function FakeAuthorization(props) {
                         })}
                         value={cityData}
                         onPickerChange={(e) => setCityData(e)}
-                        // onOk={(e) => setCityData(e)}
+                        onOk={(e) => setCityData(e)}
                         labelNumber={4}
                     >
                         <List.Item arrow="horizontal">地区</List.Item>
@@ -529,6 +549,16 @@ function FakeAuthorization(props) {
                     type="warning"
                     onClick={onSubmit}
                 >立即申请</Button><WhiteSpace />
+            </div>
+
+            <div className={"complaint"} onClick={()=>myCall(1)}>
+                <img src={complaint}/>
+                    {/* 售后 */}
+            </div>
+
+            <div className={"afterSale"} onClick={()=>myCall(2)}>
+                <img src={afterSale}/>
+                    {/* 投诉 */}
             </div>
         </div>
    );

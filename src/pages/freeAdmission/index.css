@@ -1,5 +1,12 @@
 .box{
     background: #ffffff;
+    display: block;
+    overflow: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
 }
 .bannerImg{
     width: 100%;
@@ -16,9 +23,19 @@
 .am-list-item.am-input-item{
     padding-left: 0 !important;
 }
+.am-list-item.am-list-item-middle{
+    padding-left: 0 !important;
+}
+.am-list-item .am-list-line{
+    padding-right: 0 !important;
+}
+.am-list-item.am-textarea-item{
+    padding-left: 0 !important;
+}
 .boxContent{
     margin-bottom: 70px;
 }
+
 .footer{
     position: fixed;
     left: 0;
@@ -27,4 +44,18 @@
     z-index: 1;
     background: #fff;
     padding: 0 10px;
+}
+.codeImg{
+    position: absolute !important;
+    right: 0;
+    top: 3px;
+    height: 37px;
+    line-height: 37px;
+    width: 120px;
+    font-size: 15px;
+}
+.prompt_content{
+    text-align: center;
+    line-height: 30px;
+    font-size: 18px;
 }

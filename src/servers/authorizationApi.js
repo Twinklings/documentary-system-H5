@@ -42,3 +42,12 @@ export function placeAnOrder(params) {
     data:params
   })
 }
+
+// 短信验证码确认接口
+export function smsCertification(params) {
+  return request({
+    url:serverIP+"/placeorder/smsCertification",
+    method:'post',
+    data:params
+  })
+}

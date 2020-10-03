@@ -7,6 +7,8 @@
     top: 0;
     bottom: 0;
     right: 0;
+    max-width: 620px;
+    margin: 0 auto;
 }
 .bannerImg{
     width: 100%;
@@ -37,13 +39,18 @@
 }
 
 .footer{
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 1;
     background: #fff;
-    padding: 0 10px;
+    padding: 0 !important;
+    max-width: 620px !important;
+    margin: 0 auto !important;
+}
+.footer .am-button-warning{
+    margin: 0 10px;
 }
 .codeImg{
     position: absolute !important;
@@ -58,4 +65,37 @@
     text-align: center;
     line-height: 30px;
     font-size: 18px;
+}
+
+.afterSale{
+    position: fixed;
+    right: 0;
+    bottom: 170px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background: rgb(137,207,81);
+    border-radius: 50%;
+    z-index: 10;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+}
+.afterSale img{
+    width: 26px;
+    margin: 7px;
+}
+.complaint{
+    position: fixed;
+    right: 0;
+    bottom: 100px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background: rgb(84,119,233);
+    border-radius: 50%;
+    z-index: 10;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+}
+.complaint img{
+    width: 26px;
+    margin: 7px;
 }
