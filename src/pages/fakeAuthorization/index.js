@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem } from 'antd-mobile';
+import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem, Flex } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
 import VConsole from 'vconsole';
@@ -47,6 +47,8 @@ function FakeAuthorization(props) {
     const [browserType , setBrowserType] = useState(false);
 
     const [addressParameters , setAddressParameters] = useState(false);
+
+    const [visibleModal,setVisibleModal] = useState(false);
 
     const getName = (data) => {
         
@@ -394,6 +396,14 @@ function FakeAuthorization(props) {
         }
     }
 
+    const openModal = () => {
+        setVisibleModal(true)
+    }
+
+    const onClose = () => {
+        setVisibleModal(false)
+    }
+
     const { getFieldProps, getFieldError } = props.form;
 
     return (
@@ -544,13 +554,24 @@ function FakeAuthorization(props) {
                     ):""
                 }
                 <WhiteSpace />
-            </div>
-            <div className={"footer"}>
-            <WhiteSpace />
-            <Button 
+                <Button 
                     type="warning"
                     onClick={onSubmit}
                 >立即申请</Button><WhiteSpace />
+            </div>
+            <div className={"footer"}>
+                <WhiteSpace />
+                <Flex>
+                    <Flex.Item><Button 
+                        type="primary"
+                        onClick={openModal}
+                    >微信联系</Button></Flex.Item>
+                    <Flex.Item><Button 
+                        type="warning"
+                        onClick={onSubmit}
+                    >立即申请</Button></Flex.Item>
+                </Flex>
+                <WhiteSpace />
             </div>
 
             <div className={"complaint"} onClick={()=>myCall(1)}>
@@ -562,6 +583,18 @@ function FakeAuthorization(props) {
                 <img src={afterSale}/>
                     {/* 投诉 */}
             </div>
+
+            <Modal
+                visible={visibleModal}
+                transparent
+                maskClosable={false}
+                onClose={onClose}
+                title=""
+                footer={[{ text: '关闭', onPress: () => { onClose(); } }]}
+                style={{ width:350,}}
+                >
+                二维码
+            </Modal>
         </div>
    );
 }
