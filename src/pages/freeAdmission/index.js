@@ -11,6 +11,8 @@ import { CITY } from '../../utils/city'
 import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder } from '../../servers/authorizationApi'
 
 import './index.css'
+import bannerImg from './img/20190625000833113010.jpg'
+import bannerImg1 from './img/20190625000907693451.jpg'
 
 const history = createHashHistory();
 const Item = List.Item;
@@ -382,8 +384,8 @@ function FakeAuthorization(props) {
             <div className={"prompt_content"}>
                 {initParam.prompt_content}
             </div>
-            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625000833113010.jpg' />
-            <img className={"bannerImg"} src='http://admin.huoke.wanqianlife.cn/storage/mpos_goods_info/20190625000907693451.jpg' />
+            <img className={"bannerImg"} src={bannerImg} />
+            <img className={"bannerImg"} src={bannerImg1} />
             <div className={"boxContent"}>
                 <p className={"form-title"}>在线申请中</p>
                 <p>已有2048人申请</p>

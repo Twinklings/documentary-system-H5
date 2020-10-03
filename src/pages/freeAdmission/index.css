@@ -44,6 +44,7 @@
     z-index: 1;
     background: #fff;
     padding: 0 10px;
+    border: none
 }
 .codeImg{
     position: absolute !important;

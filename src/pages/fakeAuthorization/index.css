@@ -48,9 +48,13 @@
     padding: 0 !important;
     max-width: 620px !important;
     margin: 0 auto !important;
+    border: none;
 }
 .footer .am-button-warning{
     margin: 0 10px;
+}
+.footer .am-button{
+    border: none;
 }
 .codeImg{
     position: absolute !important;
