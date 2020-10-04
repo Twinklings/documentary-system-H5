@@ -574,14 +574,16 @@ function FakeAuthorization(props) {
                 <WhiteSpace />
             </div>
 
-            <div className={"complaint"} onClick={()=>myCall(1)}>
-                <img src={complaint}/>
-                    {/* 售后 */}
-            </div>
+            <div className={"rightCall"}>
+                <div className={"complaint"} onClick={()=>myCall(1)}>
+                    <img src={complaint}/>
+                        {/* 售后 */}
+                </div>
 
-            <div className={"afterSale"} onClick={()=>myCall(2)}>
-                <img src={afterSale}/>
-                    {/* 投诉 */}
+                <div className={"afterSale"} onClick={()=>myCall(2)}>
+                    <img src={afterSale}/>
+                        {/* 投诉 */}
+                </div>
             </div>
 
             <Modal
