@@ -113,7 +113,7 @@ function Order() {
                     <div className="item flex">
                         <div className="flex_item">商品总价</div>
                         <div className="text flex_item"><span className="num">{amount}</span>元</div>
-                        <div className="flex_item" style={{"text-align":"right"}}>已免除</div>
+                        <div className="flex_item" style={{"textAlign":"right"}}>已免除</div>
                     </div>
 
                     <div className="item" >

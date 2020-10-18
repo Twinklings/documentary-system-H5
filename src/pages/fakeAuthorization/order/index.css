@@ -2,6 +2,9 @@
 li{
     list-style-type: none;
 }
+.sesameCrediservice{
+    background: #fff;
+}
 .sesameCrediservice .clock{
     position: relative;
     height: 140px;
@@ -90,7 +93,7 @@ li{
     width: 30px;
     margin-top: 10px;
 }
-.sesameCrediservice .footer{
+.sesameCrediservice .alipayFooter{
     width: 100%;
     margin: 0 auto;
     border-top: 1px solid #e4edf7;
@@ -109,4 +112,8 @@ li{
     color: #fff;
     border-radius: 4px;
     margin-top: 10px;
+}
+.texts p{
+    text-align: left;
+    text-indent: 2rem;
 }

@@ -1,4 +1,4 @@
-.box{
+.fakeAuthorizationBox{
     background: #ffffff;
     display: block;
     overflow: auto;
@@ -10,36 +10,36 @@
     max-width: 620px;
     margin: 0 auto;
 }
-.bannerImg{
+.fakeAuthorizationBox .bannerImg{
     width: 100%;
 }
-.boxContent{
+.fakeAuthorizationBox .boxContent{
     padding: 0 20px;
 }
-.form-title{
+.fakeAuthorizationBox .form-title{
     font-weight: bold;
 }
-.am-list-item .am-input-control input{
+.fakeAuthorizationBox .am-list-item .am-input-control input{
     text-align: left;
 }
-.am-list-item.am-input-item{
+.fakeAuthorizationBox .am-list-item.am-input-item{
     padding-left: 0 !important;
 }
-.am-list-item.am-list-item-middle{
+.fakeAuthorizationBox .am-list-item.am-list-item-middle{
     padding-left: 0 !important;
 }
-.am-list-item .am-list-line{
+.fakeAuthorizationBox .am-list-item .am-list-line{
     padding-right: 0 !important;
 }
-.am-list-item.am-textarea-item{
+.fakeAuthorizationBox .am-list-item.am-textarea-item{
     padding-left: 0 !important;
 }
-.boxContent{
+.fakeAuthorizationBox .boxContent{
     margin-bottom: 70px;
 }
 
-.footer{
-    position: absolute;
+.fakeAuthorizationBox .footer{
+    position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
@@ -50,21 +50,21 @@
     margin: 0 auto !important;
     border: none;
 }
-.footer .am-button-warning{
+.fakeAuthorizationBox .footer .am-button-warning{
     margin: 0 10px;
 }
-.am-button{
+.fakeAuthorizationBox .am-button{
     border: none;
     /* border-radius: 4px; */
 }
-.footer .am-button{
+.fakeAuthorizationBox .footer .am-button{
     border: none;
     /* border-radius: 4px; */
 }
-.am-list-item .am-list-line .am-list-extra{
+.fakeAuthorizationBox .am-list-item .am-list-line .am-list-extra{
     color: #000;
 }
-.codeImg{
+.fakeAuthorizationBox .codeImg{
     position: absolute !important;
     right: 0;
     top: 3px;
@@ -73,19 +73,20 @@
     width: 120px;
     font-size: 15px;
     border-radius: 2px;
+    border: 1PX solid #ddd !important;
 }
-.prompt_content{
+.fakeAuthorizationBox .prompt_content{
     text-align: center;
     line-height: 30px;
     font-size: 18px;
 }
-.rightCall{
+.fakeAuthorizationBox .rightCall{
     position: fixed;
     right: 5px;
     top: 40%;
     width: 50px;
 }
-.afterSale{
+.fakeAuthorizationBox .afterSale{
     /* position: absolute;
     right: 5px;
     top: 40%; */
@@ -93,20 +94,24 @@
     height: 50px;
     margin-top: 10px;
 }
-.afterSale img{
+.fakeAuthorizationBox .afterSale img{
     width: 100%;
 }
-.complaint{
+.fakeAuthorizationBox .complaint{
     /* position: fixed;
     right: 5px;
     top: 45%; */
     width: 50px;
     height: 50px;
 }
-.complaint img{
+.fakeAuthorizationBox .complaint img{
     width: 100%;
 }
 /* #e94f4f */
-.am-flexbox .am-flexbox-item:first-child{
+.fakeAuthorizationBox .am-flexbox .am-flexbox-item:first-child{
     margin-left: 10px;
+}
+
+*, *:before, *:after{
+    border: none !important;
 }

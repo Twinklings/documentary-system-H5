@@ -25,6 +25,13 @@ let name = "";
 let time = 60;
 
 function FakeAuthorization(props) {
+
+    const user_name = useRef();
+    const user_phone = useRef();
+    const user_imgCode = useRef();
+    const user_code = useRef();
+    const user_city = useRef();
+    const user_address = useRef();
     
     const [visible,setVisible] = useState(true);
 
@@ -33,6 +40,8 @@ function FakeAuthorization(props) {
     const [initParam,setInitParam] = useState({});
 
     const [imgCode,setImgCode] = useState("");
+    const [verificationCodeValue,setVerificationCodeValue] = useState("");
+    
 
     const [countDown,setCountDown] = useState(60);
     
@@ -89,7 +98,7 @@ function FakeAuthorization(props) {
     useEffect(() => {
         new VConsole();
 
-        document.title = '订单详情';
+        
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
         console.log(parameter,"parameter")
         let addressParam = parameter.split("_")
@@ -133,6 +142,7 @@ function FakeAuthorization(props) {
                     ...res.data,
                     isImgCode:true
                 })
+                document.title = res.data.prompt_content;
             }else{
                 Toast.fail(res.message);
             }
@@ -267,6 +277,13 @@ function FakeAuthorization(props) {
         });
     }
 
+    const jumpToPoint = () => {
+        const scrollHeight = divRef.current.scrollHeight;//里面div的实际高度 
+        const height = divRef.current.clientHeight;  //网页可见高度
+        const maxScrollTop = scrollHeight - height;
+        divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+
     const onSubmit = () =>{
         // if(!sendSMS){
         //     return Toast.fail("请先发送短信验证码！");
@@ -312,12 +329,6 @@ function FakeAuthorization(props) {
 
             
           } else {
-            const scrollHeight = divRef.current.scrollHeight;//里面div的实际高度 
-            const height = divRef.current.clientHeight;  //网页可见高度
-            const maxScrollTop = scrollHeight - height;
-            divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-            
-
             if(error.user_name || error.phone || error.address){
                 return Toast.fail('表单验证失败');
             }
@@ -408,15 +419,15 @@ function FakeAuthorization(props) {
 
     return (
       
-        <div className={"box"} style={visible?{display:"block"}:{}} ref={divRef}>
-            <div className={"prompt_content"}>
+        <div className={"box fakeAuthorizationBox"} style={visible?{display:"block"}:{}} ref={divRef}>
+            {/* <div className={"prompt_content"}>
                 {initParam.prompt_content}
-            </div>
+            </div> */}
             <img className={"bannerImg"} src={bannerImg} />
             <img className={"bannerImg"} src={bannerImg1} />
             <div className={"boxContent"}>
-                <p className={"form-title"}>在线申请中</p>
-                <p style={{color:"#a2a2a2"}}>已有2048人申请</p>
+                {/* <p className={"form-title"}>在线申请中</p> */}
+                {/* <p style={{color:"#a2a2a2"}}>已有2048人申请</p> */}
                 <List>
                     <InputItem
                         {...getFieldProps('user_name', {
@@ -433,6 +444,10 @@ function FakeAuthorization(props) {
                         placeholder="请输入您的姓名"
                         moneyKeyboardAlign={"left"}
                         labelNumber={4}
+                        ref={user_name}
+                        onClick={()=>{
+                            user_name.current.focus();
+                        }}
                     >姓名</InputItem>
 
                     <InputItem
@@ -451,6 +466,10 @@ function FakeAuthorization(props) {
                         placeholder="请输入手机"
                         moneyKeyboardAlign={"left"}
                         labelNumber={4}
+                        ref={user_phone}
+                        onClick={()=>{
+                            user_phone.current.focus();
+                        }}
                     >手机</InputItem>
                     {
                         initParam.image_captcha_status === 1?(
@@ -470,6 +489,10 @@ function FakeAuthorization(props) {
                                     placeholder="请输入图片验证码"
                                     moneyKeyboardAlign={"left"}
                                     labelNumber={4}
+                                    ref={user_imgCode}
+                                    onClick={()=>{
+                                        user_imgCode.current.focus();
+                                    }}
                                 >
                                 验证码
                                 </InputItem>
@@ -498,6 +521,16 @@ function FakeAuthorization(props) {
                             placeholder="请输入验证码"
                             moneyKeyboardAlign={"left"}
                             labelNumber={4}
+                            ref={user_code}
+                            onClick={()=>{
+                                user_code.current.focus();
+                            }}
+                            value={verificationCodeValue}
+                            onChange={(val)=>{
+                                if(val.length>6)val=val.slice(0,6)
+                                setVerificationCodeValue(val);
+                                props.form.setFieldsValue({ code:val})
+                            }}
                         >
                             验证码
                         </InputItem>
@@ -522,6 +555,10 @@ function FakeAuthorization(props) {
                         onPickerChange={(e) => setCityData(e)}
                         onOk={(e) => setCityData(e)}
                         labelNumber={4}
+                        ref={user_city}
+                        onClick={()=>{
+                            user_city.current.focus();
+                        }}
                     >
                         <List.Item arrow="horizontal">地区</List.Item>
                     </Picker>
@@ -542,6 +579,10 @@ function FakeAuthorization(props) {
                         rows={2}
                         autoHeight
                         labelNumber={4}
+                        ref={user_address}
+                        onClick={()=>{
+                            user_address.current.focus();
+                        }}
                         // ref={el => this.customFocusInst = el}
                     />
                 </List>
@@ -557,7 +598,7 @@ function FakeAuthorization(props) {
                 <Button 
                     type="warning"
                     onClick={onSubmit}
-                >立即申请</Button><WhiteSpace />
+                >提交申请</Button><WhiteSpace />
             </div>
             <div className={"footer"}>
                 <WhiteSpace />
@@ -568,7 +609,7 @@ function FakeAuthorization(props) {
                     >微信联系</Button></Flex.Item>
                     <Flex.Item><Button 
                         type="warning"
-                        onClick={onSubmit}
+                        onClick={jumpToPoint}
                     >立即申请</Button></Flex.Item>
                 </Flex>
                 <WhiteSpace />

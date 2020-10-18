@@ -32,11 +32,11 @@ function Alipay() {
       drawline($(".line-min"),30,40);
 
 
-      console.log(sessionStorage.saveParam)
-    // 获取数据
-      let saveParam = JSON.parse(sessionStorage.saveParam);
-      setAmount(saveParam.pay_amount);
-      setParam(saveParam);
+    //   console.log(sessionStorage.saveParam)
+    // // 获取数据
+    //   let saveParam = JSON.parse(sessionStorage.saveParam);
+    //   setAmount(saveParam.pay_amount);
+    //   setParam(saveParam);
 
     }, [])
 
@@ -90,7 +90,7 @@ function Alipay() {
                 </div>
                 <div className={"title_s"}>免押金租借</div>
             
-                <div className={"footer"}>
+                <div className={"alipayFooter"}>
                     <div>阅读<span style={{"color":"#007aff"}} onClick={openAgreementBox}>《服务协议》</span></div>
                     <div className={"submit"} onClick={submit}>同意并且使用</div>
                 </div>

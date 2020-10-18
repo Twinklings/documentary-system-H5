@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>客服</title>
+    <g id="客服" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="椭圆形" fill="#D3EAB9" cx="50" cy="50" r="50"></circle>
+        <circle id="椭圆形备份" fill="#8ACF44" cx="50" cy="50" r="40"></circle>
+        <text font-family="STYuanti-SC-Light, Yuanti SC" font-size="26" font-weight="300" fill="#FFFFFF">
+            <tspan x="24" y="60">客服</tspan>
+        </text>
+    </g>
+</svg>

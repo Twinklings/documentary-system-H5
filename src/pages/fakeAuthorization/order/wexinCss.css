@@ -250,6 +250,10 @@ code {
     bottom: 75px;
     padding-right: 16px;
 }
+.texts p{
+    text-align: left;
+    text-indent: 2rem;
+}
 .agreementBox .box .close{
     position: absolute;
     bottom: 20px;
