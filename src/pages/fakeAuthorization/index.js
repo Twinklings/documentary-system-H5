@@ -399,11 +399,11 @@ function FakeAuthorization(props) {
 
     const myCall = (type) => {
         if(type === 1){
-            //联系售后
+            //投诉
             window.location.href = `tel://${initParam.after_phone}`;  
         }else{
-            //投诉电话
-            window.location.href = `tel://${initParam.aftersales_phone}`; 
+            //客服
+            window.location.href = `tel://${initParam.phone}`; 
         }
     }
 
@@ -618,12 +618,12 @@ function FakeAuthorization(props) {
             <div className={"rightCall"}>
                 <div className={"complaint"} onClick={()=>myCall(1)}>
                     <img src={complaint}/>
-                        {/* 售后 */}
+                        {/* 投诉 */}
                 </div>
 
                 <div className={"afterSale"} onClick={()=>myCall(2)}>
                     <img src={afterSale}/>
-                        {/* 投诉 */}
+                        {/* 客服 */}
                 </div>
             </div>
 
