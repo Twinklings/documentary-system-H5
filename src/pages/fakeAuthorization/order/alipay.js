@@ -32,11 +32,11 @@ function Alipay() {
       drawline($(".line-min"),30,40);
 
 
-    //   console.log(sessionStorage.saveParam)
-    // // 获取数据
-    //   let saveParam = JSON.parse(sessionStorage.saveParam);
-    //   setAmount(saveParam.pay_amount);
-    //   setParam(saveParam);
+      console.log(sessionStorage.saveParam)
+    // 获取数据
+      let saveParam = JSON.parse(sessionStorage.saveParam);
+      setAmount(saveParam.pay_amount);
+      setParam(saveParam);
 
     }, [])
 
