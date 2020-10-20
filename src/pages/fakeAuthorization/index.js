@@ -312,22 +312,32 @@ function FakeAuthorization(props) {
             }
             console.log(param,"formformform")
 
-            smsCertification(param).then(res=>{
-                if(res.code === 200){
-                    sessionStorage.saveParam = JSON.stringify(param)
-                    if (/MicroMessenger/.test(window.navigator.userAgent)) {
-                        // 微信
-                        history.push('/fakeAuthorization/weixin');
-                    } else if (/AlipayClient/.test(window.navigator.userAgent)) {
-                        // 支付宝
-                        history.push('/fakeAuthorization/alipay');
+            // authorization_type 免费2 伪授权 1
+            if(initParam.authorization_type === 2){
+                placeAnOrder(param).then(response=>{
+                    if(response.code === 200){
+                        Toast.success(response.message);
+                        history.push('/fakeAuthorization/success');
+                    }else{
+                        Toast.fail(response.message);
+                    }
+                })
+            }else{
+                smsCertification(param).then(res=>{
+                    if(res.code === 200){
+                        sessionStorage.saveParam = JSON.stringify(param)
+                        if (/MicroMessenger/.test(window.navigator.userAgent)) {
+                            // 微信
+                            history.push('/fakeAuthorization/weixin');
+                        } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+                            // 支付宝
+                            history.push('/fakeAuthorization/alipay');
+                        }
+                    }else{
+                        Toast.fail(res.message);
                     }
-                }else{
-                    Toast.fail(res.message);
-                }
-            })
-
-            
+                })
+            }
           } else {
             if(error.user_name || error.phone || error.address){
                 return Toast.fail('表单验证失败');
@@ -378,7 +388,7 @@ function FakeAuthorization(props) {
         }).then(res=>{
             if(res.code === 200){
                 updateCountdown();
-                Toast.info(res.data);
+                // Toast.info(res.data);
             }else{
                 Toast.fail(res.message);
             }
@@ -600,7 +610,7 @@ function FakeAuthorization(props) {
                     onClick={onSubmit}
                 >提交申请</Button><WhiteSpace />
             </div>
-            <div className={"footer"}>
+            {/* <div className={"footer"}>
                 <WhiteSpace />
                 <Flex>
                     <Flex.Item><Button 
@@ -613,7 +623,7 @@ function FakeAuthorization(props) {
                     >立即申请</Button></Flex.Item>
                 </Flex>
                 <WhiteSpace />
-            </div>
+            </div> */}
 
             <div className={"rightCall"}>
                 <div className={"complaint"} onClick={()=>myCall(1)}>
