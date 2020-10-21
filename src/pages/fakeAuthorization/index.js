@@ -142,7 +142,7 @@ function FakeAuthorization(props) {
                     tenant_id:res.data.tenant_id,
                     dept_id:res.data.dept_id,
                     salesman:res.data.salesman,
-                    pay_amount:res.data.pay_amount,
+                    pay_amount:res.data.pay_amout,
                 })
                 setInitParam({
                     ...res.data,
