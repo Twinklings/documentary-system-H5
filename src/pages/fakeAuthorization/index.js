@@ -101,13 +101,13 @@ function FakeAuthorization(props) {
         
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
         console.log(parameter,"parameter")
-        let addressParam = parameter.split("_")
-        setAddressParameters({
-            tenant_id:addressParam[0],
-            dept_id:addressParam[1],
-            salesman:addressParam[2],
-            pay_amount:addressParam[3],
-        })
+        // let addressParam = parameter.split("_")
+        // setAddressParameters({
+        //     tenant_id:addressParam[0],
+        //     dept_id:addressParam[1],
+        //     salesman:addressParam[2],
+        //     pay_amount:addressParam[3],
+        // })
 
 
         if (/MicroMessenger/.test(window.navigator.userAgent)) {
@@ -138,6 +138,12 @@ function FakeAuthorization(props) {
         init({parameter}).then(res=>{
             if(res.code === 200){
                 console.log(res.data,"res")
+                setAddressParameters({
+                    tenant_id:res.data.tenant_id,
+                    dept_id:res.data.dept_id,
+                    salesman:res.data.salesman,
+                    pay_amount:res.data.pay_amount,
+                })
                 setInitParam({
                     ...res.data,
                     isImgCode:true
