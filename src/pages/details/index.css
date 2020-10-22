@@ -1,6 +1,15 @@
 
 .box{
     display: none;
+    background: #ffffff;
+    overflow: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    max-width: 620px;
+    margin: 0 auto;
 }
 .operation{
     text-align: center;
@@ -43,3 +52,34 @@
     color: #fff;
     padding: 0 5px;
 }
+.followUp .ListView{
+    padding: 1px 13px;
+    background: #f7f7f7;
+    margin: 10px 20px;
+    border-radius: 4px;
+}
+.followUp{
+    background: #ffffff;
+    overflow: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    max-width: 620px;
+    margin: 0 auto;
+}
+.followUp .detailsFooter{
+    /* border-bottom: 5px solid #efecec !important; */
+}
+
+.tag-container{
+    display: flex;
+    padding-top: 9px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .tag-container > div {
+    margin-left: 9px;
+    margin-bottom: 9px;
+  }

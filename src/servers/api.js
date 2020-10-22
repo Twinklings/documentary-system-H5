@@ -1,6 +1,6 @@
 import request from '../utils/axios'
 
-let serverIP = "http://push.mianyabao.cn";
+let serverIP = "http://push.gendanbao.com.cn";
 
 
 export function getWeChatConfig(id) {
@@ -13,9 +13,9 @@ export function getWeChatConfig(id) {
 // 获取订单详情
 export function getOrderDetails(params) {
   return request({
-    url:serverIP+"/wechatsalesman/salesman?"+params,
-    method:'get',
-    // data:params
+    url:serverIP+"/wechatsalesman/salesman",
+    method:'post',
+    data:params
   })
 }
 // 确认

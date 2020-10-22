@@ -4,7 +4,7 @@ import { List, Button, WhiteSpace, Modal, Toast, Flex } from 'antd-mobile';
 // import {Flex,WhiteSpace} from 'antd-mobile'
 import { createHashHistory } from 'history'; // 如果是hash路由
 import QRCode  from 'qrcode.react';
-
+import VConsole from 'vconsole';
 import {getUrlParam, validationEmpty, getLogisticsCompany} from '../../utils/utils'
 import {getWeChatConfig, getOrderDetails, confirm, viewLogistics} from '../../servers/api'
 
@@ -19,6 +19,7 @@ const Item = List.Item;
 const Brief = Item.Brief;
 
 function Details() {
+    const toastTime = 1;
     
     const [details,setDetails] = useState([]);
 
@@ -41,6 +42,8 @@ function Details() {
     });
     
     useEffect(() => {
+      new VConsole();
+
       document.title = '订单详情';
       let code = getUrlParam('code');// 这是获取请求路径中带code字段参数的方法
       let belongs = getUrlParam('belongs');// 这是获取请求路径中带code字段参数的方法
@@ -60,9 +63,28 @@ function Details() {
         if(validationEmpty(getUrlCode('code'))){
           alert("请关闭窗口从新进入")
         }else{
+          console.log(window.location.href,"地址栏order")
+          console.log(getUrlParam('state'),getUrlCode('code'),"地址栏order1");
+          // http://h1.genleme.com/?code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9&state=mf20201022231202164794#/details
           let param = window.location.href.split("?")[1];
-          console.log(param.split("#")[0]);
-          getDetails(param.split("#")[0]);
+          // code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9&state=mf20201022231202164794#/details
+          console.log(param,"地址栏order")
+
+          let _paramCode = param.split("&")[0];//code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9
+          console.log(_paramCode.split("=")[1],"_paramCode")
+          
+          let _param1 = param.split("&")[1];
+          // state=mf20201022231202164794#/details
+          console.log(_param1)
+          
+          let _param2 = _param1.split("=")[1];
+          // mf20201022231202164794#/details
+          console.log(_param2)
+
+          let _param3 = _param2.split("#")[0];
+          console.log(_param3,"_param3")
+
+          getDetails(_param3,_paramCode.split("=")[1]);
         }
       }
     }, [])
@@ -83,8 +105,11 @@ function Details() {
       return "false";
     }
 
-    const getDetails = (param) => {
-      getOrderDetails(param).then(response=>{
+    const getDetails = (_param3,_paramCode) => {
+      getOrderDetails({
+        code:_paramCode,
+        order_id:_param3
+      }).then(response=>{
         if(!response.data){
           alert("未查询到数据")
           return false;
@@ -177,7 +202,7 @@ function Details() {
 
           document.getElementById('copyId').remove()
 
-          Toast.info('复制成功!', 1);
+          Toast.info('复制成功!', toastTime);
 
       }
   const getLogistics = () => {
@@ -185,6 +210,10 @@ function Details() {
     console.log(initializationData)
     viewLogistics(initializationData.out_order_no).then(res=>{
       console.log(res)
+      if(res.data === null || res.data.list === null){
+        Toast.info('订单正在准备，请耐心等待发货。', toastTime);
+        return false;
+      }
       // let datas = {"code":200,"message":"操作成功","total":0,"data":{"code":"OK","no":"8417735845","type":"DBL","list":"[{\"time\":\"2020-08-15 17:00:00\",\"content\":\"预计8月15日17:00前送达\"},{\"time\":\"2020-08-14 06:23:00\",\"content\":\"运输中，离开【郑州枢纽中心】，下一部门【温州转运中心】\"},{\"time\":\"2020-08-13 21:33:00\",\"content\":\"运输中，到达郑州枢纽中心\"},{\"time\":\"2020-08-13 20:19:00\",\"content\":\"运输中，离开【郑州管城区陇海路快递分部】，下一部门【郑州枢纽中心】\"},{\"time\":\"2020-08-13 19:21:00\",\"content\":\"您的订单已被收件员揽收,【郑州管城区陇海路快递分部】库存中\"}]","state":"2","msg":null,"name":"德邦","courier":"","courierPhone":"","id":"","out_order_no":"wx20200812155828556244","belonging_id":""}}
       res.data.datalist = JSON.parse(res.data.list)
       
@@ -303,8 +332,8 @@ function Details() {
                 }}
               >跟进</Button>
             </Flex.Item>
-          </Flex> */}
-          {/* <WhiteSpace /> */}
+          </Flex>
+          <WhiteSpace /> */}
         </div>
         
 

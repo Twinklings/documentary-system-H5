@@ -17,6 +17,8 @@ const Item = List.Item;
 const Brief = Item.Brief;
 
 function Order() {
+
+    const toastTime = 1;
     
     const [sesameSeed,setSesameSeed] = useState(0);
 
@@ -56,14 +58,14 @@ function Order() {
 
     const submit = () => {
         if(!agreeOrNot){
-            return Toast.fail("请查看并同意委托扣款授权书");
+            return Toast.fail("请查看并同意委托扣款授权书",toastTime);
         }
         placeAnOrder(param).then(response=>{
             if(response.code === 200){
-                Toast.success(response.message);
+                Toast.success(response.message,toastTime);
                 history.push('/fakeAuthorization/success');
             }else{
-                Toast.fail(response.message);
+                Toast.fail(response.message,toastTime);
             }
         })
     }

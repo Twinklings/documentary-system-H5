@@ -32,6 +32,8 @@ function FakeAuthorization(props) {
     const user_code = useRef();
     const user_city = useRef();
     const user_address = useRef();
+
+    const toastTime = 1;
     
     const [visible,setVisible] = useState(true);
 
@@ -150,7 +152,7 @@ function FakeAuthorization(props) {
                 })
                 document.title = res.data.title;
             }else{
-                Toast.fail(res.message);
+                Toast.fail(res.message,toastTime);
             }
         })
     } 
@@ -322,10 +324,10 @@ function FakeAuthorization(props) {
             if(initParam.authorization_type === 2){
                 placeAnOrder(param).then(response=>{
                     if(response.code === 200){
-                        Toast.success(response.message);
+                        Toast.success(response.message,toastTime);
                         history.push('/fakeAuthorization/success');
                     }else{
-                        Toast.fail(response.message);
+                        Toast.fail(response.message,toastTime);
                     }
                 })
             }else{
@@ -340,23 +342,23 @@ function FakeAuthorization(props) {
                             history.push('/fakeAuthorization/alipay');
                         }
                     }else{
-                        Toast.fail(res.message);
+                        Toast.fail(res.message,toastTime);
                     }
                 })
             }
           } else {
             if(error.user_name || error.phone || error.address){
-                return Toast.fail('表单验证失败');
+                return Toast.fail('表单验证失败',toastTime);
             }
 
             if(initParam.image_captcha_status === 1 && error.imgCode){
-                return Toast.info(error.imgCode.errors[0].message);
+                return Toast.info(error.imgCode.errors[0].message,toastTime);
             }
             if(error.code){
-                return Toast.info(error.code.errors[0].message);
+                return Toast.info(error.code.errors[0].message,toastTime);
             }
             if(error.city){
-                return Toast.info(error.city.errors[0].message);
+                return Toast.info(error.city.errors[0].message,toastTime);
             }
             
           }
@@ -373,10 +375,10 @@ function FakeAuthorization(props) {
 
     const startTheCountdown = () => {
         if (!(/^1[3456789]\d{9}$/.test(props.form.getFieldsValue().phone))) {
-            return Toast.info('请输入正确的手机号格式');
+            return Toast.info('请输入正确的手机号格式',toastTime);
         }
         if (initParam.image_captcha_status === 1 && validationEmpty(props.form.getFieldsValue().imgCode)) {
-            return Toast.info('请输入图片验证码');
+            return Toast.info('请输入图片验证码',toastTime);
         }
 
         setSendSMS(true)
@@ -396,7 +398,9 @@ function FakeAuthorization(props) {
                 updateCountdown();
                 // Toast.info(res.data);
             }else{
-                Toast.fail(res.message);
+                Toast.fail(res.message,toastTime);
+                getImgCode();
+                props.form.setFieldsValue({imgCode:"",code:""});
             }
         })
     }
@@ -455,7 +459,7 @@ function FakeAuthorization(props) {
                         clear
                         error={!!getFieldError('user_name')}
                         onErrorClick={() => {
-                            Toast.info(getFieldError('user_name').join(';'));
+                            Toast.info(getFieldError('user_name').join(';'),toastTime);
                         }}
                         placeholder="请输入您的姓名"
                         moneyKeyboardAlign={"left"}
@@ -477,7 +481,7 @@ function FakeAuthorization(props) {
                         clear
                         error={!!getFieldError('phone')}
                         onErrorClick={() => {
-                            Toast.info(getFieldError('phone').join(';'));
+                            Toast.info(getFieldError('phone').join(';'),toastTime);
                         }}
                         placeholder="请输入手机"
                         moneyKeyboardAlign={"left"}
@@ -500,7 +504,7 @@ function FakeAuthorization(props) {
                                     clear
                                     error={!!getFieldError('imgCode')}
                                     onErrorClick={() => {
-                                        Toast.info(getFieldError('imgCode').join(';'));
+                                        Toast.info(getFieldError('imgCode').join(';'),toastTime);
                                     }}
                                     placeholder="请输入图片验证码"
                                     moneyKeyboardAlign={"left"}
@@ -532,7 +536,7 @@ function FakeAuthorization(props) {
                             clear
                             error={!!getFieldError('code')}
                             onErrorClick={() => {
-                                Toast.info(getFieldError('code').join(';'));
+                                Toast.info(getFieldError('code').join(';'),toastTime);
                             }}
                             placeholder="请输入验证码"
                             moneyKeyboardAlign={"left"}
@@ -589,7 +593,7 @@ function FakeAuthorization(props) {
                         placeholder="请输入详细地址"
                         error={!!getFieldError('address')}
                         onErrorClick={() => {
-                            Toast.info(getFieldError('address').join(';'));
+                            Toast.info(getFieldError('address').join(';'),toastTime);
                         }}
                         // data-seed="logId"
                         rows={2}
