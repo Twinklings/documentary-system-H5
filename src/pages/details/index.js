@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { List, Button, WhiteSpace, Modal, Toast } from 'antd-mobile';
+import { List, Button, WhiteSpace, Modal, Toast, Flex } from 'antd-mobile';
 // import {Flex,WhiteSpace} from 'antd-mobile'
 import { createHashHistory } from 'history'; // 如果是hash路由
 import QRCode  from 'qrcode.react';
@@ -206,6 +206,14 @@ function Details() {
     setVisibleModal(false)
   }
 
+  const myCall = () => {
+    window.location.href = `tel://${'15160078582'}`;  
+  }
+  
+  const followUp = () => {
+    history.push('/details/followUp');
+  }
+
     return (
       
       <div className={"box"} style={visible?{display:"block"}:{}}>
@@ -279,7 +287,24 @@ function Details() {
           onClick={()=>{
             let text = initializationData.user_name+","+initializationData.user_phone+","+initializationData.user_address
             copyArticle(text)}}
-        >复制发货信息</Button><WhiteSpace />
+          >复制发货信息</Button>
+          <WhiteSpace />
+
+          {/* <Flex>
+            <Flex.Item>
+              <Button 
+                onClick={()=>myCall()}
+              >电话</Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button 
+                onClick={()=>{
+                  followUp();
+                }}
+              >跟进</Button>
+            </Flex.Item>
+          </Flex> */}
+          {/* <WhiteSpace /> */}
         </div>
         
 
