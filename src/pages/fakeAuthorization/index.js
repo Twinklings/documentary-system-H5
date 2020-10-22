@@ -148,7 +148,7 @@ function FakeAuthorization(props) {
                     ...res.data,
                     isImgCode:true
                 })
-                document.title = res.data.prompt_content;
+                document.title = res.data.title;
             }else{
                 Toast.fail(res.message);
             }
