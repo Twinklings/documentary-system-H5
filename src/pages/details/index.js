@@ -349,7 +349,7 @@ function Details() {
           // wrapProps={{ onTouchStart: onWrapTouchStart }}
           // afterClose={() => { alert('afterClose'); }}
         >
-          <div style={{ height: 400, overflow: 'scroll' }}>
+          <div className={"logisticsList"} style={{ height: 400, overflow: 'scroll' }}>
             <div>{logisticsList.name}{logisticsList.no ? `(${logisticsList.no})` : ""}</div>
             {
               logisticsList.datalist.map((item,index)=>{

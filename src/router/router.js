@@ -1,6 +1,7 @@
 import React from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom';
 import Details from '../pages/details';
+import CustomerDetails from '../pages/details/compontent/customerDetails';
 import FollowUp from '../pages/details/compontent/followUp';
 import Success from '../pages/success';
 import Modify from '../pages/modify';
@@ -18,7 +19,9 @@ const BasicRoute = () => (
         <Switch>
             <Route exact path="/details" component={Details}/>
             <Route exact path="/" component={Details}/>
+            <Route exact path="/details/customerDetails" component={CustomerDetails}/>
             <Route exact path="/details/followUp" component={FollowUp}/>
+            
             <Route exact path="/success" component={Success}/>
             <Route exact path="/modify" component={Modify}/>
             <Route exact path="/logisticsList" component={LogisticsList}/>
