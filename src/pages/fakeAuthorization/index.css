@@ -71,7 +71,7 @@
     height: 37px;
     line-height: 37px;
     width: 120px;
-    font-size: 15px;
+    font-size: 16px;
     border-radius: 2px;
     border: 1PX solid #ddd !important;
 }
@@ -115,4 +115,13 @@
 
 .fakeAuthorizationBox *:before{
     border: none !important;
+}
+
+.fakeAuthorizationBox .am-list-item .am-input-label,
+.fakeAuthorizationBox .am-list-item .am-list-line .am-list-content,
+.fakeAuthorizationBox .am-textarea-label,
+.fakeAuthorizationBox .am-list-item .am-input-control input,
+.fakeAuthorizationBox .am-button
+{
+    font-size: 16px;
 }

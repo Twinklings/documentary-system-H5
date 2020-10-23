@@ -13,8 +13,8 @@ import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder, smsCertificati
 import './index.css'
 import afterSale from './img/afterSale.svg'
 import complaint from './img/complaint.svg'
-import bannerImg from './img/20190625000833113010.jpg'
-import bannerImg1 from './img/20190625000907693451.jpg'
+// import bannerImg from './img/20190625000833113010.jpg'
+// import bannerImg1 from './img/20190625000907693451.jpg'
 
 const history = createHashHistory();
 const Item = List.Item;
@@ -150,7 +150,7 @@ function FakeAuthorization(props) {
                     ...res.data,
                     isImgCode:true
                 })
-                document.title = res.data.title;
+                document.title = res.data.h5_title;
             }else{
                 Toast.fail(res.message,toastTime);
             }
@@ -443,8 +443,7 @@ function FakeAuthorization(props) {
             {/* <div className={"prompt_content"}>
                 {initParam.prompt_content}
             </div> */}
-            <img className={"bannerImg"} src={bannerImg} />
-            <img className={"bannerImg"} src={bannerImg1} />
+            <img className={"bannerImg"} src={initParam.h5_background} />
             <div className={"boxContent"}>
                 {/* <p className={"form-title"}>在线申请中</p> */}
                 {/* <p style={{color:"#a2a2a2"}}>已有2048人申请</p> */}
