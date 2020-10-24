@@ -3,9 +3,9 @@ import request from '../utils/axios'
 let serverIP = "http://push.gendanbao.com.cn";
 
 
-export function getWeChatConfig(id) {
+export function getWeChatConfig(id,type) {
   return request({
-    url:serverIP+"/wechatsalesman/WeChatConfig/"+id,
+    url:serverIP+"/wechatsalesman/WeChatConfig/"+type+"/"+id,
     method:'get',
   })
 }
@@ -28,10 +28,21 @@ export function confirm(params) {
 // 修改
 export function update(params) {
   return request({
-    url:serverIP+"/wechatsalesman/update/order?"+params,
+    url:serverIP+"/wechatsalesman/update/order",
     method:'post',
+    data:params
   })
 }
+
+// 跟进
+export function setFollowUp(params) {
+  return request({
+    url:serverIP+"/wechatsalesman/update/order",
+    method:'post',
+    data:params
+  })
+}
+
 // 查看物流信息
 export function viewLogistics(params) {
   return request({

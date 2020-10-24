@@ -27,15 +27,8 @@ function FollowUp(props) {
 
   const [note,setNote] = useState("");
 
-    // const [_date,set_date] = useState({
-    //   user_address: JSON.parse(sessionStorage.data).user_address,
-    //   user_name: JSON.parse(sessionStorage.data).user_name,
-    //   user_phone: JSON.parse(sessionStorage.data).user_phone,
-    // });
-
     useEffect(() => {
       document.title = '跟进订单';
-      
     }, [])
 
     const onSubmit = () =>{
@@ -43,50 +36,35 @@ function FollowUp(props) {
         Toast.fail("请输入跟进信息", toastTime);
         return false;
       }
-
-      // update(param).then(response=>{
-        // history.push('/success');
-      // })
+      let param = {
+        "openid":sessionStorage.openid,
+        "out_order_no=":JSON.parse(sessionStorage.data).out_order_no,
+        "user_name":JSON.parse(sessionStorage.data).user_name,
+        "user_phone":JSON.parse(sessionStorage.data).user_phone,
+        "user_address":JSON.parse(sessionStorage.data).user_address,
+        "id":JSON.parse(sessionStorage.data).id,
+        "follow_records":note,
+        "operation_tag":2
+      }
+      update(param).then(response=>{
+        history.push('/success');
+      })
     }
-
-    const nowTimeStamp = Date.now();
-    const now = new Date(nowTimeStamp);
-    let minDate = new Date(nowTimeStamp - 1e7);
-    const maxDate = new Date(nowTimeStamp + 1e7);
-    if (minDate.getDate() !== maxDate.getDate()) {
-        minDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-    }
-
-    const data = [
-      {
-        img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-        title: 'Meet hotel',
-        des: '不是所有的兼职汪都需要风吹日晒',
-      },
-      {
-        img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-        title: 'McDonald\'s invites you',
-        des: '不是所有的兼职汪都需要风吹日晒',
-      },
-      {
-        img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-        title: 'Eat the week',
-        des: '不是所有的兼职汪都需要风吹日晒',
-      },
-    ]
-
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    const { getFieldProps, getFieldError } = props.form;
 
     return (
       <div className={"followUp"}>
         <div className={"detailsBoxs"}>
-        <Tag data-seed="logId">Basic</Tag>
         <List className="date-picker-list">
-        
+        {/* <DatePicker
+          value={dateTime}
+          onChange={date => {
+            setDateTime(date)
+            console.log(moment(date).format("YYYY-MM-DD HH:ss"))
+          }}
+        >
+          <List.Item arrow="horizontal">计划提醒</List.Item>
+        </DatePicker> */}
+        <List.Item>跟进内容</List.Item>
         <TextareaItem
             rows={3}
             placeholder="请输入跟进信息"
@@ -98,16 +76,6 @@ function FollowUp(props) {
               setNote(value)
             }}
         />
-        <DatePicker
-          value={dateTime}
-          onChange={date => {
-            setDateTime(date)
-            console.log(moment(date).format("YYYY-MM-DD HH:ss"))
-          }}
-        >
-          <List.Item arrow="horizontal">计划提醒</List.Item>
-        </DatePicker>
-            
         </List>
         </div>
         <div className={"detailsFooter"}>
@@ -116,26 +84,11 @@ function FollowUp(props) {
             size="large"
             onClick={onSubmit}
           >确定</Button><WhiteSpace />
-        </div>
-        <div className={"ListView"}>
-          <p>XXX跟进了改客户<Badge text={'已退'} style={{ marginLeft: 10 }} /></p>
-          <p>内容</p>  
-          <p>时间</p>       
-        </div>
-        <div className={"ListView"}>
-          <p>XXX跟进了改客户<Badge text={'已退'} style={{ marginLeft: 10 }} /></p>
-          <p>内容</p>  
-          <p>时间</p>       
-        </div>
-        <div className={"ListView"}>
-          <p>XXX跟进了改客户<Badge text={'已退'} style={{ marginLeft: 10 }} /></p>
-          <p>内容</p>  
-          <p>时间</p>       
-        </div>
-        <div className={"ListView"}>
-          <p>XXX跟进了改客户<Badge text={'已退'} style={{ marginLeft: 10 }} /></p>
-          <p>内容</p>  
-          <p>时间</p>       
+           <Button 
+            // type="primary" 
+            size="large"
+            // onClick={onSubmit}
+          >取消</Button>
         </div>
       </div>
    );

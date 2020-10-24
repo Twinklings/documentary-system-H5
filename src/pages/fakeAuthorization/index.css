@@ -21,18 +21,34 @@
 }
 .fakeAuthorizationBox .am-list-item .am-input-control input{
     text-align: left;
+    font-size: 15px;
+    color: #222222;
 }
 .fakeAuthorizationBox .am-list-item.am-input-item{
     padding-left: 0 !important;
+    height: 48px !important;
 }
 .fakeAuthorizationBox .am-list-item.am-list-item-middle{
     padding-left: 0 !important;
+    height: 48px;
 }
 .fakeAuthorizationBox .am-list-item .am-list-line{
     padding-right: 0 !important;
 }
 .fakeAuthorizationBox .am-list-item.am-textarea-item{
     padding-left: 0 !important;
+}
+.fakeAuthorizationBox .submitApplication{
+    font-size: 16px !important;
+    font-weight: bold;
+    border-radius: 4px;
+    background-image: linear-gradient(to right, #f53 , #ff0042);
+}
+.fakeAuthorizationBox .am-list-body div:not(:last-child) .am-list-line{
+    border-color: #eeeeee;
+}
+.fakeAuthorizationBox .am-list-body{
+    border-color: #eeeeee;
 }
 /* .fakeAuthorizationBox .boxContent{
     margin-bottom: 70px;
@@ -62,16 +78,17 @@
     /* border-radius: 4px; */
 }
 .fakeAuthorizationBox .am-list-item .am-list-line .am-list-extra{
-    color: #000;
+    color: #222222;
+    font-size: 15px;
 }
 .fakeAuthorizationBox .codeImg{
     position: absolute !important;
     right: 0;
-    top: 3px;
+    top: 5px;
     height: 37px;
     line-height: 37px;
     width: 120px;
-    font-size: 16px;
+    font-size: 15px;
     border-radius: 2px;
     border: 1PX solid #ddd !important;
 }
@@ -120,8 +137,7 @@
 .fakeAuthorizationBox .am-list-item .am-input-label,
 .fakeAuthorizationBox .am-list-item .am-list-line .am-list-content,
 .fakeAuthorizationBox .am-textarea-label,
-.fakeAuthorizationBox .am-list-item .am-input-control input,
 .fakeAuthorizationBox .am-button
 {
-    font-size: 16px;
+    font-size: 14px;
 }

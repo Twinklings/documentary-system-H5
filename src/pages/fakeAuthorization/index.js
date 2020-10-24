@@ -367,7 +367,7 @@ function FakeAuthorization(props) {
 
     const validatePhone = (rule, value, callback) => {
         if (!(/^1[3456789]\d{9}$/.test(value))) {
-          callback(new Error('请输入正确的手机号格式'));
+          callback(new Error('请输入11位手机号手机'));
         }else{
           callback();
         }
@@ -375,10 +375,10 @@ function FakeAuthorization(props) {
 
     const startTheCountdown = () => {
         if (!(/^1[3456789]\d{9}$/.test(props.form.getFieldsValue().phone))) {
-            return Toast.info('请输入正确的手机号格式',toastTime);
+            return Toast.info('请输入11位手机号手机',toastTime);
         }
         if (initParam.image_captcha_status === 1 && validationEmpty(props.form.getFieldsValue().imgCode)) {
-            return Toast.info('请输入图片验证码',toastTime);
+            return Toast.info('请输入图形验证码',toastTime);
         }
 
         setSendSMS(true)
@@ -452,7 +452,7 @@ function FakeAuthorization(props) {
                         {...getFieldProps('user_name', {
                             // initialValue:"谢文欣",
                             rules: [
-                                { required: true, message: '请输入您的姓名' },
+                                { required: true, message: '请输入收货人姓名' },
                             ],
                         })}
                         clear
@@ -460,7 +460,7 @@ function FakeAuthorization(props) {
                         onErrorClick={() => {
                             Toast.info(getFieldError('user_name').join(';'),toastTime);
                         }}
-                        placeholder="请输入您的姓名"
+                        placeholder="请输入收货人姓名"
                         moneyKeyboardAlign={"left"}
                         labelNumber={4}
                         ref={user_name}
@@ -482,22 +482,22 @@ function FakeAuthorization(props) {
                         onErrorClick={() => {
                             Toast.info(getFieldError('phone').join(';'),toastTime);
                         }}
-                        placeholder="请输入手机"
+                        placeholder="请输入11位手机号手机"
                         moneyKeyboardAlign={"left"}
                         labelNumber={4}
                         ref={user_phone}
                         onClick={()=>{
                             user_phone.current.focus();
                         }}
-                    >手机</InputItem>
+                    >联系方式</InputItem>
                     {
                         initParam.image_captcha_status === 1?(
                             <div style={{"position":"relative"}}>
                                 <InputItem
-                                    title="图片验证码"
+                                    title="图形验证码"
                                     {...getFieldProps('imgCode', {
                                         rules: [
-                                            { required: true, message: '请输入图片验证码' },
+                                            { required: true, message: '请输入图形验证码' },
                                         ],
                                     })}
                                     clear
@@ -505,7 +505,7 @@ function FakeAuthorization(props) {
                                     onErrorClick={() => {
                                         Toast.info(getFieldError('imgCode').join(';'),toastTime);
                                     }}
-                                    placeholder="请输入图片验证码"
+                                    placeholder="请输入图形验证码"
                                     moneyKeyboardAlign={"left"}
                                     labelNumber={4}
                                     ref={user_imgCode}
@@ -562,7 +562,7 @@ function FakeAuthorization(props) {
                         {/* <img className={"codeImg"} src={imgCode}/> */}
                     </div>
                     
-                    <Picker extra="请选择(可选)"
+                    <Picker extra="请选择所在地区"
                         data={CITY}
                         title="选择地区"
                             {...getFieldProps('city', {
@@ -579,7 +579,7 @@ function FakeAuthorization(props) {
                             user_city.current.focus();
                         }}
                     >
-                        <List.Item arrow="horizontal">地区</List.Item>
+                        <List.Item arrow="horizontal">所在地区</List.Item>
                     </Picker>
                     <TextareaItem
                         {...getFieldProps('address', {
@@ -588,7 +588,7 @@ function FakeAuthorization(props) {
                                 { required: true, message: '请输入详细地址' },
                             ],
                         })}
-                        title="地址"
+                        title="详细地址"
                         placeholder="请输入详细地址"
                         error={!!getFieldError('address')}
                         onErrorClick={() => {
@@ -617,6 +617,7 @@ function FakeAuthorization(props) {
                 <Button 
                     type="warning"
                     onClick={onSubmit}
+                    className={"submitApplication"}
                 >提交申请</Button><WhiteSpace />
             </div>
             {/* <div className={"footer"}>

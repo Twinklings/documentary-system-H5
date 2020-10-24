@@ -49,13 +49,22 @@ function Modify(props) {
         if (!error) {
           console.log();
           let form = props.form.getFieldsValue()
-          let param = "out_order_no="+JSON.parse(sessionStorage.data).out_order_no+"&"+
-          "user_name="+form.user_name+"&"+
-          "user_phone="+form.user_phone+"&"+
-          "user_address="+form.user_address+"&"+
-          // "authorization_time="+date+"&"+
-          "openid="+sessionStorage.openid
+          // let param = "out_order_no="+JSON.parse(sessionStorage.data).out_order_no+"&"+
+          // "user_name="+form.user_name+"&"+
+          // "user_phone="+form.user_phone+"&"+
+          // "user_address="+form.user_address+"&"+
+          // // "authorization_time="+date+"&"+
+          // "openid="+sessionStorage.openid
 
+          let param = {
+            "out_order_no":JSON.parse(sessionStorage.data).out_order_no,
+            "user_name":form.user_name,
+            "user_phone":form.user_phone,
+            "user_address":form.user_address,
+            "openid":sessionStorage.openid,
+            "operation_tag":1,
+            "id":JSON.parse(sessionStorage.data).id,
+          };
           
           update(param).then(response=>{
             history.push('/success');

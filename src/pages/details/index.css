@@ -59,7 +59,7 @@
     border-radius: 4px;
 }
 .followUp{
-    background: #ffffff;
+    background: #F2F5FB;
     overflow: auto;
     position: fixed;
     left: 0;
@@ -68,6 +68,17 @@
     right: 0;
     max-width: 620px;
     margin: 0 auto;
+}
+.customerDetails .headPortrait{
+  width: 42px;
+  height: 42px;
+  float: left;
+  background: #196DFF;
+  border-radius: 50%;
+  line-height: 42px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
 }
 .followUp .detailsFooter{
     /* border-bottom: 5px solid #efecec !important; */
@@ -109,9 +120,14 @@
     .customerDetails .listView{
         border-top: 2px solid rgb(245, 245, 245);
         padding: 20px 10px;
+        display: flex;
     }
     .customerDetails .listView:first-child{
         border-top:0
+    }
+    .customerDetails .listViewRight{
+      float: left;
+      flex: 1;
     }
   .customerDetails .listViewRight .listItem{
     font-size: 14px;

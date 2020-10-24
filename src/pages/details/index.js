@@ -53,7 +53,7 @@ function Details() {
       
       if(getUrlCode('code') === 'false'){
         setVisible(false);
-        getWeChatConfig(getUrlParam('order')).then(response=>{
+        getWeChatConfig(getUrlParam('order'),1).then(response=>{
           console.log(response)
           const {appid,STATE,redirect_uri} = response;
           let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_base&state=${STATE}#wechat_redirect`
