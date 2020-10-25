@@ -42,7 +42,7 @@ function Details() {
     });
     
     useEffect(() => {
-      new VConsole();
+      // new VConsole();
 
       document.title = '订单详情';
       let code = getUrlParam('code');// 这是获取请求路径中带code字段参数的方法

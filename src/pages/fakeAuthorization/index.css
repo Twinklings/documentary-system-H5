@@ -68,6 +68,12 @@
 /* .fakeAuthorizationBox .boxContent{
     margin-bottom: 70px;
 } */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx){
+    html:not([data-scale]) .am-list-body div:not(:last-child) .am-list-line:after{
+        background-color: transparent !important;
+    }
+}
+
 
 .fakeAuthorizationBox .footer{
     position: fixed;

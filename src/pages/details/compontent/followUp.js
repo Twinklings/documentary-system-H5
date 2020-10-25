@@ -76,7 +76,8 @@ function FollowUp(props) {
         "id":JSON.parse(sessionStorage.data).id,
         "follow_records":JSON.stringify({list:followRecords}),
         "reminder_time":dateTime?`${moment(dateTime).format("YYYY-MM-DD HH:mm")}:00` :null,
-        "operation_tag":2
+        "operation_tag":2,
+        "salesman":JSON.parse(sessionStorage.data).salesman,
       }
       update(param).then(response=>{
         // history.push('/success');
@@ -97,8 +98,19 @@ function FollowUp(props) {
       <div className={"followUp"}>
         <div className={"detailsBoxs"}>
         <List className="date-picker-list">
-        
-        <List.Item>跟进内容</List.Item>
+        <DatePicker
+          value={dateTime}
+          onChange={date => {
+            setDateTime(date)
+            console.log(moment(date).format("YYYY-MM-DD HH:ss"))
+          }}
+          extra={"如需定时提醒，请选择"}
+        >
+          <List.Item style={{marginTop:10}} arrow="horizontal">下次联系时间</List.Item>
+        </DatePicker>
+        <List.Item style={{marginTop:10}}>跟进内容</List.Item>
+       
+
         <TextareaItem
             rows={3}
             placeholder="请输入跟进信息"
@@ -110,16 +122,7 @@ function FollowUp(props) {
               setNote(value)
             }}
         />
-        <DatePicker
-          value={dateTime}
-          onChange={date => {
-            setDateTime(date)
-            console.log(moment(date).format("YYYY-MM-DD HH:ss"))
-          }}
-          extra={"如需定时提醒，请选择"}
-        >
-          <List.Item arrow="horizontal">计划提醒</List.Item>
-        </DatePicker>
+        
         </List>
         </div>
         <div className={"detailsFooter"}>
@@ -127,12 +130,19 @@ function FollowUp(props) {
             type="primary" 
             size="large"
             onClick={onSubmit}
-          >确定</Button><WhiteSpace />
-           <Button 
+          >确定</Button>
+          <WhiteSpace />
+           {/* <Button 
             // type="primary" 
             size="large"
+            ghost
+            style={{
+              background: 'transparent',
+              color: '#1890FF',
+              border: '1px solid #1890FF',
+            }}
             // onClick={onSubmit}
-          >取消</Button>
+          >取消</Button> */}
         </div>
       </div>
    );

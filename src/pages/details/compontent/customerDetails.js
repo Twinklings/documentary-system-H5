@@ -34,10 +34,8 @@ function CustomerDetails(props) {
       // pay_amount:99.00,
       // channel_type:1,
       // user_phone:"17353134887",
-      // "list": 
-      // [
-      //   {"type": "1", "describe": "111111111", "userName": "周股", "createTime": "2020-10-25 00:00:45", "reminderTime": ""}
-      // ]
+      // user_address:"这是地址这是地址这是地址这是地址这是地址这是地址这是地址这是地址这是地址这是地址这是地址",
+      // follow_records: {list:[{'describe': '111111111', 'createTime': '2020-10-25 00:00:45'}]}
     });
 
 
@@ -52,7 +50,7 @@ function CustomerDetails(props) {
     });
 
     useEffect(() => {
-      new VConsole();
+      // new VConsole();
 
       document.title = '客户详情';
 
@@ -61,7 +59,7 @@ function CustomerDetails(props) {
       let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
       var local = window.location.href;//获取当前页面路径，即回调地址
       console.log(code,getUrlParam('order'),belongs,payAmount)
-      
+      // setVisible(true);
       if(getUrlCode('code') === 'false'){
         setVisible(false);
         getWeChatConfig(getUrlParam('order'),2).then(response=>{
@@ -170,13 +168,13 @@ function CustomerDetails(props) {
     const onClose = () => {
       setVisibleModal(false)
     }
-
     return (
       <div className={"customerDetails"} style={visible ? {display:"block"} : {display:"none"}}>
         <div className={"top"}>
           <div className={"details"}>
             <div className={"detailsTop"}>
               <span className={"detailsName"}>{initializationData.user_name}</span>
+              <span className={"moneyIcon"}>￥</span>
               <span className={"money"}>{initializationData.pay_amount}</span>
               <span className={"label"}>{
                 initializationData.confirm_tag === "0" ? "待审核":
@@ -191,18 +189,18 @@ function CustomerDetails(props) {
                 initializationData.confirm_tag === "9" ? "已过期": ""
               }</span>
             </div>
-            <div className={"listItem"}><span className={"title"}>负责来源：</span><span>{
+            <div className={"listItem"}><span className={"title"}>负责来源：</span><span style={{color:"#333333"}}>{
               initializationData.channel_type === 1 ? "支付宝" : 
               initializationData.channel_type === 2 ? "微信": 
               initializationData.channel_type === 3 ? "伪授权": 
               initializationData.channel_type === 3 ? "免费" :""
             }</span></div>
             <div className={"listItem"}><span className={"title"}>物流信息：</span><span onClick={getLogistics} className={"defultColor"}>查看物流</span></div>
-            <div className={"listItem"}><span className={"title"}>收获地址：</span><span className={"ellipsis"}>{initializationData.user_address}</span></div>
+            <div className={"listItem"}><span className={"title"}>收货地址：</span><span className={"ellipsis"}>{initializationData.user_address}</span></div>
             <div className={"detailsBottom"} onClick={()=>{myCall(initializationData.user_phone)}}>
               <img className={"phone"} src={phone}/>
               <span>{initializationData.user_phone}</span>
-              <span style={{float:"right",marginRight:10}}><Icon type={"right"} /></span>
+              <span style={{float:"right",marginTop:6}}><Icon type={"right"} /></span>
             </div>
           </div>
         </div>
@@ -231,12 +229,12 @@ function CustomerDetails(props) {
               JSON.parse(initializationData.follow_records).list.map(item=>{
               return (
                 <div className={"listView"}>
-                  <div style={{width:"60px"}}>
+                  <div style={{width:"45px",marginTop:"8px"}}>
                     <div className={"headPortrait"}>{initializationData.salesman_name ? initializationData.salesman_name.substr(-2, 2) : "暂无"}</div>
                   </div>
                   <div className={"listViewRight"}>
                     <div className={"listItem"}>
-                      <span style={{marginRight:5}}>{initializationData.salesman_name ? initializationData.salesman_name.substr(-2, 2) : "暂无"}</span>
+                      <span style={{marginRight:5,color:"#333333"}}>{initializationData.salesman_name ? initializationData.salesman_name.substr(-2, 2) : "暂无"}</span>
                       {
                         initializationData.reminder_time?(<>
                           &nbsp;<span className={"fl defultColor"}>{initializationData.reminder_time}</span> 
@@ -244,8 +242,8 @@ function CustomerDetails(props) {
                         </>):""
                       }
                     </div>
-                    <div className={"listItem"}><span className={"title"}>跟进时间：</span><span>{item.createTime}</span></div>
-                    <div className={"listItem"}><span className={"title"}>跟进内容：</span><span>{item.describe}</span></div>
+                    <div className={"listItem"}><span className={"title"}>跟进时间：</span><span style={{color:"#333333"}}>{item.createTime}</span></div>
+                    <div className={"listItem"}><span className={"title"}>跟进内容：</span><span style={{color:"#333333"}}>{item.describe}</span></div>
                   </div>  
                 </div>
               )

@@ -2,7 +2,7 @@
 <svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>投诉</title>
     <g id="投诉" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="椭圆形" fill="#FFCB8C" cx="50" cy="50" r="50"></circle>
+        <circle id="椭圆形" fill-opacity="0.9" fill="#FFCB8C" cx="50" cy="50" r="50"></circle>
         <circle id="椭圆形备份" fill="#8ACF44" cx="50" cy="50" r="40"></circle>
         <g transform="translate(10.000000, 10.000000)" fill-rule="nonzero" id="路径">
             <path d="M40.0000465,80.0000991 C62.0914785,80.0000991 80.0000931,62.0914845 80.0000931,40.0000526 C80.0000931,17.9086206 62.0914785,6.03983515e-06 40.0000465,6.03983515e-06 C17.9086146,6.03983515e-06 0,17.9086206 0,40.0000526 C0,62.0914845 17.9086146,80.0000991 40.0000465,80.0000991 Z" fill="#EF8227"></path>

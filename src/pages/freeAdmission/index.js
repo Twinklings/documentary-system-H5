@@ -96,7 +96,7 @@ function FakeAuthorization(props) {
     
 
     useEffect(() => {
-        new VConsole();
+        // new VConsole();
 
         
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数

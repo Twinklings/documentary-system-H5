@@ -98,7 +98,7 @@ function FakeAuthorization(props) {
     
 
     useEffect(() => {
-        new VConsole();
+        // new VConsole();
 
         
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
@@ -213,12 +213,13 @@ function FakeAuthorization(props) {
         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
             window.am.selectAddress(function (data) {
                 console.log(data,"data")
-                let _data = data.address.split("-")
+                // let _data = data.address.split("-")
+                // _data[_data.length-1]
                 props.form.setFieldsValue(
                     {
                         phone:data.mobilePhone,
                         user_name:data.fullname,
-                        address:_data[_data.length-1],
+                        address:data.address,
                     }
                 );
                 getProv(data.addressCode,"1")
@@ -305,7 +306,7 @@ function FakeAuthorization(props) {
             let param = {
                 "user_name": form.user_name,
                 "user_phone": form.phone,
-                "user_address": form.address,
+                "user_address": `${cityPark[0]}${cityPark[1]}${cityPark[2]}${form.address}`,
                 "pay_amount": addressParameters.pay_amount,
                 "salesman": addressParameters.salesman,
                 "province": cityPark[0],
