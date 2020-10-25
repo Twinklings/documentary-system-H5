@@ -75,7 +75,7 @@ function FollowUp(props) {
         "user_address":JSON.parse(sessionStorage.data).user_address,
         "id":JSON.parse(sessionStorage.data).id,
         "follow_records":JSON.stringify({list:followRecords}),
-        "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null,
+        "reminder_time":dateTime?`${moment(dateTime).format("YYYY-MM-DD HH:mm")}:00` :null,
         "operation_tag":2
       }
       update(param).then(response=>{
