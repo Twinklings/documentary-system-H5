@@ -177,23 +177,23 @@ function CustomerDetails(props) {
               <span className={"moneyIcon"}>￥</span>
               <span className={"money"}>{initializationData.pay_amount}</span>
               <span className={"label"}>{
-                initializationData.confirm_tag === "0" ? "待审核":
-                initializationData.confirm_tag === "1" ? "已审核":
-                initializationData.confirm_tag === "2" ? "已发货":
-                initializationData.confirm_tag === "3" ? "在途中":
-                initializationData.confirm_tag === "4" ? "已签收":
-                initializationData.confirm_tag === "5" ? "跟进中":
-                initializationData.confirm_tag === "6" ? "已激活":
-                initializationData.confirm_tag === "7" ? "已退回":
-                initializationData.confirm_tag === "8" ? "已取消":
-                initializationData.confirm_tag === "9" ? "已过期": ""
+                (initializationData.confirm_tag === "0" || initializationData.confirm_tag === 0) ? "待审核":
+                (initializationData.confirm_tag === "1" || initializationData.confirm_tag === 1) ? "已审核":
+                (initializationData.confirm_tag === "2" || initializationData.confirm_tag === 2) ? "已发货":
+                (initializationData.confirm_tag === "3" || initializationData.confirm_tag === 3) ? "在途中":
+                (initializationData.confirm_tag === "4" || initializationData.confirm_tag === 4) ? "已签收":
+                (initializationData.confirm_tag === "5" || initializationData.confirm_tag === 5) ? "跟进中":
+                (initializationData.confirm_tag === "6" || initializationData.confirm_tag === 6) ? "已激活":
+                (initializationData.confirm_tag === "7" || initializationData.confirm_tag === 7) ? "已退回":
+                (initializationData.confirm_tag === "8" || initializationData.confirm_tag === 8) ? "已取消":
+                (initializationData.confirm_tag === "9" || initializationData.confirm_tag === 9) ? "已过期": ""
               }</span>
             </div>
-            <div className={"listItem"}><span className={"title"}>负责来源：</span><span style={{color:"#333333"}}>{
-              initializationData.channel_type === 1 ? "支付宝" : 
-              initializationData.channel_type === 2 ? "微信": 
-              initializationData.channel_type === 3 ? "伪授权": 
-              initializationData.channel_type === 3 ? "免费" :""
+            <div className={"listItem"}><span className={"title"}>负责来源：</span><span style={{color:"#333333"}}>{initializationData.user_name}/{
+              (initializationData.channel_type === 1 || initializationData.channel_type === '1') ? "支付宝" : 
+              (initializationData.channel_type === 2 || initializationData.channel_type === '2') ? "微信": 
+              (initializationData.channel_type === 3 || initializationData.channel_type === '3') ? "伪授权": 
+              (initializationData.channel_type === 3 || initializationData.channel_type === '4') ? "免费" :""
             }</span></div>
             <div className={"listItem"}><span className={"title"}>物流信息：</span><span onClick={getLogistics} className={"defultColor"}>查看物流</span></div>
             <div className={"listItem"}><span className={"title"}>收货地址：</span><span className={"ellipsis"}>{initializationData.user_address}</span></div>
