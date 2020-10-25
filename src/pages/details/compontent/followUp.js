@@ -36,18 +36,59 @@ function FollowUp(props) {
         Toast.fail("请输入跟进信息", toastTime);
         return false;
       }
+      console.log(note,"跟进信息");
+      console.log(JSON.parse(sessionStorage.data).follow_records);
+      console.log(dateTime,dateTime ? moment(dateTime).format("YYYY-MM-DD HH:ss"):null)
+
+      let followRecords = [];
+
+      if(!JSON.parse(sessionStorage.data).follow_records || JSON.parse(sessionStorage.data).follow_records === null || JSON.parse(sessionStorage.data).follow_records === '{}'){
+        followRecords = [{
+          "describe":note,
+          "createTime":moment().format("YYYY-MM-DD HH:mm:ss"),
+          "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
+        }]
+      }else{
+
+        // moment(dateTime).format("YYYY-MM-DD HH:ss")
+        
+        let oldlist = JSON.parse(JSON.parse(sessionStorage.data).follow_records).list;
+
+        console.log(oldlist,"followRecords");
+        
+        followRecords = [
+          {
+            "describe":note,
+            "createTime":moment().format("YYYY-MM-DD HH:mm:ss"),
+            "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
+          },
+          ...oldlist
+        ]
+      }
+      console.log(followRecords,moment().format("YYYY-MM-DD HH:mm:ss"),"listlistlistlistlist");
+
       let param = {
         "openid":sessionStorage.openid,
-        "out_order_no=":JSON.parse(sessionStorage.data).out_order_no,
+        "out_order_no":JSON.parse(sessionStorage.data).out_order_no,
         "user_name":JSON.parse(sessionStorage.data).user_name,
         "user_phone":JSON.parse(sessionStorage.data).user_phone,
         "user_address":JSON.parse(sessionStorage.data).user_address,
         "id":JSON.parse(sessionStorage.data).id,
-        "follow_records":note,
+        "follow_records":JSON.stringify({list:followRecords}),
         "operation_tag":2
       }
       update(param).then(response=>{
-        history.push('/success');
+        // history.push('/success');
+        Toast.info('跟进成功，窗口将会关闭，请重新打开详情查看跟进信息', 3);
+        setTimeout(()=>{
+          if (/MicroMessenger/.test(window.navigator.userAgent)) {
+            // 微信
+            window.WeixinJSBridge.call('closeWindow');
+          } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+            // 支付宝
+            window.AlipayJSBridge.call('closeWebview');
+          }
+        },3000)
       })
     }
 
@@ -55,15 +96,7 @@ function FollowUp(props) {
       <div className={"followUp"}>
         <div className={"detailsBoxs"}>
         <List className="date-picker-list">
-        {/* <DatePicker
-          value={dateTime}
-          onChange={date => {
-            setDateTime(date)
-            console.log(moment(date).format("YYYY-MM-DD HH:ss"))
-          }}
-        >
-          <List.Item arrow="horizontal">计划提醒</List.Item>
-        </DatePicker> */}
+        
         <List.Item>跟进内容</List.Item>
         <TextareaItem
             rows={3}
@@ -76,6 +109,15 @@ function FollowUp(props) {
               setNote(value)
             }}
         />
+        <DatePicker
+          value={dateTime}
+          onChange={date => {
+            setDateTime(date)
+            console.log(moment(date).format("YYYY-MM-DD HH:ss"))
+          }}
+        >
+          <List.Item arrow="horizontal">计划提醒</List.Item>
+        </DatePicker>
         </List>
         </div>
         <div className={"detailsFooter"}>

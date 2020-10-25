@@ -44,11 +44,26 @@
     border-radius: 4px;
     background-image: linear-gradient(to right, #f53 , #ff0042);
 }
+.fakeAuthorizationBox .selectAddress{
+    font-size: 16px !important;
+    font-weight: bold;
+    border-radius: 4px;
+    background-image: linear-gradient(to right, #40a9ff , #1890ff);
+}
 .fakeAuthorizationBox .am-list-body div:not(:last-child) .am-list-line{
-    border-color: #eeeeee;
+    border-bottom: 1px solid #eeeeee !important;
 }
 .fakeAuthorizationBox .am-list-body{
-    border-color: #eeeeee;
+    border: 0 !important;
+}
+.fakeAuthorizationBox .am-list-item .am-input-label{
+    color: #828282;
+}
+.fakeAuthorizationBox .am-list-item .am-list-line .am-list-content{
+    color: #828282;
+}
+.fakeAuthorizationBox .am-textarea-label{
+    color: #828282;
 }
 /* .fakeAuthorizationBox .boxContent{
     margin-bottom: 70px;
@@ -90,8 +105,24 @@
     width: 120px;
     font-size: 15px;
     border-radius: 2px;
-    border: 1PX solid #ddd !important;
+    border: 1PX solid #eeeeee !important;
 }
+
+.fakeAuthorizationBox .am-list-body:before{
+    background-color: transparent !important;
+}
+.fakeAuthorizationBox .am-list-body:after{
+    background-color: transparent !important;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx){
+    html:not([data-scale]) .am-list-body:after{
+        background-color: transparent !important;
+    }
+    html:not([data-scale]) .am-list-body:before{
+        background-color: transparent !important;
+    }
+}
+
 .fakeAuthorizationBox .prompt_content{
     text-align: center;
     line-height: 30px;

@@ -98,7 +98,15 @@
 
   /* 客户详情 */
  .customerDetails{
-
+    background: #F2F5FB;
+    overflow: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    max-width: 620px;
+    margin: 0 auto;
   }
   .customerDetails .top{
     background: #196DFF ;
@@ -210,4 +218,11 @@
   }
   .customerDetails .details .title{
     color: #656667;
+  }
+  .ellipsis{
+    display: inline-block;
+    width: 180px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }

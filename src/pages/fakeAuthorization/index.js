@@ -519,6 +519,7 @@ function FakeAuthorization(props) {
                                     className={"codeImg"} 
                                     src={imgCode}
                                     onClick={getImgCode}
+                                    style={{height:35,width:118}}
                                 />
                             </div>
                         ):""
@@ -529,7 +530,7 @@ function FakeAuthorization(props) {
                             title="验证码"
                             {...getFieldProps('code', {
                                 rules: [
-                                    { required: true, max: 6, min: 6, message: '请输入6位验证码' },
+                                    { required: true, max: 6, min: 6, message: '请输入6位短信验证码' },
                                 ],
                             })}
                             clear
@@ -537,7 +538,7 @@ function FakeAuthorization(props) {
                             onErrorClick={() => {
                                 Toast.info(getFieldError('code').join(';'),toastTime);
                             }}
-                            placeholder="请输入验证码"
+                            placeholder="请输入短信验证码"
                             moneyKeyboardAlign={"left"}
                             labelNumber={4}
                             ref={user_code}
@@ -610,6 +611,7 @@ function FakeAuthorization(props) {
                     <Button 
                         type="primary"
                         onClick={selectAddress}
+                        className={"selectAddress"}
                     >{browserType === 1 ? "":"获取淘宝地址"}</Button>
                     ):""
                 }

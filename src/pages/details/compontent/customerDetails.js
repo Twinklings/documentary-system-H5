@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 // import { List, Button, WhiteSpace, DatePicker, InputItem, TextareaItem, Toast, ListView, Badge, Tag } from 'antd-mobile';
-import { Tabs, WhiteSpace, Badge, Icon } from 'antd-mobile';
+import { Tabs, WhiteSpace, Badge, Icon, Toast, Modal } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import moment from 'moment'
 // import {Flex,WhiteSpace} from 'antd-mobile'
@@ -147,6 +147,30 @@ function CustomerDetails(props) {
       window.location.href = `tel://${tel}`;  
     }
 
+    const getLogistics = () => {
+      setVisibleModal(true)
+      console.log(initializationData)
+      viewLogistics(initializationData.out_order_no).then(res=>{
+        console.log(res)
+        if(res.data === null || res.data.list === null){
+          Toast.info('订单正在准备，请耐心等待发货。', toastTime);
+          return false;
+        }
+        res.data.datalist = JSON.parse(res.data.list)
+        
+        let _datas = res.data;
+        
+        _datas.name = getLogisticsCompany().result[_datas.type];
+  
+        console.log(_datas.datalist)
+        setLogisticsList(_datas);
+      })
+    }
+
+    const onClose = () => {
+      setVisibleModal(false)
+    }
+
     return (
       <div className={"customerDetails"} style={visible ? {display:"block"} : {display:"none"}}>
         <div className={"top"}>
@@ -173,8 +197,8 @@ function CustomerDetails(props) {
               initializationData.channel_type === 3 ? "伪授权": 
               initializationData.channel_type === 3 ? "免费" :""
             }</span></div>
-            <div className={"listItem"}><span className={"title"}>物流信息：</span><span className={"defultColor"}>查看物流</span></div>
-            <div className={"listItem"}><span className={"title"}>收获地址：</span><span>{initializationData.user_address}</span></div>
+            <div className={"listItem"}><span className={"title"}>物流信息：</span><span onClick={getLogistics} className={"defultColor"}>查看物流</span></div>
+            <div className={"listItem"}><span className={"title"}>收获地址：</span><span className={"ellipsis"}>{initializationData.user_address}</span></div>
             <div className={"detailsBottom"} onClick={()=>{myCall(initializationData.user_phone)}}>
               <img className={"phone"} src={phone}/>
               <span>{initializationData.user_phone}</span>
@@ -184,7 +208,7 @@ function CustomerDetails(props) {
         </div>
         <div className={"tabs"}>
           <Tabs tabs={tabs}
-            initialPage={1}
+            initialPage={0}
             onChange={(tab, index) => { console.log('onChange', index, tab); }}
             onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
           >
@@ -200,7 +224,11 @@ function CustomerDetails(props) {
 
         <div className={"customerContent"}>
           {
-            (initializationData.list && initializationData.list != "" && initializationData.list != "[]" && initializationData.list != null) ? JSON.parse(initializationData.list).map(item=>{
+            (initializationData.follow_records && 
+              initializationData.follow_records != "" && 
+              initializationData.follow_records != "{}" && 
+              initializationData.follow_records != null) ? 
+              JSON.parse(initializationData.follow_records).list.map(item=>{
               return (
                 <div className={"listView"}>
                   <div style={{width:"60px"}}>
@@ -209,8 +237,12 @@ function CustomerDetails(props) {
                   <div className={"listViewRight"}>
                     <div className={"listItem"}>
                       <span style={{marginRight:5}}>{initializationData.salesman_name ? initializationData.salesman_name.substr(-2, 2) : "暂无"}</span>
-                      {/* &nbsp;<span className={"fl defultColor"}>10-22 19:30</span>  */}
-                      {/* <img className={"alarmClock"} src={alarmClock}/> */}
+                      {
+                        item.reminder_time?(<>
+                          &nbsp;<span className={"fl defultColor"}>{item.reminder_time}</span> 
+                          <img className={"alarmClock"} src={alarmClock}/>
+                        </>):""
+                      }
                     </div>
                     <div className={"listItem"}><span className={"title"}>跟进时间：</span><span>{item.createTime}</span></div>
                     <div className={"listItem"}><span className={"title"}>跟进内容：</span><span>{item.describe}</span></div>
@@ -220,6 +252,29 @@ function CustomerDetails(props) {
             }) : ""
           }
         </div>
+        <Modal
+          visible={visibleModal}
+          transparent
+          maskClosable={false}
+          onClose={onClose}
+          title="物流信息"
+          footer={[{ text: '关闭', onPress: () => { onClose(); } }]}
+          style={{ width:350,}}
+        >
+          <div className={"logisticsList"} style={{ height: 400, overflow: 'scroll' }}>
+            <div>{logisticsList.name}{logisticsList.no ? `(${logisticsList.no})` : ""}</div>
+            {
+              logisticsList.datalist.map((item,index)=>{
+                return(
+                  <div key={index} className={"listItem"}>
+                    <div style={{textAlign:"left"}}>{item.content}</div>
+                    <div style={{textAlign:"left"}}>{item.time}</div>
+                  </div>
+                )
+              })
+            }
+          </div>
+        </Modal>
       </div>
    );
 }
