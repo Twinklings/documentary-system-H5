@@ -46,7 +46,7 @@ function FollowUp(props) {
         followRecords = [{
           "describe":note,
           "createTime":moment().format("YYYY-MM-DD HH:mm:ss"),
-          "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
+          // "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
         }]
       }else{
 
@@ -60,7 +60,7 @@ function FollowUp(props) {
           {
             "describe":note,
             "createTime":moment().format("YYYY-MM-DD HH:mm:ss"),
-            "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
+            // "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
           },
           ...oldlist
         ]
@@ -75,6 +75,7 @@ function FollowUp(props) {
         "user_address":JSON.parse(sessionStorage.data).user_address,
         "id":JSON.parse(sessionStorage.data).id,
         "follow_records":JSON.stringify({list:followRecords}),
+        "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null,
         "operation_tag":2
       }
       update(param).then(response=>{
@@ -115,6 +116,7 @@ function FollowUp(props) {
             setDateTime(date)
             console.log(moment(date).format("YYYY-MM-DD HH:ss"))
           }}
+          extra={"如需定时提醒，请选择"}
         >
           <List.Item arrow="horizontal">计划提醒</List.Item>
         </DatePicker>
