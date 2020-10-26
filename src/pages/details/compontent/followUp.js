@@ -46,7 +46,7 @@ function FollowUp(props) {
         followRecords = [{
           "describe":note,
           "createTime":moment().format("YYYY-MM-DD HH:mm:ss"),
-          // "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
+          "reminder_time":dateTime?`${moment(dateTime).format("YYYY-MM-DD HH:mm")}:00`:null
         }]
       }else{
 
@@ -60,7 +60,7 @@ function FollowUp(props) {
           {
             "describe":note,
             "createTime":moment().format("YYYY-MM-DD HH:mm:ss"),
-            // "reminder_time":dateTime?moment(dateTime).format("YYYY-MM-DD HH:ss"):null
+            "reminder_time":dateTime?`${moment(dateTime).format("YYYY-MM-DD HH:mm")}:00`:null
           },
           ...oldlist
         ]
