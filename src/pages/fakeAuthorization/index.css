@@ -137,7 +137,7 @@
 .fakeAuthorizationBox .rightCall{
     position: fixed;
     right: 5px;
-    top: 40%;
+    top: 25%;
     width: 50px;
     z-index: 1000;
 }
