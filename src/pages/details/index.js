@@ -132,8 +132,14 @@ function Details() {
           },
           {
             title:"订单来源",
-            // 1 支付宝 2 微信  3伪授权 4免费 
-            name:_data.channel_type === 1 ? "支付宝" : _data.channel_type === 2 ? "微信": _data.channel_type === 3 ? "伪授权": _data.channel_type === 3 ? "免费" :""
+            name:(_data.order_source === 1 || _data.order_source === '1') ? "新增" : 
+            (_data.order_source === 2 || _data.order_source === '2') ? "导入": 
+            (_data.order_source === 3 || _data.order_source === '3') ? "H5扫码": 
+            (_data.order_source === 4 || _data.order_source === '4') ? "销售": 
+            (_data.order_source === 5 || _data.order_source === '5') ? "电销": 
+            (_data.order_source === 6 || _data.order_source === '6') ? "网销": 
+            (_data.order_source === 7 || _data.order_source === '7') ? "地推": 
+            (_data.order_source === 8 || _data.order_source === '8') ? "免押宝" :""
           },
           {
             title:"免押金额",

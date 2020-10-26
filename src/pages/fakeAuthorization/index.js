@@ -294,9 +294,11 @@ function FakeAuthorization(props) {
     }
 
     const onSubmit = () =>{
-        // if(!sendSMS){
-        //     return Toast.fail("请先发送短信验证码！");
-        // }
+        if(!sendSMS){
+            setVerificationCodeValue("");
+            props.form.setFieldsValue({code:""});
+            return Toast.fail("请先发送短信验证码！");
+        }
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {
             let form = props.form.getFieldsValue()
@@ -318,6 +320,8 @@ function FakeAuthorization(props) {
                 "code": form.code,
                 "tenant_id": addressParameters.tenant_id,
                 "dept_id": addressParameters.dept_id,
+                "product_type": `${initParam.pay_pany_name}/${initParam.product_type_name}`,
+                "product_name":initParam.product_name
             }
             console.log(param,"formformform")
 
@@ -374,6 +378,14 @@ function FakeAuthorization(props) {
         }
     }
 
+    const validateCode = (rule, value, callback) => {
+        if (value.length != 6 || !(/(^[1-9]\d*$)/.test(value))) {
+          callback(new Error('请输入6位数字短信验证码'));
+        }else{
+          callback();
+        }
+    }
+
     const startTheCountdown = () => {
         if (!(/^1[3456789]\d{9}$/.test(props.form.getFieldsValue().phone))) {
             return Toast.info('请输入11位手机号手机',toastTime);
@@ -382,7 +394,7 @@ function FakeAuthorization(props) {
             return Toast.info('请输入图形验证码',toastTime);
         }
 
-        setSendSMS(true)
+        setSendSMS(true);
         
         sendVerificationCode(props.form.getFieldsValue().phone);
     }
@@ -529,9 +541,11 @@ function FakeAuthorization(props) {
                     <div style={{"position":"relative"}}>
                         <InputItem
                             title="验证码"
+                            // type={"money"}
                             {...getFieldProps('code', {
                                 rules: [
-                                    { required: true, max: 6, min: 6, message: '请输入6位短信验证码' },
+                                    // { required: true, max: 6, min: 6, message: '请输入6位短信验证码' },
+                                    { required: true, validator: validateCode },
                                 ],
                             })}
                             clear

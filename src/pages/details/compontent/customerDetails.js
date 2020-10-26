@@ -168,6 +168,14 @@ function CustomerDetails(props) {
     const onClose = () => {
       setVisibleModal(false)
     }
+    // {name:"新增",key:1},
+    // {name:"导入",key:2},
+    // {name:"H5扫码",key:3},
+    // {name:"销售",key:4},
+    // {name:"电销",key:5},
+    // {name:"网销",key:6},
+    // {name:"地推",key:7},
+    // {name:"免押宝",key:8},
     return (
       <div className={"customerDetails"} style={visible ? {display:"block"} : {display:"none"}}>
         <div className={"top"}>
@@ -190,10 +198,14 @@ function CustomerDetails(props) {
               }</span>
             </div>
             <div className={"listItem"}><span className={"title"}>负责来源：</span><span style={{color:"#333333"}}>{initializationData.user_name}/{
-              (initializationData.channel_type === 1 || initializationData.channel_type === '1') ? "支付宝" : 
-              (initializationData.channel_type === 2 || initializationData.channel_type === '2') ? "微信": 
-              (initializationData.channel_type === 3 || initializationData.channel_type === '3') ? "伪授权": 
-              (initializationData.channel_type === 3 || initializationData.channel_type === '4') ? "免费" :""
+              (initializationData.order_source === 1 || initializationData.order_source === '1') ? "新增" : 
+              (initializationData.order_source === 2 || initializationData.order_source === '2') ? "导入": 
+              (initializationData.order_source === 3 || initializationData.order_source === '3') ? "H5扫码": 
+              (initializationData.order_source === 4 || initializationData.order_source === '4') ? "销售" :
+              (initializationData.order_source === 5 || initializationData.order_source === '5') ? "电销" :
+              (initializationData.order_source === 6 || initializationData.order_source === '6') ? "网销" :
+              (initializationData.order_source === 7 || initializationData.order_source === '7') ? "地推" :
+              (initializationData.order_source === 8 || initializationData.order_source === '8') ? "免押宝" :""
             }</span></div>
             <div className={"listItem"}><span className={"title"}>物流信息：</span><span onClick={getLogistics} className={"defultColor"}>查看物流</span></div>
             <div className={"listItem"}><span className={"title"}>收货地址：</span><span className={"ellipsis"}>{initializationData.user_address}</span></div>
