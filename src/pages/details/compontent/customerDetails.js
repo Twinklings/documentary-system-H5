@@ -186,15 +186,16 @@ function CustomerDetails(props) {
               <span className={"money"}>{initializationData.pay_amount}</span>
               <span className={"label"}>{
                 (initializationData.confirm_tag === "0" || initializationData.confirm_tag === 0) ? "待审核":
-                (initializationData.confirm_tag === "1" || initializationData.confirm_tag === 1) ? "已审核":
-                (initializationData.confirm_tag === "2" || initializationData.confirm_tag === 2) ? "已发货":
-                (initializationData.confirm_tag === "3" || initializationData.confirm_tag === 3) ? "在途中":
-                (initializationData.confirm_tag === "4" || initializationData.confirm_tag === 4) ? "已签收":
-                (initializationData.confirm_tag === "5" || initializationData.confirm_tag === 5) ? "跟进中":
-                (initializationData.confirm_tag === "6" || initializationData.confirm_tag === 6) ? "已激活":
-                (initializationData.confirm_tag === "7" || initializationData.confirm_tag === 7) ? "已退回":
-                (initializationData.confirm_tag === "8" || initializationData.confirm_tag === 8) ? "已取消":
-                (initializationData.confirm_tag === "9" || initializationData.confirm_tag === 9) ? "已过期": ""
+                (initializationData.confirm_tag === "1" || initializationData.confirm_tag === 1) ? "一审":
+                (initializationData.confirm_tag === "2" || initializationData.confirm_tag === 2) ? "已审":
+                (initializationData.confirm_tag === "3" || initializationData.confirm_tag === 3) ? "已发货":
+                (initializationData.confirm_tag === "4" || initializationData.confirm_tag === 4) ? "在途中":
+                (initializationData.confirm_tag === "5" || initializationData.confirm_tag === 5) ? "已签收":
+                (initializationData.confirm_tag === "6" || initializationData.confirm_tag === 6) ? "跟进中":
+                (initializationData.confirm_tag === "7" || initializationData.confirm_tag === 7) ? "已激活":
+                (initializationData.confirm_tag === "8" || initializationData.confirm_tag === 8) ? "已退回":
+                (initializationData.confirm_tag === "9" || initializationData.confirm_tag === 9) ? "已取消":
+                (initializationData.confirm_tag === "10" || initializationData.confirm_tag === 10) ? "已过期": ""
               }</span>
             </div>
             <div className={"listItem"}><span className={"title"}>负责来源：</span><span style={{color:"#333333"}}>{initializationData.user_name}/{
