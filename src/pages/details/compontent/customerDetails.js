@@ -186,8 +186,8 @@ function CustomerDetails(props) {
               <span className={"money"}>{initializationData.pay_amount}</span>
               <span className={"label"}>{
                 (initializationData.confirm_tag === "0" || initializationData.confirm_tag === 0) ? "待审核":
-                (initializationData.confirm_tag === "1" || initializationData.confirm_tag === 1) ? "一审":
-                (initializationData.confirm_tag === "2" || initializationData.confirm_tag === 2) ? "已审":
+                (initializationData.confirm_tag === "1" || initializationData.confirm_tag === 1) ? "初审":
+                (initializationData.confirm_tag === "2" || initializationData.confirm_tag === 2) ? "终审":
                 (initializationData.confirm_tag === "3" || initializationData.confirm_tag === 3) ? "已发货":
                 (initializationData.confirm_tag === "4" || initializationData.confirm_tag === 4) ? "在途中":
                 (initializationData.confirm_tag === "5" || initializationData.confirm_tag === 5) ? "已签收":
