@@ -13,6 +13,7 @@ import FakeAuthorizationWeixin from '../pages/fakeAuthorization/order/weixin';
 import FakeAuthorizationAlipay from '../pages/fakeAuthorization/order/alipay';
 
 import FreeAdmission from '../pages/freeAdmission';
+import Successful from '../pages/recharge/successful';
 
 const BasicRoute = () => (
     <HashRouter>
@@ -21,6 +22,8 @@ const BasicRoute = () => (
             <Route exact path="/" component={Details}/>
             <Route exact path="/details/customerDetails" component={CustomerDetails}/>
             <Route exact path="/details/followUp" component={FollowUp}/>
+
+            <Route exact path="/recharge/successful" component={Successful}/>
             
             <Route exact path="/success" component={Success}/>
             <Route exact path="/modify" component={Modify}/>
