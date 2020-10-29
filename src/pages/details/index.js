@@ -172,9 +172,11 @@ function Details() {
     }
 
     const determine = () =>{
-      let param = "out_order_no="+initializationData.out_order_no+"&"+
-          "openid="+initializationData.openid
-      confirm(param).then(response=>{
+      confirm({
+        "out_order_no":initializationData.out_order_no,
+        "openid":initializationData.openid,
+        "confirm_tag":"1"
+      }).then(response=>{
         history.push('/success');
       })
     }
@@ -258,8 +260,8 @@ function Details() {
               订单详情
               <span 
                 className={"tips"}
-                style={confirm_tag === 0 ? {background:"#FF6010"} : {background:"#49CB15"}}
-              >{confirm_tag === 0 ? "待确认" : "已确认"}</span>
+                style={(confirm_tag === 0 || confirm_tag === '0') ? {background:"#FF6010"} : {background:"#49CB15"}}
+              >{(confirm_tag === 0 || confirm_tag === '0') ? "待确认" : "已确认"}</span>
             </div>
           </div>
           <ListItem
@@ -301,7 +303,7 @@ function Details() {
 
         <div className={"detailsFooter"}>
           {
-            confirm_tag === 0 ? (
+            (confirm_tag === 0 || confirm_tag === '0') ? (
               <div>
                 <Button 
                   type="primary" 
@@ -312,7 +314,7 @@ function Details() {
             ) :""
           }
           {
-            confirm_tag === 0 ? (
+            (confirm_tag === 0 || confirm_tag === '0') ? (
               <div>
                 <Button onClick={update}>修改</Button><WhiteSpace />
               </div>

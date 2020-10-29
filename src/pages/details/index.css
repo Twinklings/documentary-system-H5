@@ -244,3 +244,14 @@
     flex: 1;
     color: #333333;
   }
+
+  .orderTypeModal .am-list-body{
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+  }
+  .orderTypeModal .am-list-item.am-list-item-middle .am-list-line{
+    border-bottom: 1PX solid #ddd !important;
+  }
+  .orderTypeModal .am-list-item{
+    padding-right: 15px;
+  }

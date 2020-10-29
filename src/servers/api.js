@@ -21,8 +21,9 @@ export function getOrderDetails(params) {
 // 确认
 export function confirm(params) {
   return request({
-    url:serverIP+"/wechatsalesman/update/status?"+params,
+    url:serverIP+"/wechatsalesman/update/status",
     method:'post',
+    data:params
   })
 }
 // 修改
