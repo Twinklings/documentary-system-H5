@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 // import { List, Button, WhiteSpace, DatePicker, InputItem, TextareaItem, Toast, ListView, Badge, Tag } from 'antd-mobile';
-import { Tabs, WhiteSpace, Badge, Icon, Toast, Modal } from 'antd-mobile';
+import { Tabs, WhiteSpace, Badge, Icon, Toast, Modal, Radio, List } from 'antd-mobile';
+
 import { createForm } from 'rc-form';
 import moment from 'moment'
 // import {Flex,WhiteSpace} from 'antd-mobile'
@@ -17,6 +18,7 @@ import phone from '../img/phone.svg'
 import followUp from '../img/followUp.svg'
 
 const history = createHashHistory();
+const RadioItem = Radio.RadioItem;
 
 function CustomerDetails(props) {
   
@@ -30,6 +32,7 @@ function CustomerDetails(props) {
     const [confirm_tag,setConfirm_tag] = useState(0);
 
     const [initializationData,setInitializationData] = useState({
+      // confirm_tag:"0",
       // user_name:"姓名",
       // pay_amount:99.00,
       // channel_type:1,
@@ -38,6 +41,8 @@ function CustomerDetails(props) {
       // follow_records: {list:[{'describe': '111111111', 'createTime': '2020-10-25 00:00:45'}]}
     });
 
+    const [orderTypeVisible,setOrderTypeVisible] = useState(false);
+    const [confirmTag,setConfirmTag] = useState("");
 
     const [visible,setVisible] = useState(false);
 
@@ -168,6 +173,41 @@ function CustomerDetails(props) {
     const onClose = () => {
       setVisibleModal(false)
     }
+
+    const onOrderTypeClose = () => {
+      setOrderTypeVisible(false)
+    }
+
+    const showOrderType = () => {
+      if(initializationData.confirm_tag != "7" && initializationData.confirm_tag != "8" && initializationData.confirm_tag != "9"){
+        setOrderTypeVisible(true);
+      }
+    }
+
+    const determineOrderType = () => {
+      if(confirmTag === ""){
+        return Toast.info('请选择您要修改的状态', toastTime);
+      }
+      confirm({
+        "out_order_no":initializationData.out_order_no,
+        "openid":initializationData.openid,
+        "confirm_tag":confirmTag
+      }).then(response=>{
+        if(response.code === 200){
+          let param = {...initializationData}
+          param.confirm_tag = confirmTag
+          setInitializationData(param);
+          setOrderTypeVisible(false);
+        }else{
+          return Toast.info(response.message, toastTime);
+        }
+      })
+    }
+
+    const onChangeRadioItem = (value) => {
+      setConfirmTag(value);
+    }
+    
     // {name:"新增",key:1},
     // {name:"导入",key:2},
     // {name:"H5扫码",key:3},
@@ -184,7 +224,9 @@ function CustomerDetails(props) {
               <span className={"detailsName"}>{initializationData.user_name}</span>
               <span className={"moneyIcon"}>￥</span>
               <span className={"money"}>{initializationData.pay_amount}</span>
-              <span className={"label"}>{
+              <span className={"label"}
+                 onClick={showOrderType}
+              >{
                 (initializationData.confirm_tag === "0" || initializationData.confirm_tag === 0) ? "待审核":
                 (initializationData.confirm_tag === "1" || initializationData.confirm_tag === 1) ? "已初审":
                 (initializationData.confirm_tag === "2" || initializationData.confirm_tag === 2) ? "已终审":
@@ -284,6 +326,29 @@ function CustomerDetails(props) {
                 )
               })
             }
+          </div>
+        </Modal>
+
+        <Modal
+          visible={orderTypeVisible}
+          transparent
+          maskClosable={false}
+          onClose={onOrderTypeClose}
+          title="修改状态"
+          footer={[
+            { text: '关闭', onPress: () => { onOrderTypeClose(); } },
+            { text: '确定', onPress: () => { determineOrderType(); } }
+          ]}
+          style={{ width:300,}}
+        >
+          <div className={"orderTypeModal"}>
+            <List>
+              <RadioItem key={'7'} checked={confirmTag === '7'} onChange={() => onChangeRadioItem('7')}>已激活</RadioItem>
+              <RadioItem key={'8'} checked={confirmTag === '8'} onChange={() => onChangeRadioItem('8')}>已退回</RadioItem>
+              {initializationData.confirm_tag != '10' ? (
+                <RadioItem key={'9'} checked={confirmTag === '9'} onChange={() => onChangeRadioItem('9')}>已取消</RadioItem>
+              ) : ""}
+            </List>
           </div>
         </Modal>
       </div>
