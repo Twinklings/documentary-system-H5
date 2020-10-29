@@ -37,6 +37,8 @@ function FakeAuthorization(props) {
     
     const [visible,setVisible] = useState(true);
 
+    const [loading,setLoading] = useState(false);
+
     const [sendSMS,setSendSMS] = useState(false);
 
     const [initParam,setInitParam] = useState({});
@@ -301,7 +303,8 @@ function FakeAuthorization(props) {
         }
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {
-            let form = props.form.getFieldsValue()
+            setLoading(true);
+            let form = props.form.getFieldsValue();
             console.log(form,cityName,"formformform")
             let cityPark = cityName.split("_");
             console.log(cityPark)
@@ -328,6 +331,7 @@ function FakeAuthorization(props) {
             // authorization_type 免费2 伪授权 1
             if(initParam.authorization_type === 2){
                 placeAnOrder(param).then(response=>{
+                    setLoading(false);
                     if(response.code === 200){
                         Toast.success(response.message,toastTime);
                         history.push('/fakeAuthorization/success');
@@ -337,6 +341,7 @@ function FakeAuthorization(props) {
                 })
             }else{
                 smsCertification(param).then(res=>{
+                    setLoading(false);
                     if(res.code === 200){
                         sessionStorage.saveParam = JSON.stringify(param)
                         if (/MicroMessenger/.test(window.navigator.userAgent)) {
@@ -635,6 +640,7 @@ function FakeAuthorization(props) {
                     type="warning"
                     onClick={onSubmit}
                     className={"submitApplication"}
+                    loading={loading}
                 >提交申请</Button><WhiteSpace />
             </div>
             {/* <div className={"footer"}>

@@ -25,6 +25,8 @@ function FollowUp(props) {
     
   const [dateTime,setDateTime] = useState("");
 
+  const [loading,setLoading] = useState(false);
+
   const [note,setNote] = useState("");
 
     useEffect(() => {
@@ -36,6 +38,7 @@ function FollowUp(props) {
         Toast.fail("请输入跟进信息", toastTime);
         return false;
       }
+      setLoading(true);
       console.log(note,"跟进信息");
       console.log(JSON.parse(sessionStorage.data).follow_records);
       console.log(dateTime,dateTime ? moment(dateTime).format("YYYY-MM-DD HH:ss"):null)
@@ -82,6 +85,7 @@ function FollowUp(props) {
       update(param).then(response=>{
         // history.push('/success');
         Toast.info('跟进成功，窗口将会关闭，请重新打开详情查看跟进信息', 3);
+        setLoading(false);
         setTimeout(()=>{
           if (/MicroMessenger/.test(window.navigator.userAgent)) {
             // 微信
@@ -130,6 +134,7 @@ function FollowUp(props) {
             type="primary" 
             size="large"
             onClick={onSubmit}
+            loading={loading}
           >确定</Button>
           <WhiteSpace />
            {/* <Button 
