@@ -6,6 +6,8 @@ import { createHashHistory } from 'history'; // 如果是hash路由
 import VConsole from 'vconsole';
 import $ from 'jquery'
 
+import DocumentTitle from 'react-document-title'
+
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
 import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder, smsCertification } from '../../servers/authorizationApi'
@@ -152,7 +154,23 @@ function FakeAuthorization(props) {
                     ...res.data,
                     isImgCode:true
                 })
+                
+
                 document.title = res.data.h5_title;
+
+                let iframe = document.createElement('iframe');
+                // iframe.src = require('/favicon.ico');
+                iframe.style.display = 'none';
+                let fn = function () {
+                    setTimeout(function () {
+                        iframe.removeEventListener('load', fn);
+                        document.body.removeChild(iframe);
+                        // alert(document.title)
+                    }, 0);
+                };
+                iframe.addEventListener('load', fn);
+                document.body.appendChild(iframe);
+
             }else{
                 Toast.fail(res.message,toastTime);
             }
@@ -456,7 +474,7 @@ function FakeAuthorization(props) {
     const { getFieldProps, getFieldError } = props.form;
 
     return (
-      
+        // <DocumentTitle title={initParam.h5_title}>
         <div className={"box fakeAuthorizationBox"} style={visible?{display:"block"}:{}} ref={divRef}>
             {/* <div className={"prompt_content"}>
                 {initParam.prompt_content}
@@ -682,6 +700,8 @@ function FakeAuthorization(props) {
                 二维码
             </Modal>
         </div>
+   
+        // </DocumentTitle>
    );
 }
 
