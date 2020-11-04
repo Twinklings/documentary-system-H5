@@ -342,13 +342,18 @@ function CustomerDetails(props) {
           style={{ width:300,}}
         >
           <div className={"orderTypeModal"}>
-            <List>
+          <Radio key={'7'} checked={confirmTag === '7'} onChange={() => onChangeRadioItem('7')}>已激活</Radio>
+          <Radio key={'8'} checked={confirmTag === '8'} onChange={() => onChangeRadioItem('8')}>已退回</Radio>
+          {initializationData.confirm_tag != '10' ? (
+            <Radio key={'9'} checked={confirmTag === '9'} onChange={() => onChangeRadioItem('9')}>已取消</Radio>
+          ) : ""}
+            {/* <List>
               <RadioItem key={'7'} checked={confirmTag === '7'} onChange={() => onChangeRadioItem('7')}>已激活</RadioItem>
               <RadioItem key={'8'} checked={confirmTag === '8'} onChange={() => onChangeRadioItem('8')}>已退回</RadioItem>
               {initializationData.confirm_tag != '10' ? (
                 <RadioItem key={'9'} checked={confirmTag === '9'} onChange={() => onChangeRadioItem('9')}>已取消</RadioItem>
               ) : ""}
-            </List>
+            </List> */}
           </div>
         </Modal>
       </div>

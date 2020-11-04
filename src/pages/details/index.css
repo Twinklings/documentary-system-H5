@@ -255,3 +255,16 @@
   .orderTypeModal .am-list-item{
     padding-right: 15px;
   }
+  .orderTypeModal .am-radio {
+    padding: 2.5px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin-right: 5px;
+    margin-top: -3px;
+  }
+  .orderTypeModal .am-radio-wrapper{
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    margin-right: 8px;
+  }
