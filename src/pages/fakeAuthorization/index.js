@@ -156,21 +156,15 @@ function FakeAuthorization(props) {
                 })
                 
 
-                document.title = res.data.h5_title;
-                // document.title.style.color = "#000000";
-                // document.setAttribute('color', "#000000");
-                // let iframe = document.createElement('iframe');
-                // iframe.src = require('../../../src/pages/fakeAuthorization/img');
-                // iframe.style.display = 'none';
-                // iframe.style.color = "#000000";
-                // let fn = function () {
-                //     setTimeout(function () {
-                //         iframe.removeEventListener('load', fn);
-                //         document.body.removeChild(iframe);
-                //     }, 0);
-                // };
-                // iframe.addEventListener('load', fn);
-                // document.body.appendChild(iframe);
+                // document.title = res.data.h5_title;
+
+                // 处理IOS浏览器下修改title不生效的问题，修改后刷新一次当前页面，url添加title字段区分是否是第一次进入才刷新不然会导致死循环
+                if(!getUrlParam('title')){
+                    let title = document.getElementsByTagName('title')[0];
+                    title.innerHTML = res.data.h5_title;
+                    let herf = window.location.href+"&title=R";
+                    window.location.href = herf;
+                }
 
             }else{
                 Toast.fail(res.message,toastTime);
