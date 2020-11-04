@@ -157,19 +157,20 @@ function FakeAuthorization(props) {
                 
 
                 document.title = res.data.h5_title;
-
-                let iframe = document.createElement('iframe');
-                // iframe.src = require('/favicon.ico');
-                iframe.style.display = 'none';
-                let fn = function () {
-                    setTimeout(function () {
-                        iframe.removeEventListener('load', fn);
-                        document.body.removeChild(iframe);
-                        // alert(document.title)
-                    }, 0);
-                };
-                iframe.addEventListener('load', fn);
-                document.body.appendChild(iframe);
+                // document.title.style.color = "#000000";
+                // document.setAttribute('color', "#000000");
+                // let iframe = document.createElement('iframe');
+                // iframe.src = require('../../../src/pages/fakeAuthorization/img');
+                // iframe.style.display = 'none';
+                // iframe.style.color = "#000000";
+                // let fn = function () {
+                //     setTimeout(function () {
+                //         iframe.removeEventListener('load', fn);
+                //         document.body.removeChild(iframe);
+                //     }, 0);
+                // };
+                // iframe.addEventListener('load', fn);
+                // document.body.appendChild(iframe);
 
             }else{
                 Toast.fail(res.message,toastTime);
@@ -474,7 +475,9 @@ function FakeAuthorization(props) {
     const { getFieldProps, getFieldError } = props.form;
 
     return (
-        // <DocumentTitle title={initParam.h5_title}>
+        <>
+        {/* {initParam.tenant_id? ( */}
+        {/* <DocumentTitle title={initParam.h5_title} style={{color:"#000000"}}> */}
         <div className={"box fakeAuthorizationBox"} style={visible?{display:"block"}:{}} ref={divRef}>
             {/* <div className={"prompt_content"}>
                 {initParam.prompt_content}
@@ -701,7 +704,8 @@ function FakeAuthorization(props) {
             </Modal>
         </div>
    
-        // </DocumentTitle>
+        {/* </DocumentTitle>) : ""} */}
+        </>
    );
 }
 
