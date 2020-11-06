@@ -515,7 +515,7 @@ function FakeAuthorization(props) {
                         onErrorClick={() => {
                             Toast.info(getFieldError('phone').join(';'),toastTime);
                         }}
-                        placeholder="请输入11位手机号手机"
+                        placeholder="请输入11位手机号"
                         moneyKeyboardAlign={"left"}
                         labelNumber={4}
                         ref={user_phone}
