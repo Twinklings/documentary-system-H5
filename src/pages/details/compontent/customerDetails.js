@@ -291,8 +291,8 @@ function CustomerDetails(props) {
                     <div className={"listItem"}>
                       <span style={{marginRight:5,color:"#333333",float:"left"}}>{initializationData.salesman_name ? initializationData.salesman_name.substr(-2, 2) : "暂无"}</span>
                       {
-                        item.reminder_time?(<>
-                          &nbsp;<span className={"fl defultColor"}>{item.reminder_time}</span> 
+                        item.reminderTime?(<>
+                          &nbsp;<span className={"fl defultColor"}>{item.reminderTime}</span> 
                           <img className={"alarmClock"} src={alarmClock}/>
                         </>):""
                       }
