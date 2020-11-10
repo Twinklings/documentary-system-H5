@@ -309,14 +309,16 @@ function FakeAuthorization(props) {
     }
 
     const onSubmit = () =>{
+        
         if(!sendSMS){
             setVerificationCodeValue("");
             props.form.setFieldsValue({code:""});
             return Toast.fail("请先发送短信验证码！");
         }
+        setLoading(true);
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {
-            setLoading(true);
+            
             let form = props.form.getFieldsValue();
             console.log(form,cityName,"formformform")
             let cityPark = cityName.split("_");
@@ -370,6 +372,7 @@ function FakeAuthorization(props) {
                 })
             }
           } else {
+            setLoading(false);
             if(error.user_name || error.phone || error.address){
                 return Toast.fail('表单验证失败',toastTime);
             }
