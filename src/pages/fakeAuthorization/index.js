@@ -339,7 +339,10 @@ function FakeAuthorization(props) {
                 "tenant_id": addressParameters.tenant_id,
                 "dept_id": addressParameters.dept_id,
                 "product_type": `${initParam.pay_pany_name}/${initParam.product_type_name}`,
-                "product_name":initParam.product_name
+                "product_name":initParam.product_name,
+                'product_id':initParam.product_id,
+                'product_type_id':initParam.product_type_id,
+                'pay_pany_id':initParam.pay_pany_id,
             }
             console.log(param,"formformform")
 
