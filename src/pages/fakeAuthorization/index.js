@@ -81,7 +81,7 @@ function FakeAuthorization(props) {
 
     useEffect(()=>{
         console.log(cityData,cityData.length,"cityDatacityData")
-        if(cityData.length === 3){
+        if(cityData.length >= 2){
             name = ""
             for(let i=0; i<CITY.length; i++){
                 if(cityData.indexOf(CITY[i].value) != -1){
@@ -102,7 +102,7 @@ function FakeAuthorization(props) {
     
 
     useEffect(() => {
-        // new VConsole();
+        new VConsole();
 
         
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
@@ -326,12 +326,12 @@ function FakeAuthorization(props) {
             let param = {
                 "user_name": form.user_name,
                 "user_phone": form.phone,
-                "user_address": `${cityPark[0]}${cityPark[1]}${cityPark[2]}${form.address}`,
+                "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
                 "pay_amount": addressParameters.pay_amount,
                 "salesman": addressParameters.salesman,
-                "province": cityPark[0],
-                "city": cityPark[1],
-                "area": cityPark[2],
+                "province": cityPark[0] || "",
+                "city": cityPark[1] || "",
+                "area": cityPark[2] || "",
                 "county": "",
                 "openid": "",
                 "wechat_id": "",
