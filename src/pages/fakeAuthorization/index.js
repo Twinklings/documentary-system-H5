@@ -315,6 +315,9 @@ function FakeAuthorization(props) {
             props.form.setFieldsValue({code:""});
             return Toast.fail("请先发送短信验证码！");
         }
+        if(loading){
+            return false;
+        }
         setLoading(true);
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {

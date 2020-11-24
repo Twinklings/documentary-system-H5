@@ -30,7 +30,8 @@ function Order() {
 
     const [agreeOrNot,setAgreeOrNot] = useState(true);
     
-    
+    const [loading,setLoading] = useState(false);
+
     useEffect(() => {
       document.title = '提交订单';
       setSesameSeed(Math.floor(Math.random() * (780 - 600 + 1) + 600))
@@ -60,7 +61,12 @@ function Order() {
         if(!agreeOrNot){
             return Toast.fail("请查看并同意委托扣款授权书",toastTime);
         }
+        if(loading){
+            return false;
+        }
+        setLoading(true);
         placeAnOrder(param).then(response=>{
+            setLoading(false);
             if(response.code === 200){
                 Toast.success(response.message,toastTime);
                 history.push('/fakeAuthorization/success');

@@ -15,9 +15,6 @@ const Brief = Item.Brief;
 const CheckboxItem = Checkbox.CheckboxItem;
 
 function Alipay() {
-    // const setAddres = () => {
-    //     history.push('/addres');
-    // }
 
     const toastTime = 1;
 
@@ -31,6 +28,8 @@ function Alipay() {
     const [param,setParam] = useState({});
 
     const [visibleModal,setVisibleModal] = useState(false);
+
+    const [loading,setLoading] = useState(false);
     
     useEffect(() => {
       document.title = '芝麻信用服务';
@@ -63,7 +62,12 @@ function Alipay() {
             return Toast.fail("请阅读并同意《用户授权协议》",toastTime);
         }
         
+        if(loading){
+            return false;
+        }
+        setLoading(true);
         placeAnOrder(param).then(response=>{
+            setLoading(false);
             if(response.code === 200){
                 Toast.success(response.message,toastTime);
                 history.push('/fakeAuthorization/success');
