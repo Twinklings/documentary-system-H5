@@ -23,6 +23,7 @@ const BasicRoute = () => (
             <Route exact path="/details/customerDetails" component={CustomerDetails}/>
             <Route exact path="/details/followUp" component={FollowUp}/>
 
+            {/* 充值成功 */}
             <Route exact path="/recharge/successful" component={Successful}/>
             
             <Route exact path="/success" component={Success}/>
