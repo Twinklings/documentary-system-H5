@@ -237,7 +237,8 @@ function CustomerDetails(props) {
                 (initializationData.confirm_tag === "7" || initializationData.confirm_tag === 7) ? "已激活":
                 (initializationData.confirm_tag === "8" || initializationData.confirm_tag === 8) ? "已退回":
                 (initializationData.confirm_tag === "9" || initializationData.confirm_tag === 9) ? "已取消":
-                (initializationData.confirm_tag === "10" || initializationData.confirm_tag === 10) ? "已过期": ""
+                (initializationData.confirm_tag === "10" || initializationData.confirm_tag === 10) ? "已过期":
+                (initializationData.confirm_tag === "11" || initializationData.confirm_tag === 11) ? "退回中": ""
               }</span>
             </div>
             <div className={"listItem"}><span className={"title"}>负责来源：</span><span style={{color:"#333333"}}>{initializationData.user_name}/{
