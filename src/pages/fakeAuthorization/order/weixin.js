@@ -134,7 +134,7 @@ function Order() {
                         <div className="agreement">是否同意<span onClick={openAgreementBox}>《委托扣款授权书》</span></div>
                     </div>
 
-                    <div className="item describe">温馨提示：微信支付分达到550及以上，免押金领取机器，租借期间不收取租金，您需在收货后30日内使用，不使用将通过微信支付分扣取机器押金<span className="num">{amount}</span>元。</div>
+                    <div className="item describe">温馨提示：微信支付分达到550及以上，免押金领取机器，租借期间不收取租金，您需在收货后30日内激活，不激活将通过微信支付分扣取机器押金<span className="num">{amount}</span>元。</div>
                 </div>
                 <div className="footer">
                     <div className="bnt">
