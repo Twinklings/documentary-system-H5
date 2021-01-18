@@ -27,7 +27,6 @@ let name = "";
 let time = 60;
 
 function FakeAuthorization(props) {
-
     const user_name = useRef();
     const user_phone = useRef();
     const user_imgCode = useRef();
@@ -474,8 +473,21 @@ function FakeAuthorization(props) {
     const onClose = () => {
         setVisibleModal(false)
     }
+    let address='123'
+    var BMap = window.BMap;
+    var geoc = new BMap.Geocoder();
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function (r) {
+        geoc.getLocation(r.point, function (rs) {
+            console.log(rs)   //具体信息可以打印出来看一下，根据需求取值     经纬度，城市，街道等等
+            address=rs.address
+        });
+    });
+
 
     const { getFieldProps, getFieldError } = props.form;
+
+
 
     return (
         <>
@@ -628,7 +640,7 @@ function FakeAuthorization(props) {
                     </Picker>
                     <TextareaItem
                         {...getFieldProps('address', {
-                            // initialValue:"涉外商务区",
+                            initialValue:address,
                             rules: [
                                 { required: true, message: '请输入详细地址' },
                             ],
