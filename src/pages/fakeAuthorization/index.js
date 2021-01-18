@@ -473,20 +473,53 @@ function FakeAuthorization(props) {
     const onClose = () => {
         setVisibleModal(false)
     }
-    let address='123'
-    var BMap = window.BMap;
-    var geoc = new BMap.Geocoder();
-    var geolocation = new BMap.Geolocation();
-    geolocation.getCurrentPosition(function (r) {
-        geoc.getLocation(r.point, function (rs) {
-            console.log(rs)   //具体信息可以打印出来看一下，根据需求取值     经纬度，城市，街道等等
-            address=rs.address
-        });
-    });
+
 
 
     const { getFieldProps, getFieldError } = props.form;
 
+
+    const [address, setaAdress] = useState("123")
+
+    useEffect(()=>{
+        var BMap = window.BMap;
+        var geoc = new BMap.Geocoder();
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+            console.log(r,"7876786")
+            // $.ajax({
+            //     // url:'http://api.map.baidu.com/geocoder/v2/?ak=1IZOnhUdOCvHXy6vKuz0gGcq1T25CAf4&location=' + r.point.lat + ',' + r.point.lng + '&output=json',
+            //     url:'http://api.map.baidu.com/geocoder?output=json&location=39.983424,%20116.322987&key=37492c0ee6f924cb5e934fa08c6b1676',
+            //     dataType: 'jsonp',
+            //     success: function(res) {
+            //         console.log(res);
+            //         var result = res.result,
+            //             addressComponent = result.addressComponent,
+            //             adcode = addressComponent.adcode
+            //     } ,
+            //     error:function(){
+            //
+            //     }
+            // });
+
+            geoc.getLocation(r.point, function (rs) {
+                console.log(rs)   //具体信息可以打印出来看一下，根据需求取值     经纬度，城市，街道等等
+                // alert(rs.address+"-----"+rs.business)
+                // Wi: "房地产"
+                // address: "长江二路39号"
+                // city: "重庆市"
+                // phoneNumber: null
+                // point: N {lng: 106.531398, lat: 29.544267}
+                // postcode: null
+                // tags: ["房地产"]
+                // title: "红楼小区"
+                // type: 0
+                // uid: "c111224232d12c04841541cf"
+                // console.log(rs.surroundingPois[0].city+"-"+rs.surroundingPois[0].address+"-"+rs.surroundingPois[0].title)
+                setaAdress(rs.address)
+            });
+        });
+    },[])
 
 
     return (
@@ -640,7 +673,7 @@ function FakeAuthorization(props) {
                     </Picker>
                     <TextareaItem
                         {...getFieldProps('address', {
-                            initialValue:address,
+                            initialValue:"17353134887",
                             rules: [
                                 { required: true, message: '请输入详细地址' },
                             ],
