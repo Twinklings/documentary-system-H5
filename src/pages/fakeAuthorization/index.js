@@ -479,8 +479,8 @@ function FakeAuthorization(props) {
     const { getFieldProps, getFieldError } = props.form;
 
 
-    const [address, setaAdress] = useState("123")
-
+    const [address, setaAdress] = useState({})
+    const code=''
     useEffect(()=>{
         var BMap = window.BMap;
         var geoc = new BMap.Geocoder();
@@ -501,10 +501,9 @@ function FakeAuthorization(props) {
             //
             //     }
             // });
-
             geoc.getLocation(r.point, function (rs) {
                 console.log(rs)   //具体信息可以打印出来看一下，根据需求取值     经纬度，城市，街道等等
-                // alert(rs.address+"-----"+rs.business)
+                console.log(rs.address+"-----"+rs.business)
                 // Wi: "房地产"
                 // address: "长江二路39号"
                 // city: "重庆市"
@@ -517,10 +516,17 @@ function FakeAuthorization(props) {
                 // uid: "c111224232d12c04841541cf"
                 // console.log(rs.surroundingPois[0].city+"-"+rs.surroundingPois[0].address+"-"+rs.surroundingPois[0].title)
                 setaAdress(rs.address)
+                for(let i=0; i<CITY.length; i++){
+                    console.log(CITY[i])
+                    if(CITY[i].label === rs.addressComponents.city){
+                        console.log(CITY[i].label)
+                        console.log(CITY[i].value)
+                    }
+                }
+                console.log(CITY)
             });
         });
     },[])
-
 
     return (
         <>
