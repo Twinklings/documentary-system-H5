@@ -19,7 +19,7 @@ const BasicRoute = () => (
     <HashRouter>
         <Switch>
             <Route exact path="/details" component={Details}/>
-            <Route exact path="/" component={FakeAuthorization}/>
+            <Route exact path="/" component={Details}/>
             <Route exact path="/details/customerDetails" component={CustomerDetails}/>
             <Route exact path="/details/followUp" component={FollowUp}/>
 
