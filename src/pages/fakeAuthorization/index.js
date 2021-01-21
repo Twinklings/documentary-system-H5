@@ -502,18 +502,9 @@ function FakeAuthorization(props) {
                         getProv(res.result.addressComponent.adcode,"1")
                     },
                 });
-                let addressCode=''
-                for(let i=0; i<CITY.length; i++){
-                    if(CITY[i].label === rs.addressComponents.city){
-                        console.log(CITY[i].children)
-                        console.log(CITY[i].value)
-                        addressCode = CITY[i].value
-                    }
-                }
-                console.log(rs.address)
                 props.form.setFieldsValue(
                     {
-                        address:rs.surroundingPois[0].title,
+                        address:rs.addressComponents.city+""+rs.addressComponents.district+""+rs.addressComponents.street+""+rs.addressComponents.streetNumber,
                     }
                 );
             });
