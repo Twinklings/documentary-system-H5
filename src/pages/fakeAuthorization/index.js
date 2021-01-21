@@ -504,7 +504,7 @@ function FakeAuthorization(props) {
                 });
                 props.form.setFieldsValue(
                     {
-                        address:rs.addressComponents.city+""+rs.addressComponents.district+""+rs.addressComponents.street+""+rs.addressComponents.streetNumber,
+                        address:rs.addressComponents.street+""+rs.addressComponents.streetNumber,
                     }
                 );
             });
