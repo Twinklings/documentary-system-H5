@@ -101,6 +101,7 @@
 .fakeAuthorizationBox .am-list-item .am-list-line .am-list-extra{
     color: #222222;
     font-size: 15px;
+    flex-basis: 56%;
 }
 .fakeAuthorizationBox .codeImg{
     position: absolute !important;
