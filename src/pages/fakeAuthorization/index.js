@@ -513,6 +513,7 @@ function FakeAuthorization(props) {
 
 
 
+    // 悬浮图标拖动
     window.onload = function () {
         var oDiv = document.getElementById('touchMove');
 
