@@ -511,6 +511,51 @@ function FakeAuthorization(props) {
         });
     },[])
 
+
+
+    window.onload = function () {
+        var oDiv = document.getElementById('touchMove');
+
+        let disX, moveX, L, T, starX, starY, starXEnd, starYEnd,disY,moveY;
+
+        oDiv.addEventListener('touchstart', function (e) {
+            //e.preventDefault();
+
+            disX = e.touches[0].clientX - this.offsetLeft;
+            disY = e.touches[0].clientY - this.offsetTop;
+            starX = e.touches[0].clientX;
+            starY = e.touches[0].clientY;
+        });
+        oDiv.addEventListener('touchmove', function (e) {
+            L = e.touches[0].clientX - disX;
+            T = e.touches[0].clientY - disY;
+            starXEnd = e.touches[0].clientX - starX;
+            starYEnd = e.touches[0].clientY - starY;
+            //console.log(L);
+            if (L < 0) {
+                L = 0;
+            } else if (L > document.documentElement.clientWidth - this.offsetWidth) {
+                L = document.documentElement.clientWidth - this.offsetWidth;
+            }
+
+            if (T < 0) {
+                T = 0;
+            } else if (T > document.documentElement.clientHeight - this.offsetHeight) {
+                T = document.documentElement.clientHeight - this.offsetHeight;
+            }
+            moveX = L + 'px';
+            moveY = T + 'px';
+            //console.log(moveX);
+            this.style.left = moveX;
+            this.style.top = moveY;
+        });
+        window.addEventListener('touchend', function (e) {
+            //alert(parseInt(moveX))
+            //判断滑动方向
+
+        });
+    }
+
     return (
         <>
         {/* {initParam.tenant_id? ( */}
@@ -716,7 +761,7 @@ function FakeAuthorization(props) {
                 <WhiteSpace />
             </div> */}
 
-            <div className={"rightCall"}>
+            <div className={"rightCall"} id={'touchMove'}>
                 <div className={"complaint"} onClick={()=>myCall(1)}>
                     <img src={complaint}/>
                         {/* 投诉 */}
