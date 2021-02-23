@@ -52,3 +52,14 @@ export function smsCertification(params) {
     data:params
   })
 }
+
+
+// 认证号码接口
+export function verifyWeb(params) {
+  console.log(params,"params")
+  return request({
+    url:"https://api.verification.jpush.cn/v1/web/h5/verify",
+    method:'post',
+    data:params
+  })
+}

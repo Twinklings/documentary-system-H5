@@ -10,7 +10,7 @@ import DocumentTitle from 'react-document-title'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder, smsCertification,getCode } from '../../servers/authorizationApi'
+import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder, smsCertification,verifyWeb } from '../../servers/authorizationApi'
 
 import './index.css'
 import afterSale from './img/afterSale.svg'
@@ -333,6 +333,17 @@ function FakeAuthorization(props) {
         divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
 
+    const authenticationNumber = (data,phone) => {
+        verifyWeb({
+            token:data.content,
+            phone:phone
+        }).then(res=>{
+            console.log(res,"验证结果")
+        }).catch(res=>{
+            console.log(res,"失败验证结果")
+        })
+    }
+
     const onSubmit = () =>{
 
         // 是否需要短信验证
@@ -344,23 +355,10 @@ function FakeAuthorization(props) {
             }
         }else{
             // 判断初始化是否成功
-            if(window.JVerificationInterface.isInitSuccess()){
-                // SDK 获取号码认证 token
-                window.JVerificationInterface.getToken({
-                    operater:"CM",
-                    success: function(data)  { 
-                    //TODO 获取token成功回调
-                    var operater =data.operater;
-                    var token =data.content;
-
-                    }, fail: function(data)  { 
-                    //TODO 获取token失败回调
-                    } 
-                })
-            }else{
+            if(!window.JVerificationInterface.isInitSuccess()){
                 Toast.info("请开启数据流量，关闭WiFi后重新尝试");
+                return false;
             }
-           
         }
 
         if(loading){
@@ -369,11 +367,27 @@ function FakeAuthorization(props) {
         setLoading(true);
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {
-            
+             
             let form = props.form.getFieldsValue();
             console.log(form,cityName,"formformform")
             let cityPark = cityName.split("_");
             console.log(cityPark)
+
+            // SDK 获取号码认证 token
+            window.JVerificationInterface.getToken({
+                operater:"CM",
+                success: function(data)  { 
+                    //TODO 获取token成功回调
+                    var operater =data.operater;
+                    var token =data.content;
+                    authenticationNumber(data,form.phone)
+                    console.log(data,"获取token成功回调")
+                }, fail: function(data)  { 
+                    //TODO 获取token失败回调
+                    console.log(data,"获取token失败回调")
+                } 
+            })
+
             let param = {
                 "user_name": form.user_name,
                 "user_phone": form.phone,
@@ -401,13 +415,13 @@ function FakeAuthorization(props) {
             if(initParam.authorization_type === 2){
                 placeAnOrder(param).then(response=>{
                     setLoading(false);
-                    if(response.code === 200){
-                        Toast.success(response.message,toastTime);
-                        history.push('/fakeAuthorization/success');
-                    }else{
-                        Toast.fail(response.message,toastTime);
-                    }
-                })
+                    if(response.code === 200){
+                        Toast.success(response.message,toastTime);
+                        history.push('/fakeAuthorization/success');
+                    }else{
+                        Toast.fail(response.message,toastTime);
+                    }
+                })
             }else{
                 smsCertification(param).then(res=>{
                     setLoading(false);
