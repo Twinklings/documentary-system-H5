@@ -1,8 +1,8 @@
 import request from '../utils/axios'
 import { conversionFormat } from '../utils/utils'
 
-// let serverIP = "http://47.102.204.79:80";
-let serverIP = "http://h5.genleme.com:80";
+let serverIP = "http://47.102.204.79:9081";
+// let serverIP = "http://h5.genleme.com:80";
 
 export function getWeChatConfig(params) {
     return request({
@@ -58,8 +58,11 @@ export function smsCertification(params) {
 export function verifyWeb(params) {
   console.log(params,"params")
   return request({
-    url:"https://api.verification.jpush.cn/v1/web/h5/verify",
+    url: serverIP+"/validation/machinecertified",
     method:'post',
-    data:params
+    data:{
+      ...params,
+      exID: Date.parse(new Date())
+    }
   })
 }

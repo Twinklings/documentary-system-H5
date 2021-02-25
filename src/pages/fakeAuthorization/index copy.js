@@ -22,6 +22,7 @@ const history = createHashHistory();
 const Item = List.Item;
 const Brief = Item.Brief;
 const RadioItem = Radio.RadioItem;
+const modalAlert = Modal.alert;
 let name = "";
 
 let time = 60;
@@ -42,13 +43,12 @@ function FakeAuthorization(props) {
 
     const [sendSMS,setSendSMS] = useState(false);
 
-    const [initParam,setInitParam] = useState({
-        orderVerification:0, //0 本机  1 短信
-    });
+    const [initParam,setInitParam] = useState({});
+
+    const [orderVerification,setOrderVerification] = useState(0);
 
     const [imgCode,setImgCode] = useState("");
     const [verificationCodeValue,setVerificationCodeValue] = useState("");
-    
 
     const [countDown,setCountDown] = useState(60);
     
@@ -93,18 +93,12 @@ function FakeAuthorization(props) {
                 if(CITY[i].children){
                     getName(CITY[i].children)
                 }
-                
             }
         }
-        
-        
     },[cityData])
-
-    
 
     useEffect(() => {
         new VConsole();
-
         
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
         console.log(parameter,"parameter")
@@ -115,7 +109,6 @@ function FakeAuthorization(props) {
         //     salesman:addressParam[2],
         //     pay_amount:addressParam[3],
         // })
-
 
         if (/MicroMessenger/.test(window.navigator.userAgent)) {
             // 微信
@@ -154,33 +147,29 @@ function FakeAuthorization(props) {
                 setInitParam({
                     ...res.data,
                     isImgCode:true,
-
-                    orderVerification:0, //0 本机  1 短信
-
                 })
+
+                // setOrderVerification(0)
                 // if(res.data.orderVerification === 0){
 
-                    window.JVerificationInterface.init({
-                        appkey: "b724ac6a699f0ef0f1d07501",
-                        debugMode: true,
-                        success: function(data) { 
-                            //TODO 初始化成功回调
-                            console.log(data,"初始化成功回调")
-                        }, 
-                        fail: function(data) { 
-                            //TODO 初始化失败回调
-                            console.log(data,"初始化失败回调")
-                        }
-                      });
-
-                    // 判断网络环境是否支持
-                    if(!window.JVerificationInterface.checkVerifyEnable()){
-                        Toast.info("请开启数据流量，关闭WiFi后使用");
+                window.JVerificationInterface.init({
+                    appkey: "b724ac6a699f0ef0f1d07501",
+                    debugMode: true,
+                    success: function(data) { 
+                        //TODO 初始化成功回调
+                        console.log(data,"初始化成功回调")
+                    }, 
+                    fail: function(data) { 
+                        //TODO 初始化失败回调
+                        console.log(data,"初始化失败回调")
                     }
-                // }
-                
+                    });
 
-                // document.title = res.data.h5_title;
+                // 判断网络环境是否支持
+                if(!window.JVerificationInterface.checkVerifyEnable()){
+                    Toast.info("请开启数据流量，关闭WiFi后使用");
+                }
+                // }
 
                 // 处理IOS浏览器下修改title不生效的问题，修改后刷新一次当前页面，url添加title字段区分是否是第一次进入才刷新不然会导致死循环
                 if(!getUrlParam('title')){
@@ -252,8 +241,6 @@ function FakeAuthorization(props) {
         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
             window.am.selectAddress(function (data) {
                 console.log(data,"data")
-                // let _data = data.address.split("-")
-                // _data[_data.length-1]
                 props.form.setFieldsValue(
                     {
                         phone:data.mobilePhone,
@@ -333,21 +320,34 @@ function FakeAuthorization(props) {
         divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
 
-    const authenticationNumber = (data,phone) => {
+    const authenticationNumber = (data,form) => {
         verifyWeb({
-            token:data.content,
-            phone:phone
+            token: data.content,
+            phone: form.phone
         }).then(res=>{
-            console.log(res,"验证结果")
-        }).catch(res=>{
-            console.log(res,"失败验证结果")
+            console.log(res,"验证结果");
+            setLoading(false);
+            if(res.code === 200){
+                saveParam(form);
+            }else{
+                switchVerificationMode();
+            }
         })
+    }
+
+    const switchVerificationMode = () => {
+        modalAlert('提示', '请开启数据流量，关闭WiFi后再次尝试，或切换为短信验证', [
+            { text: '取消', onPress: () => console.log('cancel') },
+            { text: '短信验证', onPress: () => {
+                setOrderVerification(1);
+            } },
+        ])
     }
 
     const onSubmit = () =>{
 
         // 是否需要短信验证
-        if(initParam.orderVerification === 1){
+        if(orderVerification === 1){
             if(!sendSMS){
                 setVerificationCodeValue("");
                 props.form.setFieldsValue({code:""});
@@ -369,76 +369,27 @@ function FakeAuthorization(props) {
           if (!error) {
              
             let form = props.form.getFieldsValue();
-            console.log(form,cityName,"formformform")
-            let cityPark = cityName.split("_");
-            console.log(cityPark)
-
-            // SDK 获取号码认证 token
-            window.JVerificationInterface.getToken({
-                operater:"CM",
-                success: function(data)  { 
-                    //TODO 获取token成功回调
-                    var operater =data.operater;
-                    var token =data.content;
-                    authenticationNumber(data,form.phone)
-                    console.log(data,"获取token成功回调")
-                }, fail: function(data)  { 
-                    //TODO 获取token失败回调
-                    console.log(data,"获取token失败回调")
-                } 
-            })
-
-            let param = {
-                "user_name": form.user_name,
-                "user_phone": form.phone,
-                "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
-                "pay_amount": addressParameters.pay_amount,
-                "salesman": addressParameters.salesman,
-                "province": cityPark[0] || "",
-                "city": cityPark[1] || "",
-                "area": cityPark[2] || "",
-                "county": "",
-                "openid": "",
-                "wechat_id": "",
-                "code": form.code,
-                "tenant_id": addressParameters.tenant_id,
-                "dept_id": addressParameters.dept_id,
-                "product_type": `${initParam.pay_pany_name}/${initParam.product_type_name}`,
-                "product_name":initParam.product_name,
-                'product_id':initParam.product_id,
-                'product_type_id':initParam.product_type_id,
-                'pay_pany_id':initParam.pay_pany_id,
-            }
-            console.log(param,"formformform")
-
-            // authorization_type 免费2 伪授权 1
-            if(initParam.authorization_type === 2){
-                placeAnOrder(param).then(response=>{
-                    setLoading(false);
-                    if(response.code === 200){
-                        Toast.success(response.message,toastTime);
-                        history.push('/fakeAuthorization/success');
-                    }else{
-                        Toast.fail(response.message,toastTime);
-                    }
-                })
+            if(orderVerification === 1){
+                saveParam(form);
             }else{
-                smsCertification(param).then(res=>{
-                    setLoading(false);
-                    if(res.code === 200){
-                        sessionStorage.saveParam = JSON.stringify(param)
-                        if (/MicroMessenger/.test(window.navigator.userAgent)) {
-                            // 微信
-                            history.push('/fakeAuthorization/weixin');
-                        } else if (/AlipayClient/.test(window.navigator.userAgent)) {
-                            // 支付宝
-                            history.push('/fakeAuthorization/alipay');
-                        }
-                    }else{
-                        Toast.fail(res.message,toastTime);
-                    }
+                 // SDK 获取号码认证 token
+                window.JVerificationInterface.getToken({
+                    operater:"CM",
+                    success: function(data)  { 
+                        //TODO 获取token成功回调
+                        var operater =data.operater;
+                        var token =data.content;
+                        authenticationNumber(data,form);
+
+                    }, fail: function(data)  { 
+                        //TODO 获取token失败回调
+                        console.log(data,"获取token失败回调");
+                        setLoading(false);
+                    } 
                 })
             }
+           
+
           } else {
             setLoading(false);
             if(error.user_name || error.phone || error.address){
@@ -457,7 +408,66 @@ function FakeAuthorization(props) {
 
           }
         });
-      }
+    }
+
+    const saveParam = (form) => {
+
+        console.log(form,cityName,"formformform")
+        let cityPark = cityName.split("_");
+        console.log(cityPark)
+        
+        let param = {
+            "user_name": form.user_name,
+            "user_phone": form.phone,
+            "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
+            "pay_amount": addressParameters.pay_amount,
+            "salesman": addressParameters.salesman,
+            "province": cityPark[0] || "",
+            "city": cityPark[1] || "",
+            "area": cityPark[2] || "",
+            "county": "",
+            "openid": "",
+            "wechat_id": "",
+            "code": form.code,
+            "tenant_id": addressParameters.tenant_id,
+            "dept_id": addressParameters.dept_id,
+            "product_type": `${initParam.pay_pany_name}/${initParam.product_type_name}`,
+            "product_name":initParam.product_name,
+            'product_id':initParam.product_id,
+            'product_type_id':initParam.product_type_id,
+            'pay_pany_id':initParam.pay_pany_id,
+        }
+        console.log(param,"formformform")
+
+        // authorization_type 免费2 伪授权 1
+        if(initParam.authorization_type === 2){
+            placeAnOrder(param).then(response=>{
+                setLoading(false);
+                if(response.code === 200){
+                    Toast.success(response.message,toastTime);
+                    history.push('/fakeAuthorization/success');
+                }else{
+                    Toast.fail(response.message,toastTime);
+                }
+            })
+        }else{
+            smsCertification(param).then(res=>{
+                setLoading(false);
+                if(res.code === 200){
+                    sessionStorage.saveParam = JSON.stringify(param)
+                    if (/MicroMessenger/.test(window.navigator.userAgent)) {
+                        // 微信
+                        history.push('/fakeAuthorization/weixin');
+                    } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+                        // 支付宝
+                        history.push('/fakeAuthorization/alipay');
+                    }
+                }else{
+                    Toast.fail(res.message,toastTime);
+                }
+            })
+        }
+    }
 
     const validatePhone = (rule, value, callback) => {
         if (!(/^1[3456789]\d{9}$/.test(value))) {
@@ -679,7 +689,7 @@ function FakeAuthorization(props) {
                     {
                         (
                             // 是否是短信验证
-                            initParam.orderVerification === 1  &&
+                            orderVerification === 1  &&
                             // 是否显示图形验证码
                             initParam.image_captcha_status === 1 
                         )?(
@@ -717,7 +727,7 @@ function FakeAuthorization(props) {
                     }
                     {
                     // 是否是短信验证
-                    initParam.orderVerification === 1?(
+                    orderVerification === 1?(
                     <div style={{"position":"relative"}}>
                         <InputItem
                             title="验证码"
@@ -813,7 +823,7 @@ function FakeAuthorization(props) {
                 <WhiteSpace />
                 {
                     // 是否是短信验证
-                    initParam.orderVerification != 1?(
+                    orderVerification != 1?(
                     <span
                         style={{
                             display: 'inline-block',
