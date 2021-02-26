@@ -6,7 +6,7 @@ import { createHashHistory } from 'history'; // 如果是hash路由
 import $ from 'jquery'
 
 import './index.css'
-import { placeAnOrder } from '../../../servers/authorizationApi'
+import { placeAnOrder, machinesaveOrder } from '../../../servers/authorizationApi'
 import capitalSecurity from '../img/capitalSecurity.svg'
 
 const history = createHashHistory();
@@ -66,15 +66,27 @@ function Alipay() {
             return false;
         }
         setLoading(true);
-        placeAnOrder(param).then(response=>{
-            setLoading(false);
-            if(response.code === 200){
-                Toast.success(response.message,toastTime);
-                history.push('/fakeAuthorization/success');
-            }else{
-                Toast.fail(response.message,toastTime);
-            }
-        })
+        if(param.exID){
+            machinesaveOrder(param).then(response=>{
+                setLoading(false);
+                if(response.code === 200){
+                    Toast.success(response.message,toastTime);
+                    history.push('/fakeAuthorization/success');
+                }else{
+                    Toast.fail(response.message,toastTime);
+                }
+            })
+        }else{
+            placeAnOrder(param).then(response=>{
+                setLoading(false);
+                if(response.code === 200){
+                    Toast.success(response.message,toastTime);
+                    history.push('/fakeAuthorization/success');
+                }else{
+                    Toast.fail(response.message,toastTime);
+                }
+            })
+        }
     }
 
     const openAgreementBox = () => {

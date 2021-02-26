@@ -44,6 +44,15 @@ export function placeAnOrder(params) {
   })
 }
 
+// 本机认证下单接口
+export function machinesaveOrder(params) {
+  return request({
+    url:serverIP+"/placeorder/machinesaveOrder",
+    method:'post',
+    data:params
+  })
+}
+
 // 短信验证码确认接口
 export function smsCertification(params) {
   return request({
@@ -62,7 +71,6 @@ export function verifyWeb(params) {
     method:'post',
     data:{
       ...params,
-      exID: Date.parse(new Date())
     }
   })
 }

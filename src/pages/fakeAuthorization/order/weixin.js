@@ -6,7 +6,7 @@ import { createHashHistory } from 'history'; // 如果是hash路由
 import $ from 'jquery'
 
 import './wexinCss.css'
-import { placeAnOrder } from '../../../servers/authorizationApi'
+import { placeAnOrder, machinesaveOrder } from '../../../servers/authorizationApi'
 import myjzj from '../img/myjzj.png'
 import defaults from '../img/default.svg'
 import select from '../img/select.svg'
@@ -65,15 +65,27 @@ function Order() {
             return false;
         }
         setLoading(true);
-        placeAnOrder(param).then(response=>{
-            setLoading(false);
-            if(response.code === 200){
-                Toast.success(response.message,toastTime);
-                history.push('/fakeAuthorization/success');
-            }else{
-                Toast.fail(response.message,toastTime);
-            }
-        })
+        if(param.exID){
+            machinesaveOrder(param).then(response=>{
+                setLoading(false);
+                if(response.code === 200){
+                    Toast.success(response.message,toastTime);
+                    history.push('/fakeAuthorization/success');
+                }else{
+                    Toast.fail(response.message,toastTime);
+                }
+            })
+        }else{
+            placeAnOrder(param).then(response=>{
+                setLoading(false);
+                if(response.code === 200){
+                    Toast.success(response.message,toastTime);
+                    history.push('/fakeAuthorization/success');
+                }else{
+                    Toast.fail(response.message,toastTime);
+                }
+            })
+        }
     }
 
     const openAgreementBox = () => {

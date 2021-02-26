@@ -19,23 +19,23 @@
 .fakeAuthorizationBox .form-title{
     font-weight: bold;
 }
-.fakeAuthorizationBox .am-list-item .am-input-control input{
+.boxContent .am-list-item .am-input-control input{
     text-align: left;
     font-size: 15px;
     color: #222222;
 }
-.fakeAuthorizationBox .am-list-item.am-input-item{
+.boxContent .am-list-item.am-input-item{
     padding-left: 0 !important;
     height: 48px !important;
 }
-.fakeAuthorizationBox .am-list-item.am-list-item-middle{
+.boxContent .am-list-item.am-list-item-middle{
     padding-left: 0 !important;
     height: 48px;
 }
-.fakeAuthorizationBox .am-list-item .am-list-line{
+.boxContent .am-list-item .am-list-line{
     padding-right: 0 !important;
 }
-.fakeAuthorizationBox .am-list-item.am-textarea-item{
+.boxContent .am-list-item.am-textarea-item{
     padding-left: 0 !important;
 }
 .fakeAuthorizationBox .submitApplication{
@@ -56,13 +56,13 @@
 .fakeAuthorizationBox .am-list-body{
     border: 0 !important;
 }
-.fakeAuthorizationBox .am-list-item .am-input-label{
+.boxContent .am-list-item .am-input-label{
     color: #828282;
 }
-.fakeAuthorizationBox .am-list-item .am-list-line .am-list-content{
+.boxContent .am-list-item .am-list-line .am-list-content{
     color: #828282;
 }
-.fakeAuthorizationBox .am-textarea-label{
+.boxContent .am-textarea-label{
     color: #828282;
 }
 /* .fakeAuthorizationBox .boxContent{
@@ -103,7 +103,7 @@
     font-size: 15px;
     flex-basis: 56%;
 }
-.fakeAuthorizationBox .codeImg{
+.boxContent .codeImg{
     position: absolute !important;
     right: 0;
     top: 5px;
@@ -171,11 +171,18 @@
 .fakeAuthorizationBox *:before{
     border: none !important;
 }
+.am-modal-transparent{
+    width: 340px;
+}
+.am-modal-content{
+    width: 340px;
+    overflow: inherit;
+}
 
-.fakeAuthorizationBox .am-list-item .am-input-label,
-.fakeAuthorizationBox .am-list-item .am-list-line .am-list-content,
-.fakeAuthorizationBox .am-textarea-label,
-.fakeAuthorizationBox .am-button
+.boxContent .am-list-item .am-input-label,
+.boxContent .am-list-item .am-list-line .am-list-content,
+.boxContent .am-textarea-label,
+.boxContent .am-button
 {
     font-size: 14px;
 }
