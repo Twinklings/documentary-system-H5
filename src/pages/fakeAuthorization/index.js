@@ -164,8 +164,8 @@ function FakeAuthorization(props) {
                     isImgCode:true,
                 })
 
-                // setOrderVerification(res.data.authorization_type)
-                setOrderVerification(1)
+                setOrderVerification(res.data.authorization_type)
+                // setOrderVerification(1)
                 // if(res.data.orderVerification === 0){
 
                 window.JVerificationInterface.init({
