@@ -187,6 +187,8 @@ function FakeAuthorization(props) {
                 // }
                 // }
 
+                document.title = res.data.h5_title;
+
                 // 处理IOS浏览器下修改title不生效的问题，修改后刷新一次当前页面，url添加title字段区分是否是第一次进入才刷新不然会导致死循环
                 if(!getUrlParam('title')){
                     let title = document.getElementsByTagName('title')[0];
