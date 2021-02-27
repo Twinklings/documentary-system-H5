@@ -412,6 +412,13 @@ function FakeAuthorization(props) {
                         console.log(data,"获取token失败回调");
                         setLoading(false);
                         setTipsColor('red');
+                        if(tipsCount+1 === 2){
+                            setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
+                        }
+                        if(tipsCount+1 >2){
+                            setSMSvisibleModal(true);
+                            setOrderVerification(1);
+                        }
                         setTipsCount(tipsCount+1);
                     } 
                 })
