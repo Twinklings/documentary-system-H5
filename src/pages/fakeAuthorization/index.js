@@ -164,7 +164,7 @@ function FakeAuthorization(props) {
                     isImgCode:true,
                 })
 
-                setOrderVerification(res.data.authorization_type)
+                setOrderVerification(res.data.authentication_status)
                 // setOrderVerification(1)
                 // if(res.data.orderVerification === 0){
 
@@ -411,6 +411,8 @@ function FakeAuthorization(props) {
                         //TODO 获取token失败回调
                         console.log(data,"获取token失败回调");
                         setLoading(false);
+                        setTipsColor('red');
+                        setTipsCount(tipsCount+1);
                     } 
                 })
             }
@@ -853,8 +855,6 @@ function FakeAuthorization(props) {
                             textAlign: 'left',
                             width: '295px',
                             lineHeight: '30px',
-                            marginLeft: '50%',
-                            transform: 'translateX(-50%)'
                         }}
                     >
                         {tipsColor==='red'?(
