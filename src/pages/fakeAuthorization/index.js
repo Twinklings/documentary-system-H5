@@ -140,6 +140,41 @@ function FakeAuthorization(props) {
 
     }, [])
 
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            var BMap = window.BMap;
+            var geoc = new BMap.Geocoder();
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function (r) {
+                console.log(r,"7876786")
+                geoc.getLocation(r.point, function (rs) {
+                    $.ajax({
+                        type: "get",
+                        url: 'http://api.map.baidu.com/reverse_geocoding/v3/',
+                        data:{
+                            ak:'1IZOnhUdOCvHXy6vKuz0gGcq1T25CAf4',
+                            output:'json',
+                            coordtype:'bd0911',
+                            location:rs.point.lat+","+rs.point.lng
+                        },
+                        dataType: "jsonp",
+                        jsonpCallback: "success_jsonpCallback",
+                        success: (res) => {
+                            console.log(res)
+                            getProv(res.result.addressComponent.adcode,"1")
+                        },
+                    });
+                    props.form.setFieldsValue(
+                        {
+                            address:rs.addressComponents.street+""+rs.addressComponents.streetNumber,
+                        }
+                    );
+                });
+            });
+        },1000)
+    },[])
+
     const getImgCode = () => {
         let random_code = randomCode(6);
         setRandomkey(random_code)
@@ -186,7 +221,7 @@ function FakeAuthorization(props) {
                 //     Toast.info("请开启数据流量，关闭WiFi后使用");
                 // }
                 // }
-
+                document.getElementsByTagName("title")[0].innerText = res.data.h5_title;
                 // 处理IOS浏览器下修改title不生效的问题，修改后刷新一次当前页面，url添加title字段区分是否是第一次进入才刷新不然会导致死循环
                 if(!getUrlParam('title')){
                     let title = document.getElementsByTagName('title')[0];
@@ -646,37 +681,7 @@ function FakeAuthorization(props) {
 
     const { getFieldProps, getFieldError } = props.form;
 
-    useEffect(()=>{
-        var BMap = window.BMap;
-        var geoc = new BMap.Geocoder();
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function (r) {
-            console.log(r,"7876786")
-            geoc.getLocation(r.point, function (rs) {
-                $.ajax({
-                    type: "get",
-                    url: 'http://api.map.baidu.com/reverse_geocoding/v3/',
-                    data:{
-                        ak:'1IZOnhUdOCvHXy6vKuz0gGcq1T25CAf4',
-                        output:'json',
-                        coordtype:'bd0911',
-                        location:rs.point.lat+","+rs.point.lng
-                    },
-                    dataType: "jsonp",
-                    jsonpCallback: "success_jsonpCallback",
-                    success: (res) => {
-                        console.log(res)
-                        getProv(res.result.addressComponent.adcode,"1")
-                    },
-                });
-                props.form.setFieldsValue(
-                    {
-                        address:rs.addressComponents.street+""+rs.addressComponents.streetNumber,
-                    }
-                );
-            });
-        });
-    },[])
+    
 
 
 

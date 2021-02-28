@@ -56,6 +56,9 @@
 .fakeAuthorizationBox .am-list-body{
     border: 0 !important;
 }
+.boxContent .am-list-body{
+    border-bottom: none !important;
+}
 .boxContent .am-list-item .am-input-label{
     color: #828282;
 }
@@ -177,6 +180,9 @@
 .am-modal-content{
     width: 340px;
     overflow: inherit;
+}
+.am-button{
+    border: none !important;
 }
 
 .boxContent .am-list-item .am-input-label,
