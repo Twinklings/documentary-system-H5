@@ -199,7 +199,7 @@ function FakeAuthorization(props) {
                     isImgCode:true,
                 })
 
-                setOrderVerification(res.data.authorization_type)
+                setOrderVerification(res.data.authentication_status)
                 // setOrderVerification(1)
                 // if(res.data.orderVerification === 0){
 
@@ -425,29 +425,72 @@ function FakeAuthorization(props) {
             }else{
                 // 判断初始化是否成功
                 if(!window.JVerificationInterface.isInitSuccess()){
-                    // Toast.info("请开启数据流量，关闭WiFi后重新尝试");
-                    setLoading(false);
-                    setTipsColor('red');
-                    setTipsCount(tipsCount+1);
-                    return false;
+                    window.JVerificationInterface.init({
+                        appkey: "b724ac6a699f0ef0f1d07501",
+                        debugMode: true,
+                        success: function(data) { 
+                            //TODO 初始化成功回调
+                            console.log(data,"初始化成功回调")
+                            // SDK 获取号码认证 token
+                            window.JVerificationInterface.getToken({
+                                operater:"CM",
+                                success: function(data)  { 
+                                    console.log(data,"获取token成功回调")
+                                    //TODO 获取token成功回调
+                                    var operater =data.operater;
+                                    var token =data.content;
+                                    authenticationNumber(data,form);
+                                }, fail: function(data)  { 
+                                    //TODO 获取token失败回调
+                                    console.log(data,"获取token失败回调");
+                                    setLoading(false);
+                                    setTipsColor('red');
+                                    if(tipsCount+1 === 2){
+                                        setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
+                                    }
+                                    if(tipsCount+1 >2){
+                                        setSMSvisibleModal(true);
+                                        setOrderVerification(1);
+                                    }
+                                    setTipsCount(tipsCount+1);
+                                } 
+                            })
+                        }, 
+                        fail: function(data) { 
+                            //TODO 初始化失败回调
+                            console.log(data,"初始化失败回调")
+                            setLoading(false);
+                            setTipsColor('red');
+                            setTipsCount(tipsCount+1);
+                            return false;
+                        }
+                    });
+                }else{
+                    // SDK 获取号码认证 token
+                    window.JVerificationInterface.getToken({
+                        operater:"CM",
+                        success: function(data)  { 
+                            console.log(data,"获取token成功回调")
+                            //TODO 获取token成功回调
+                            var operater =data.operater;
+                            var token =data.content;
+                            authenticationNumber(data,form);
+                        }, fail: function(data)  { 
+                            //TODO 获取token失败回调
+                            console.log(data,"获取token失败回调");
+                            setLoading(false);
+                            setTipsColor('red');
+                            if(tipsCount+1 === 2){
+                                setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
+                            }
+                            if(tipsCount+1 >2){
+                                setSMSvisibleModal(true);
+                                setOrderVerification(1);
+                            }
+                            setTipsCount(tipsCount+1);
+                        } 
+                    })
                 }
-
-                // SDK 获取号码认证 token
-                window.JVerificationInterface.getToken({
-                    operater:"CM",
-                    success: function(data)  { 
-                        console.log(data,"获取token成功回调")
-                        //TODO 获取token成功回调
-                        var operater =data.operater;
-                        var token =data.content;
-                        authenticationNumber(data,form);
-
-                    }, fail: function(data)  { 
-                        //TODO 获取token失败回调
-                        console.log(data,"获取token失败回调");
-                        setLoading(false);
-                    } 
-                })
             }
 
           } else {
@@ -858,8 +901,6 @@ function FakeAuthorization(props) {
                             textAlign: 'left',
                             width: '295px',
                             lineHeight: '30px',
-                            marginLeft: '50%',
-                            transform: 'translateX(-50%)'
                         }}
                     >
                         {tipsColor==='red'?(
