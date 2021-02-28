@@ -114,8 +114,18 @@
     line-height: 37px;
     width: 120px;
     font-size: 15px;
-    border-radius: 2px;
+    border-radius: 6px;
     border: 1PX solid #eeeeee !important;
+}
+
+.boxContent .codeImgs{
+    position: absolute !important;
+    right: 0;
+    top: 5px;
+    height: 37px;
+    line-height: 37px;
+    width: 120px;
+    font-size: 15px;
 }
 
 .fakeAuthorizationBox .am-list-body:before{

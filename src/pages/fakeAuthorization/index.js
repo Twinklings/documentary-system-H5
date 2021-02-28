@@ -30,6 +30,7 @@ const prompt = Modal.prompt;
 let name = "";
 
 let time = 60;
+let smsTime = 30;
 
 function FakeAuthorization(props) {
     const user_name = useRef();
@@ -55,7 +56,11 @@ function FakeAuthorization(props) {
     const [imgCode,setImgCode] = useState("");
     const [verificationCodeValue,setVerificationCodeValue] = useState("");
 
+    const [inputimgCode,setInputImgCode] = useState("");
+
     const [countDown,setCountDown] = useState(60);
+
+    const [smsCountDown,setSmsCountDown] = useState(30);
     
     const divRef = useRef();
 
@@ -80,6 +85,9 @@ function FakeAuthorization(props) {
     const [SMSvisibleModal,setSMSvisibleModal] = useState(false);
 
     const [exID,setEXID] = useState("");
+
+    const [initType,setInitType] = useState(false);
+    const [initMsg,setInitMsg] = useState("");
 
     const getName = (data) => {
         
@@ -113,7 +121,7 @@ function FakeAuthorization(props) {
     },[cityData])
 
     useEffect(() => {
-        new VConsole();
+        // new VConsole();
         
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
         console.log(parameter,"parameter")
@@ -136,7 +144,7 @@ function FakeAuthorization(props) {
         // 初始化数据接口
         getInit(parameter);
         // 获取验证码图片
-        getImgCode();
+        // getImgCode();
 
     }, [])
 
@@ -187,6 +195,7 @@ function FakeAuthorization(props) {
         console.log(parameter,"parameter")
         init({parameter}).then(res=>{
             if(res.code === 200){
+                setInitType(true)
                 console.log(res.data,"res")
                 setAddressParameters({
                     tenant_id:res.data.tenant_id,
@@ -231,6 +240,7 @@ function FakeAuthorization(props) {
                 }
 
             }else{
+                setInitMsg(res.message)
                 Toast.fail(res.message,toastTime);
             }
         })
@@ -372,30 +382,43 @@ function FakeAuthorization(props) {
     }
 
     const authenticationNumber = (data,form) => {
-        let time = Date.parse(new Date());
-        setEXID(time)
-        
+        let exID = Date.parse(new Date());
+        setEXID(exID);
+
         verifyWeb({
             token: data.content,
             phone: form.phone,
-            exID: time
+            exID,
+            "dept_id": initParam.dept_id,
+            "tenant_id": initParam.tenant_id,
         }).then(res=>{
             console.log(res,"验证结果");
             setLoading(false);
-            if(res.code === 200){
-                saveParam(form,time);
+            if(res.code === 404){
+                setSMSvisibleModal(true);
+                resetPopUps();
+                setOrderVerification(1);
+            }else if(res.code === 200){
+                saveParam(form,exID);
             }else{
+
+                Toast.info(res.message);
                 setTipsColor('red');
-                if(tipsCount+1 === 2){
-                    setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
-                }
-                if(tipsCount+1 >2){
+                // if(tipsCount+1 === 2){
+                //     setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
+                // }
+                if(tipsCount+1 >= 2){
                     setSMSvisibleModal(true);
+                    resetPopUps();
                     setOrderVerification(1);
+                }else{
+                    updateSmsCountdown();
                 }
 
                 setTipsCount(tipsCount+1);
             }
+        }).catch(res=>{
+            setLoading(false);
         })
     }
 
@@ -408,8 +431,36 @@ function FakeAuthorization(props) {
         ])
     }
 
+    const updateSmsCountdown = () =>{
+        setTimeout(()=>{
+            smsTime --;
+            if(smsTime != 0){
+                updateSmsCountdown();
+            }else{
+                smsTime = 30
+            }
+            setSmsCountDown(smsTime)
+        },1000)
+    }
+
+    const resetPopUps = () => {
+        getImgCode();
+        setVerificationCodeValue("");
+        setInputImgCode("");
+        setCountDown(60);
+    }
 
     const authentication = () =>{
+        if(!initType){
+            Toast.fail(initMsg,toastTime);
+            return false;
+        }
+
+        if(!initParam.dept_id || !initParam.tenant_id){
+            Toast.info('当前提交参数异常,请联系销售协助!',toastTime);
+            return false;
+        }
+
         if(loading){
             return false;
         }
@@ -421,6 +472,7 @@ function FakeAuthorization(props) {
             // 是否需要短信验证
             if(orderVerification === 1){
                 setSMSvisibleModal(true);
+                resetPopUps();
                 setLoading(false);
             }else{
                 // 判断初始化是否成功
@@ -445,10 +497,10 @@ function FakeAuthorization(props) {
                                     console.log(data,"获取token失败回调");
                                     setLoading(false);
                                     setTipsColor('red');
-                                    if(tipsCount+1 === 2){
-                                        setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
-                                    }
-                                    if(tipsCount+1 >2){
+                                    // if(tipsCount+1 === 2){
+                                    //     setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
+                                    // }
+                                    if(tipsCount+1 >=2){
                                         setSMSvisibleModal(true);
                                         setOrderVerification(1);
                                     }
@@ -475,16 +527,18 @@ function FakeAuthorization(props) {
                             var operater =data.operater;
                             var token =data.content;
                             authenticationNumber(data,form);
-                        }, fail: function(data)  { 
+                        }, 
+                        fail: function(data)  { 
                             //TODO 获取token失败回调
                             console.log(data,"获取token失败回调");
                             setLoading(false);
                             setTipsColor('red');
-                            if(tipsCount+1 === 2){
-                                setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
-                            }
-                            if(tipsCount+1 >2){
+                            // if(tipsCount+1 === 2){
+                            //     setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
+                            // }
+                            if(tipsCount+1 >= 2){
                                 setSMSvisibleModal(true);
+                                resetPopUps();
                                 setOrderVerification(1);
                             }
                             setTipsCount(tipsCount+1);
@@ -495,16 +549,24 @@ function FakeAuthorization(props) {
 
           } else {
             setLoading(false);
-            if(error.user_name || error.address){
-                return Toast.fail('表单验证失败',toastTime);
+            // if(error.user_name || error.address){
+            //     return Toast.fail('表单验证失败',toastTime);
+            // }
+            if(error.user_name){
+                return Toast.info(error.user_name.errors[0].message,toastTime);
             }
-
-            if(error.code){
-                return Toast.info(error.code.errors[0].message,toastTime);
+            if(error.phone){
+                return Toast.info(error.phone.errors[0].message,toastTime);
             }
             if(error.city){
                 return Toast.info(error.city.errors[0].message,toastTime);
             }
+            if(error.address){
+                return Toast.info(error.address.errors[0].message,toastTime);
+            }
+            // if(error.code){
+            //     return Toast.info(error.code.errors[0].message,toastTime);
+            // }
           }
         });
     }
@@ -515,6 +577,10 @@ function FakeAuthorization(props) {
             setVerificationCodeValue("");
             props.form.setFieldsValue({code:""});
             return Toast.fail("请先发送短信验证码！");
+        }
+
+        if (verificationCodeValue.length != 6 || !(/(^[1-9]\d*$)/.test(verificationCodeValue))) {
+            return Toast.fail("请输入6位数字短信验证码");
         }
 
         if(loading){
@@ -530,25 +596,29 @@ function FakeAuthorization(props) {
 
           } else {
             setLoading(false);
-            if(error.user_name || error.phone || error.address){
-                return Toast.fail('表单验证失败',toastTime);
+            // if(error.user_name || error.address){
+            //     return Toast.fail('表单验证失败',toastTime);
+            // }
+            if(error.user_name){
+                return Toast.info(error.user_name.errors[0].message,toastTime);
             }
-
-            if(initParam.image_captcha_status === 1 && error.imgCode){
-                return Toast.info(error.imgCode.errors[0].message,toastTime);
-            }
-            if(error.code){
-                return Toast.info(error.code.errors[0].message,toastTime);
+            if(error.phone){
+                return Toast.info(error.phone.errors[0].message,toastTime);
             }
             if(error.city){
                 return Toast.info(error.city.errors[0].message,toastTime);
             }
-
+            if(error.address){
+                return Toast.info(error.address.errors[0].message,toastTime);
+            }
+            // if(error.code){
+            //     return Toast.info(error.code.errors[0].message,toastTime);
+            // }
           }
         });
     }
 
-    const saveParam = (form,time) => {
+    const saveParam = (form,exID) => {
 
         console.log(form,cityName,"formformform")
         let cityPark = cityName.split("_");
@@ -566,7 +636,7 @@ function FakeAuthorization(props) {
             "county": "",
             "openid": "",
             "wechat_id": "",
-            "code": form.code,
+            "code": verificationCodeValue,
             "tenant_id": addressParameters.tenant_id,
             "dept_id": addressParameters.dept_id,
             "product_type": `${initParam.pay_pany_name}/${initParam.product_type_name}`,
@@ -592,20 +662,26 @@ function FakeAuthorization(props) {
                     setLoading(false);
                 })
             }else{
-                machinesaveOrder({
-                    ...param,
-                    exID:time
-                }).then(response=>{
+                if(exID){
+                    machinesaveOrder({
+                        ...param,
+                        exID
+                    }).then(response=>{
+                        setLoading(false);
+                        if(response.code === 200){
+                            Toast.success(response.message,toastTime);
+                            history.push('/fakeAuthorization/success');
+                        }else{
+                            Toast.fail(response.message,toastTime);
+                        }
+                    }).catch(res=>{
+                        setLoading(false);
+                    })
+                }else{
                     setLoading(false);
-                    if(response.code === 200){
-                        Toast.success(response.message,toastTime);
-                        history.push('/fakeAuthorization/success');
-                    }else{
-                        Toast.fail(response.message,toastTime);
-                    }
-                })
+                    Toast.info('当前提交参数异常,请联系销售协助!',toastTime);
+                }
             }
-            
         }else{
             if(orderVerification === 1){
                 smsCertification(param).then(res=>{
@@ -623,12 +699,14 @@ function FakeAuthorization(props) {
                     }else{
                         Toast.fail(res.message,toastTime);
                     }
+                }).catch(res=>{
+                    setLoading(false);
                 })
             }else{
                 setLoading(false);
                 sessionStorage.saveParam = JSON.stringify({
                     ...param,
-                    exID:time
+                    exID
                 });
 
                 if (/MicroMessenger/.test(window.navigator.userAgent)) {
@@ -662,7 +740,7 @@ function FakeAuthorization(props) {
         if (!(/^1[3456789]\d{9}$/.test(props.form.getFieldsValue().phone))) {
             return Toast.info('请输入11位手机号手机',toastTime);
         }
-        if (initParam.image_captcha_status === 1 && validationEmpty(props.form.getFieldsValue().imgCode)) {
+        if (initParam.image_captcha_status === 1 && validationEmpty(inputimgCode)) {
             return Toast.info('请输入图形验证码',toastTime);
         }
 
@@ -673,7 +751,7 @@ function FakeAuthorization(props) {
 
     const sendVerificationCode = (phone) => {
         sendcode({
-            "code": props.form.getFieldsValue().imgCode,
+            "code": inputimgCode,
             "dept_id": initParam.dept_id,
             "phone": phone,
             "random_key": randomkey,
@@ -685,7 +763,9 @@ function FakeAuthorization(props) {
             }else{
                 Toast.fail(res.message,toastTime);
                 getImgCode();
-                props.form.setFieldsValue({imgCode:"",code:""});
+                setVerificationCodeValue("");
+                setInputImgCode("");
+                // props.form.setFieldsValue({imgCode:"",code:""});
             }
         })
     }
@@ -884,10 +964,13 @@ function FakeAuthorization(props) {
                 
                 <Button 
                     type="warning"
-                    onClick={authentication}
                     className={"submitApplication"}
                     loading={loading}
-                >提交申请</Button><WhiteSpace />
+                    disabled={smsCountDown === 30 ? false : true}
+                    onClick={smsCountDown === 30 ? authentication : ""}
+                >
+                    提交申请{smsCountDown != 30 ? `${smsCountDown}s` : ""}
+                </Button><WhiteSpace />
 
                 {
                     // 是否是短信验证
@@ -965,7 +1048,7 @@ function FakeAuthorization(props) {
                 transparent
                 maskClosable={false}
                 onClose={()=>{
-                    setSMSvisibleModal(false)
+                    setSMSvisibleModal(false);
                 }}
                 // title="Title"
             >
@@ -998,11 +1081,11 @@ function FakeAuthorization(props) {
                         <div style={{"position":"relative"}}>
                             <InputItem
                                 title="图形验证码"
-                                {...getFieldProps('imgCode', {
-                                    rules: [
-                                        { required: true, message: '请输入图形验证码' },
-                                    ],
-                                })}
+                                // {...getFieldProps('imgCode', {
+                                //     rules: [
+                                //         { required: true, message: '请输入图形验证码' },
+                                //     ],
+                                // })}
                                 clear
                                 error={!!getFieldError('imgCode')}
                                 onErrorClick={() => {
@@ -1014,6 +1097,10 @@ function FakeAuthorization(props) {
                                 ref={user_imgCode}
                                 onClick={()=>{
                                     user_imgCode.current.focus();
+                                }}
+                                value={inputimgCode}
+                                onChange={(val)=>{
+                                    setInputImgCode(val)
                                 }}
                             >
                             </InputItem>
@@ -1033,12 +1120,13 @@ function FakeAuthorization(props) {
                     <InputItem
                         title="验证码"
                         // type={"money"}
-                        {...getFieldProps('code', {
-                            rules: [
-                                // { required: true, max: 6, min: 6, message: '请输入6位短信验证码' },
-                                { required: true, validator: validateCode },
-                            ],
-                        })}
+                        // {...getFieldProps('code', {
+                        //     rules: [
+                        //         // { required: true, max: 6, min: 6, message: '请输入6位短信验证码' },
+                        //         { required: true, validator: validateCode },
+                        //     ],
+                        // })}
+                        maxLength={6}
                         clear
                         error={!!getFieldError('code')}
                         onErrorClick={() => {
@@ -1055,12 +1143,12 @@ function FakeAuthorization(props) {
                         onChange={(val)=>{
                             if(val.length>6)val=val.slice(0,6)
                             setVerificationCodeValue(val);
-                            props.form.setFieldsValue({ code:val})
+                            // props.form.setFieldsValue({ code:val})
                         }}
                     >
                     </InputItem>
                     <Button 
-                        className={"codeImg"}
+                        className={"codeImgs"}
                         disabled={countDown === 60 ? false : true}
                         onClick={countDown === 60 ? startTheCountdown : ""}
                     >
