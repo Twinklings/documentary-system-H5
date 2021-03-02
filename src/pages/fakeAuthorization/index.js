@@ -13,7 +13,16 @@ import closeModal from '../../assets/close.svg'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import { init, getvcode, sendcode, machinesaveOrder, placeAnOrder, smsCertification,verifyWeb } from '../../servers/authorizationApi'
+import { 
+    init, 
+    getvcode, 
+    sendcode, 
+    machinesaveOrder, 
+    placeAnOrder, 
+    smsCertification,
+    verifyWeb,
+    certificationRecord
+} from '../../servers/authorizationApi'
 
 import './index.css'
 import afterSale from './img/afterSale.svg'
@@ -381,12 +390,10 @@ function FakeAuthorization(props) {
         divRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
 
-    const authenticationNumber = (data,form) => {
-        let exID = Date.parse(new Date());
-        setEXID(exID);
-
+    const authenticationNumber = (data,form,exID) => {
         verifyWeb({
             token: data.content,
+            operater: data.operater,
             phone: form.phone,
             exID,
             "dept_id": initParam.dept_id,
@@ -475,6 +482,10 @@ function FakeAuthorization(props) {
                 resetPopUps();
                 setLoading(false);
             }else{
+
+                // 生成 exID
+                let exID = Date.parse(new Date());
+
                 // 判断初始化是否成功
                 if(!window.JVerificationInterface.isInitSuccess()){
                     window.JVerificationInterface.init({
@@ -483,6 +494,9 @@ function FakeAuthorization(props) {
                         success: function(data) { 
                             //TODO 初始化成功回调
                             console.log(data,"初始化成功回调")
+                            
+                            setEXID(exID);
+
                             // SDK 获取号码认证 token
                             window.JVerificationInterface.getToken({
                                 operater:"CM",
@@ -491,15 +505,19 @@ function FakeAuthorization(props) {
                                     //TODO 获取token成功回调
                                     var operater =data.operater;
                                     var token =data.content;
-                                    authenticationNumber(data,form);
+                                    authenticationNumber(data,form,exID);
                                 }, fail: function(data)  { 
                                     //TODO 获取token失败回调
                                     console.log(data,"获取token失败回调");
                                     setLoading(false);
                                     setTipsColor('red');
-                                    // if(tipsCount+1 === 2){
-                                    //     setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
-                                    // }
+
+                                    // 失败时记录
+                                    certificationRecord({
+                                        exID,
+                                        phone: form.phone,
+                                    })
+
                                     if(tipsCount+1 >=2){
                                         setSMSvisibleModal(true);
                                         setOrderVerification(1);
@@ -518,6 +536,8 @@ function FakeAuthorization(props) {
                         }
                     });
                 }else{
+                    setEXID(exID);
+
                     // SDK 获取号码认证 token
                     window.JVerificationInterface.getToken({
                         operater:"CM",
@@ -526,7 +546,7 @@ function FakeAuthorization(props) {
                             //TODO 获取token成功回调
                             var operater =data.operater;
                             var token =data.content;
-                            authenticationNumber(data,form);
+                            authenticationNumber(data,form,exID);
                         }, 
                         fail: function(data)  { 
                             //TODO 获取token失败回调
@@ -536,6 +556,13 @@ function FakeAuthorization(props) {
                             // if(tipsCount+1 === 2){
                             //     setTipsText("请再次确认是否已开启数据流量并关闭WiFi")
                             // }
+
+                            // 失败时记录
+                            certificationRecord({
+                                exID,
+                                phone: form.phone,
+                            })
+
                             if(tipsCount+1 >= 2){
                                 setSMSvisibleModal(true);
                                 resetPopUps();

@@ -74,3 +74,16 @@ export function verifyWeb(params) {
     }
   })
 }
+
+// 认证记录
+export function certificationRecord(params) {
+  console.log(params,"params")
+  // return request({
+  //   url: serverIP+"/validation/machinecertified",
+  //   method:'post',
+  //   data:{
+  //     ...params,
+  //   }
+  // })
+}
+ 
