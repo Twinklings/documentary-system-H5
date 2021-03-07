@@ -1,8 +1,8 @@
 import request from '../utils/axios'
 import { conversionFormat } from '../utils/utils'
 
-// let serverIP = "http://47.102.204.79:9081";
-let serverIP = "http://h5.genleme.com:80";
+let serverIP = "http://47.102.204.79:9081";
+// let serverIP = "http://h5.genleme.com:80";
 
 export function getWeChatConfig(params) {
     return request({

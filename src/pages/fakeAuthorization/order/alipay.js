@@ -75,6 +75,9 @@ function Alipay() {
                 }else{
                     Toast.fail(response.message,toastTime);
                 }
+            }).catch(res=>{
+                setLoading(false);
+                Toast.info(res.message || "当前提交异常,请联系销售协助!");
             })
         }else{
             placeAnOrder(param).then(response=>{
@@ -85,6 +88,9 @@ function Alipay() {
                 }else{
                     Toast.fail(response.message,toastTime);
                 }
+            }).catch(res=>{
+                setLoading(false);
+                Toast.info(res.message || "当前提交异常,请联系销售协助!");
             })
         }
     }

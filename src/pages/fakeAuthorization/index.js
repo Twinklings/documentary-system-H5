@@ -249,8 +249,8 @@ function FakeAuthorization(props) {
                 }
 
             }else{
-                setInitMsg(res.message)
-                Toast.fail(res.message,toastTime);
+                setInitMsg(res.message || "没有找到当前销售人员的基本信息,请联系销售咨询!")
+                Toast.fail(res.message || "没有找到当前销售人员的基本信息,请联系销售咨询!",toastTime);
             }
         })
     } 
@@ -426,6 +426,7 @@ function FakeAuthorization(props) {
             }
         }).catch(res=>{
             setLoading(false);
+            Toast.info(res.message || "当前提交异常,请联系销售协助!");
         })
     }
 
@@ -454,7 +455,7 @@ function FakeAuthorization(props) {
         getImgCode();
         setVerificationCodeValue("");
         setInputImgCode("");
-        setCountDown(60);
+        // setCountDown(60);
     }
 
     const authentication = () =>{
@@ -606,6 +607,10 @@ function FakeAuthorization(props) {
             return Toast.fail("请先发送短信验证码！");
         }
 
+        if (initParam.image_captcha_status === 1 && validationEmpty(inputimgCode)) {
+            return Toast.info('请输入图形验证码',toastTime);
+        }
+
         if (verificationCodeValue.length != 6 || !(/(^[1-9]\d*$)/.test(verificationCodeValue))) {
             return Toast.fail("请输入6位数字短信验证码");
         }
@@ -687,6 +692,7 @@ function FakeAuthorization(props) {
                     }
                 }).catch(res=>{
                     setLoading(false);
+                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
                 })
             }else{
                 if(exID){
@@ -703,6 +709,7 @@ function FakeAuthorization(props) {
                         }
                     }).catch(res=>{
                         setLoading(false);
+                        Toast.info(res.message || "当前提交异常,请联系销售协助!");
                     })
                 }else{
                     setLoading(false);
@@ -728,6 +735,7 @@ function FakeAuthorization(props) {
                     }
                 }).catch(res=>{
                     setLoading(false);
+                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
                 })
             }else{
                 setLoading(false);
