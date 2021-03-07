@@ -40,6 +40,7 @@ let name = "";
 
 let time = 60;
 let smsTime = 30;
+let timer = null;
 
 function FakeAuthorization(props) {
     const user_name = useRef();
@@ -455,7 +456,8 @@ function FakeAuthorization(props) {
         getImgCode();
         setVerificationCodeValue("");
         setInputImgCode("");
-        // setCountDown(60);
+        clearInterval(timer);
+        setCountDown(60);
     }
 
     const authentication = () =>{
@@ -806,15 +808,14 @@ function FakeAuthorization(props) {
     }
 
     const updateCountdown = () =>{
-        setTimeout(()=>{
+        timer = setInterval(() => {
             time --;
-            if(time != 0){
-                updateCountdown();
-            }else{
-                time = 60
+            if(time <= 0){
+                time = 60;
+                clearInterval(timer);
             }
-            setCountDown(time)
-        },1000)
+            setCountDown(time);
+        }, 1000);
     }
 
     const myCall = (type) => {
