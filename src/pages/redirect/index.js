@@ -35,7 +35,7 @@ function Redirect(props) {
     const getRedirect = (parameter) => {
         redirect({parameter}).then(res=>{
             if(res.code === 200){
-                location.href=res.data.redirect_url;
+                window.location.href=res.data.redirect_url;
                 // location.href=res.data.redirect_url;
             }else{
                 // setInitMsg(res.message)
