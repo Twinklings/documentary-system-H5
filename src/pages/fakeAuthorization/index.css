@@ -1,3 +1,19 @@
+.browserAlt{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    background: #030303;
+    opacity: .4;
+    text-align: center;
+    color: #fff;
+    padding-top: 50px;
+}
+.browserAltNone{
+    display: none;
+}
 .fakeAuthorizationBox{
     background: #ffffff;
     display: block;
@@ -10,6 +26,7 @@
     max-width: 620px;
     margin: 0 auto;
 }
+
 .fakeAuthorizationBox .bannerImg{
     width: 100%;
 }

@@ -42,6 +42,7 @@ let time = 60;
 let smsTime = 30;
 let timer = null;
 
+let browserAlt = false;
 function FakeAuthorization(props) {
     const user_name = useRef();
     const user_phone = useRef();
@@ -205,6 +206,15 @@ function FakeAuthorization(props) {
         console.log(parameter,"parameter")
         init({parameter}).then(res=>{
             if(res.code === 200){
+                //
+                if(res.data.wechat_browser_status === 1){
+                    if (/MicroMessenger/.test(window.navigator.userAgent)) {
+                        // 微信
+                        browserAlt = true;
+                    }
+                }
+
+
                 setInitType(true)
                 console.log(res.data,"res")
                 setAddressParameters({
@@ -890,9 +900,10 @@ function FakeAuthorization(props) {
 
     return (
         <>
+            <div className={browserAlt?"browserAlt":'browserAltNone'}>请在浏览器中打开</div>
         {/* {initParam.tenant_id? ( */}
         {/* <DocumentTitle title={initParam.h5_title} style={{color:"#000000"}}> */}
-        <div className={"box fakeAuthorizationBox"} style={visible?{display:"block"}:{}} ref={divRef}>
+        <div className={"box fakeAuthorizationBox"} style={browserAlt?{filter:'blur(20px)'}:visible?{display:"block"}:{}} ref={divRef}>
             {/* <div className={"prompt_content"}>
                 {initParam.prompt_content}
             </div> */}
