@@ -1,6 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { createForm } from 'rc-form';
+import React, { useEffect } from 'react';
 import { createHashHistory } from 'history'; // 如果是hash路由
 
 import { getUrlParam } from '../../utils/utils'
@@ -9,7 +8,7 @@ import {
 } from '../../servers/authorizationApi'
 
 const history = createHashHistory();
-function Redirect(props) {
+function Redirect() {
     useEffect(() => {
 
         let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
@@ -28,9 +27,10 @@ function Redirect(props) {
             });
         }
 
-        getRedirect(parameter);
+        // getRedirect(parameter);
 
     }, [])
+
 
     const getRedirect = (parameter) => {
         redirect({parameter}).then(res=>{
@@ -46,4 +46,4 @@ function Redirect(props) {
     return (<div></div>)
 }
 
-export default createForm()(Redirect)
+export default Redirect
