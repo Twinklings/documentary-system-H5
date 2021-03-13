@@ -14,6 +14,7 @@ import FakeAuthorizationAlipay from '../pages/fakeAuthorization/order/alipay';
 
 import FreeAdmission from '../pages/freeAdmission';
 import Successful from '../pages/recharge/successful';
+import Redirect from '../pages/redirect/'
 
 const BasicRoute = () => (
     <HashRouter>
@@ -37,6 +38,8 @@ const BasicRoute = () => (
 
             
             <Route exact path="/freeAdmission" component={FreeAdmission}/>
+
+            <Route exact path="/redirect" component={Redirect}/>
             
         </Switch>
     </HashRouter>

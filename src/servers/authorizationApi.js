@@ -12,6 +12,14 @@ export function getWeChatConfig(params) {
     })
 }
 
+//重定向地址
+export function redirect(params) {
+    return request({
+        url:serverIP+"/placeorder/redirect?"+conversionFormat(params),
+        method:'get',
+    })
+}
+
 // 初始化接口
 export function init(params) {
     console.log(conversionFormat(params))
