@@ -10,6 +10,8 @@ import DocumentTitle from 'react-document-title'
 
 import assetsTips from '../../assets/tips.svg'
 import closeModal from '../../assets/close.svg'
+import AndroidImg from '../../assets/Android.svg'
+import IosImg from '../../assets/iOS.svg'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
@@ -43,6 +45,8 @@ let smsTime = 30;
 let timer = null;
 
 let browserAlt = false;
+let browserAltType = 'Android';
+
 function FakeAuthorization(props) {
     const user_name = useRef();
     const user_phone = useRef();
@@ -143,6 +147,14 @@ function FakeAuthorization(props) {
         //     salesman:addressParam[2],
         //     pay_amount:addressParam[3],
         // })
+
+
+        if (/(iPhone|iPad|iPod|iOS)/i.test(window.navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+            browserAltType ="iPhone";
+        } else if (/(Android)/i.test(window.navigator.userAgent)) { //判断Android
+            browserAltType ="Android";
+        }
+
 
         if (/MicroMessenger/.test(window.navigator.userAgent)) {
             // 微信
@@ -900,7 +912,20 @@ function FakeAuthorization(props) {
 
     return (
         <>
-            <div className={browserAlt?"browserAlt":'browserAltNone'}>请在浏览器中打开</div>
+            <div className={browserAlt?"browserAlt":'browserAltNone'}>
+                {browserAltType == 'Android'?(
+                    <img
+                        src={AndroidImg}
+                        style={{ width: '100%' }}
+                    />
+                ):(
+                    <img
+                        src={IosImg}
+                        style={{ width: '100%' }}
+                    />
+                )}
+
+            </div>
         {/* {initParam.tenant_id? ( */}
         {/* <DocumentTitle title={initParam.h5_title} style={{color:"#000000"}}> */}
         <div className={"box fakeAuthorizationBox"} style={browserAlt?{filter:'blur(20px)'}:visible?{display:"block"}:{}} ref={divRef}>
