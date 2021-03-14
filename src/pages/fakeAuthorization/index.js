@@ -10,8 +10,8 @@ import DocumentTitle from 'react-document-title'
 
 import assetsTips from '../../assets/tips.svg'
 import closeModal from '../../assets/close.svg'
-import AndroidImg from '../../assets/Android.svg'
-import IosImg from '../../assets/iOS.svg'
+import AndroidImg from '../../assets/Android.png'
+import IosImg from '../../assets/iOS.png'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
