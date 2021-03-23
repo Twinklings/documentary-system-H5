@@ -2,6 +2,9 @@ html{
     /* font-size: 10px; */
     margin: 0px atuo;
 }
+html,body{
+    height: 100%;
+}
 p{
     height: auto !important;
 }
