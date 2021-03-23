@@ -132,7 +132,7 @@ function Order() {
                         <div>支付方式</div>
                         <div className="wxtips">
                             <img src={myjzj} />
-                            <span className="green" style={{"padding":"0 10px"}}>免押金租借</span>
+                            <span className="green" style={{"padding":"0 10px"}}>免押金领取</span>
                             <span>550分以上可免费领取</span>
                         </div>
                     </div>
@@ -152,12 +152,14 @@ function Order() {
                         <div className="agreement">是否同意<span onClick={openAgreementBox}>《委托扣款授权书》</span></div>
                     </div>
 
-                    <div className="item describe">温馨提示：微信支付分达到550及以上，免押金领取机器，租借期间不收取租金，您需在收货后30日内激活，不激活将通过微信支付分扣取机器押金<span className="num">{amount}</span>元。</div>
+                    <div className="item describe">温馨提示：微信支付分达到550及以上，免押金领取机器，您需在收货后30日内激活。</div>
+                    {/* 不激活将通过微信支付分扣取机器押金<span className="num">{amount}</span>元。 */}
+                    
                 </div>
                 <div className="footer">
                     <div className="bnt">
                         <div className="lease" onClick={submit}>
-                            <span>免押金租借</span>
+                            <span>免押金领取</span>
                             <div className="tip">(微信支付分550分以上可免费领取)</div>
                         </div>
                     </div>
