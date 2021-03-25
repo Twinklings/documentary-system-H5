@@ -42,6 +42,9 @@ function Details() {
     });
 
     const [logisticsNo,setLogisticsNo] = useState("");
+
+    const [logisticsName,setLogisticsName] = useState("");
+    
     
     useEffect(() => {
       // new VConsole();
@@ -223,6 +226,7 @@ function Details() {
           return false;
         }
         setLogisticsNo(res.data.no)
+        setLogisticsName(getLogisticsCompany().result[res.data.type])
       })
     }
 
@@ -281,10 +285,7 @@ function Details() {
             data={details}
           />
 
-          <div className={"list-item"}>
-              <div className={"list-left-title"}>物流单号</div>
-              <div className={"list-right-content"}>{logisticsNo}</div>
-          </div>
+          
           {/* <div className={"list-item"}>
               <div className={"list-left-title"}>物流地址</div>
               <div className={"list-right-content"}>
@@ -293,6 +294,16 @@ function Details() {
               >复制</a>
               </div>
           </div> */}
+          <div className={"list-item"} style={{borderTop: '1px solid #e2e2e2',marginTop:10}}>
+              <div className={"list-left-title"}>快递公司</div>
+              <div className={"list-right-content"}>{logisticsName}</div>
+          </div>
+          <div className={"list-item"}>
+              <div className={"list-left-title"}>快递单号</div>
+              <div className={"list-right-content"} onClick={()=>{
+                copyArticle(logisticsNo)
+              }}>{logisticsNo}</div>
+          </div>
           <div className={"list-item"}>
               <div className={"list-left-title"}>物流信息</div>
               <div className={"list-right-content"}>
@@ -301,6 +312,7 @@ function Details() {
               >查看</a>
               </div>
           </div>
+          
           <div className={"list-item"} style={{borderTop: '1px solid #e2e2e2',marginTop:10}}>
               <div className={"list-left-title"}>专属客服</div>
               <div className={"list-right-content"}>{initializationData.aftersales_phone}</div>
