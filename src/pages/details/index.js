@@ -40,6 +40,8 @@ function Details() {
     const [logisticsList,setLogisticsList] = useState({
       datalist:[]
     });
+
+    const [logisticsNo,setLogisticsNo] = useState("");
     
     useEffect(() => {
       // new VConsole();
@@ -167,7 +169,8 @@ function Details() {
         setConfirm_tag(_data.confirm_tag);
         sessionStorage.openid = _data.openid;
         sessionStorage.data = JSON.stringify(_data);
-        setLogistics_url(_data.logistics_url)
+        setLogistics_url(_data.logistics_url);
+        getLogisticsNo(_data.out_order_no);
       })
     }
 
@@ -213,6 +216,16 @@ function Details() {
           Toast.info('复制成功!', toastTime);
 
       }
+
+    const getLogisticsNo = (out_order_no) => {
+      viewLogistics(out_order_no).then(res=>{
+        if(res.data === null || res.data.list === null){
+          return false;
+        }
+        setLogisticsNo(res.data.no)
+      })
+    }
+
   const getLogistics = () => {
     setVisibleModal(true)
     console.log(initializationData)
@@ -267,6 +280,11 @@ function Details() {
           <ListItem
             data={details}
           />
+
+          <div className={"list-item"}>
+              <div className={"list-left-title"}>物流单号</div>
+              <div className={"list-right-content"}>{logisticsNo}</div>
+          </div>
           {/* <div className={"list-item"}>
               <div className={"list-left-title"}>物流地址</div>
               <div className={"list-right-content"}>
