@@ -59,6 +59,8 @@ function FakeAuthorization(props) {
     
     const [visible,setVisible] = useState(true);
 
+    const [modal1,setModal1] = useState(false);
+
     const [loading,setLoading] = useState(false);
 
     const [sendSMS,setSendSMS] = useState(false);
@@ -274,6 +276,7 @@ function FakeAuthorization(props) {
             }else{
                 setInitMsg(res.message || "没有找到当前销售人员的基本信息,请联系销售咨询!")
                 Toast.fail(res.message || "没有找到当前销售人员的基本信息,请联系销售咨询!",toastTime);
+                // setModal1(true)
             }
         })
     } 
@@ -484,7 +487,7 @@ function FakeAuthorization(props) {
 
     const authentication = () =>{
         if(!initType){
-            Toast.fail(initMsg,toastTime);
+            Toast.fail(initMsg || "没有找到当前销售人员的基本信息,请联系销售咨询!",toastTime);
             return false;
         }
 
@@ -712,7 +715,7 @@ function FakeAuthorization(props) {
                         Toast.success(response.message,toastTime);
                         history.push('/fakeAuthorization/success');
                     }else{
-                        Toast.fail(response.message,toastTime);
+                        Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
                     }
                 }).catch(res=>{
                     setLoading(false);
@@ -729,7 +732,7 @@ function FakeAuthorization(props) {
                             Toast.success(response.message,toastTime);
                             history.push('/fakeAuthorization/success');
                         }else{
-                            Toast.fail(response.message,toastTime);
+                            Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
                         }
                     }).catch(res=>{
                         setLoading(false);
@@ -755,7 +758,7 @@ function FakeAuthorization(props) {
                             history.push('/fakeAuthorization/alipay');
                         }
                     }else{
-                        Toast.fail(res.message,toastTime);
+                        Toast.fail(res.message || "当前提交异常,请联系销售协助!",toastTime);
                     }
                 }).catch(res=>{
                     setLoading(false);
@@ -820,7 +823,7 @@ function FakeAuthorization(props) {
                 updateCountdown();
                 // Toast.info(res.data);
             }else{
-                Toast.fail(res.message,toastTime);
+                Toast.fail(res.message || "当前提交异常,请联系销售协助!" ,toastTime);
                 getImgCode();
                 setVerificationCodeValue("");
                 setInputImgCode("");
@@ -1240,7 +1243,23 @@ function FakeAuthorization(props) {
             </Modal>
             ):""}
         </div>
-   
+        {/* <Modal
+          visible={modal1}
+          transparent
+          maskClosable={false}
+          title="提示"
+          footer={[{ text: '退出', onPress: () => { 
+            if (/MicroMessenger/.test(window.navigator.userAgent)) {
+                // 微信
+                window.WeixinJSBridge.call('closeWindow');
+              } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+                // 支付宝
+                window.AlipayJSBridge.call('closeWebview');
+              }
+           } }]}
+        >
+          <div>没有找到当前销售人员的基本信息,请联系销售咨询!</div>
+        </Modal> */}
         {/* </DocumentTitle>) : ""} */}
         </>
    );
