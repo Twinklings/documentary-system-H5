@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { List, Result, Icon, Button, WhiteSpace } from 'antd-mobile';
 // import {Flex,WhiteSpace} from 'antd-mobile'
 import { createHashHistory } from 'history'; // 如果是hash路由
+import $ from 'jquery'
 
 import './index.css'
 
@@ -25,6 +26,10 @@ function Success() {
       } else if (/AlipayClient/.test(window.navigator.userAgent)) {
         // 支付宝
         window.AlipayJSBridge.call('closeWebview');
+      }else{
+        $(document.body).hide();
+        window.document.title="";
+        window.close();
       }
     }
 

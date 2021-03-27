@@ -23,7 +23,7 @@ import {
     placeAnOrder, 
     smsCertification,
     verifyWeb,
-    certificationRecord
+    certificationRecord,
 } from '../../servers/authorizationApi'
 
 import './index.css'
@@ -756,6 +756,38 @@ function FakeAuthorization(props) {
                         } else if (/AlipayClient/.test(window.navigator.userAgent)) {
                             // 支付宝
                             history.push('/fakeAuthorization/alipay');
+                        }else{
+                            // 浏览器打开的时候
+                            if(exID){
+                                machinesaveOrder({
+                                    ...param,
+                                    exID
+                                }).then(response=>{
+                                    setLoading(false);
+                                    if(response.code === 200){
+                                        Toast.success(response.message,toastTime);
+                                        history.push('/fakeAuthorization/success');
+                                    }else{
+                                        Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                                    }
+                                }).catch(res=>{
+                                    setLoading(false);
+                                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                                })
+                            }else{
+                                placeAnOrder(param).then(response=>{
+                                    setLoading(false);
+                                    if(response.code === 200){
+                                        Toast.success(response.message,toastTime);
+                                        history.push('/fakeAuthorization/success');
+                                    }else{
+                                        Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                                    }
+                                }).catch(res=>{
+                                    setLoading(false);
+                                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                                })
+                            }
                         }
                     }else{
                         Toast.fail(res.message || "当前提交异常,请联系销售协助!",toastTime);
@@ -777,6 +809,39 @@ function FakeAuthorization(props) {
                 } else if (/AlipayClient/.test(window.navigator.userAgent)) {
                     // 支付宝
                     history.push('/fakeAuthorization/alipay');
+                }else{
+                    // 浏览器打开的时候
+                    if(exID){
+                        machinesaveOrder({
+                            ...param,
+                            exID
+                        }).then(response=>{
+                            setLoading(false);
+                            if(response.code === 200){
+                                Toast.success(response.message,toastTime);
+                                history.push('/fakeAuthorization/success');
+                            }else{
+                                Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                            }
+                        }).catch(res=>{
+                            setLoading(false);
+                            Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                        })
+                    }else{
+                        placeAnOrder(param).then(response=>{
+                            setLoading(false);
+                            if(response.code === 200){
+                                Toast.success(response.message,toastTime);
+                                history.push('/fakeAuthorization/success');
+                            }else{
+                                Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                            }
+                        }).catch(res=>{
+                            setLoading(false);
+                            Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                        })
+                    }
+
                 }
             }
         }
