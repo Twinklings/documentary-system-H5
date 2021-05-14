@@ -4,6 +4,7 @@ let serverIP = "http://push.gendanbao.com.cn";
 
 
 export function getWeChatConfig(id,type) {
+  // type 修改1 跟进2
   return request({
     url:serverIP+"/wechatsalesman/WeChatConfig/"+type+"/"+id,
     method:'get',

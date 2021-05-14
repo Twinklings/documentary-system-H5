@@ -43,7 +43,7 @@ const BasicRoute = () => (
             <Route exact path="/redirect" component={Redirect}/>
 
             {/*订单*/}
-            <Route exact path="/order/add" component={OrderAdd}/>
+            <Route exact path="/details/order/add" component={OrderAdd}/>
         </Switch>
     </HashRouter>
 );
