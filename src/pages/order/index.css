@@ -21,10 +21,12 @@
 }
 .orderAdd .am-list-item .am-input-extra{
     font-size: 13px;
+    color: #333333;
 }
 
 .orderAdd .am-list-item .am-list-line .am-list-extra{
     font-size: 13px;
+    color: #333333;
 }
 /*.orderAdd .am-list-item .am-list-line .am-list-arrow{*/
 /*    width: 13px;*/
@@ -80,9 +82,11 @@
     background: #1890FF;
     margin: 0 10px;
     border-radius:3px !important;
+    font-size: 16px;
 }
 .orderAdd .am-button-borderfix{
     margin: 10px; border: 1px solid #1890FF !important;
     border-radius:3px !important;
+    font-size: 16px;
 }
 .orderAdd .am-button-borderfix::before{ display: none; }
