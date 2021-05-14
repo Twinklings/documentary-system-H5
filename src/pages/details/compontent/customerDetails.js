@@ -191,7 +191,9 @@ function CustomerDetails(props) {
       confirm({
         "out_order_no":initializationData.out_order_no,
         "openid":initializationData.openid,
-        "confirm_tag":confirmTag
+        "confirm_tag":confirmTag,
+        'tenant_id':initializationData.tenant_id,
+        'dept_id':initializationData.dept_id,
       }).then(response=>{
         if(response.code === 200){
           let param = {...initializationData}

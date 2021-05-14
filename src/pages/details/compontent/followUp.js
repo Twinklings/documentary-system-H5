@@ -81,6 +81,8 @@ function FollowUp(props) {
         "reminderTime":dateTime?`${moment(dateTime).format("YYYY-MM-DD HH:mm")}:00` :null,
         "operation_tag":2,
         "salesman":JSON.parse(sessionStorage.data).salesman,
+        'tenant_id':JSON.parse(sessionStorage.data).tenant_id,
+        'dept_id':JSON.parse(sessionStorage.data).dept_id,
       }
       update(param).then(response=>{
         // history.push('/success');
