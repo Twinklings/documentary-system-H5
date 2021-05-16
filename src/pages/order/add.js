@@ -361,6 +361,7 @@ function OrderAdd(props) {
                     >
                         <List.Item>收货地区</List.Item>
                     </Picker>
+                    <div className={'borderBottom'}></div>
                     <InputItem
                         {...getFieldProps('address', {
                             initialValue: defaultParam.address,
@@ -424,16 +425,16 @@ function OrderAdd(props) {
                         user_money.current.focus();
                     }}
                 >下单金额</InputItem>
-                <div className={'borderBottom'}></div>
-                <div className={'am-list-item am-input-item am-list-item-middle'}>
-                    <div className={'am-list-line'}>
-                        <label className={"am-input-label"}>下单提醒</label>
-                        <div className={"am-input-control"}>
-                            <Radio name={'a'} checked={radioValue === 1} className="my-radio-01" onChange={e => setRadioValue(1)}>是</Radio>
-                            <Radio name={'b'} checked={radioValue === 0} className="my-radio" onChange={e => setRadioValue(0)}>否</Radio>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className={'borderBottom'}></div>*/}
+                {/*<div className={'am-list-item am-input-item am-list-item-middle'}>*/}
+                {/*    <div className={'am-list-line'}>*/}
+                {/*        <label className={"am-input-label"}>下单提醒</label>*/}
+                {/*        <div className={"am-input-control"}>*/}
+                {/*            <Radio name={'a'} checked={radioValue === 1} className="my-radio-01" onChange={e => setRadioValue(1)}>是</Radio>*/}
+                {/*            <Radio name={'b'} checked={radioValue === 0} className="my-radio" onChange={e => setRadioValue(0)}>否</Radio>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
             <div className={"group"}>
                 <List>
