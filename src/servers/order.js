@@ -10,7 +10,7 @@ export function getWeChatConfig() {
 // 获取产品树
 export function getProductTree(params) {
     return request({
-        url:serverIP+"/wechatsalesman/productTree",
+        url:serverIP+"/wechatsalesman/productTree?code="+params.code,
         method:'post',
         data:params
     })
