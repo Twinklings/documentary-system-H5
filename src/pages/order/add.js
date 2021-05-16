@@ -121,14 +121,14 @@ function OrderAdd(props) {
 
                 let _param3 = _param2.split("#")[0];
 
-                getProductTree(_param3,_paramCode.split("=")[1]);
+                getProductTrees(_param3,_paramCode.split("=")[1]);
             }
         }
 
     }, [])
 
     //获取产品树
-    const getProductTree = (_param3,_paramCode) => {
+    const getProductTrees = (_param3,_paramCode) => {
         getProductTree({
             code:_paramCode
         }).then(response=>{
