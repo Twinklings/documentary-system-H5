@@ -99,7 +99,6 @@ function OrderAdd(props) {
         // let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
         // var local = window.location.href;//获取当前页面路径，即回调地址
 
-        return false;
         if(getUrlCode('code') === 'false'){
             setVisible(false);
             getWeChatConfig().then(response=>{
