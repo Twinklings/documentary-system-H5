@@ -8,9 +8,10 @@ import $ from 'jquery'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import { init, getvcode, sendcode, getWeChatConfig, placeAnOrder, } from '../../servers/authorizationApi'
+import {getWeChatConfig,getProductTree,machinesaveOrder} from '../../servers/order'
 
 import './index.css'
+import {getOrderDetails} from "../../servers/api";
 // import afterSale from './img/afterSale.svg'
 // import complaint from './img/complaint.svg'
 // import bannerImg from './img/20190625000833113010.jpg'
@@ -31,34 +32,25 @@ function OrderAdd(props) {
     const user_money = useRef();
     const user_address = useRef();
     const user_city = useRef();
+    const user_product = useRef();
 
     const [visible,setVisible] = useState(true);
 
-    const [sendSMS,setSendSMS] = useState(false);
-
     const [initParam,setInitParam] = useState({});
 
-    const [imgCode,setImgCode] = useState("");
-    const [verificationCodeValue,setVerificationCodeValue] = useState("");
-
-
-    const [countDown,setCountDown] = useState(60);
-
     const divRef = useRef();
-
-    const [randomkey , setRandomkey] = useState("");
 
     const [cityData , setCityData] = useState([]);
 
     const [cityName , setCityName] = useState([]);
 
-    const [browserType , setBrowserType] = useState(false);
-
     const [addressParameters , setAddressParameters] = useState(false);
 
-    const [visibleModal,setVisibleModal] = useState(false);
-
     const [radioValue,setRadioValue] = useState(0);
+
+    const [products,setProducts] = useState([]);
+
+    const [product,setProduct] = useState([]);
 
     const getName = (data) => {
 
@@ -97,35 +89,54 @@ function OrderAdd(props) {
 
 
     useEffect(() => {
-        // new VConsole();
+        document.title = '新增订单';
+        // let code = getUrlParam('code');// 这是获取请求路径中带code字段参数的方法
+        // let belongs = getUrlParam('belongs');// 这是获取请求路径中带code字段参数的方法
+        // let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
+        // var local = window.location.href;//获取当前页面路径，即回调地址
 
+        if(getUrlCode('code') === 'false'){
+            setVisible(false);
+            getWeChatConfig().then(response=>{
+                const {appid,STATE,redirect_uri} = response;
+                let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_base&state=${STATE}#wechat_redirect`
+                window.location.href = url
+            })
+        }else{
+            if(validationEmpty(getUrlCode('code'))){
+                alert("请关闭窗口从新进入")
+            }else{
+                // http://h1.genleme.com/?code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9&state=mf20201022231202164794#/details
+                let param = window.location.href.split("?")[1];
 
-        let parameter = getUrlParam('parameter');// 这是获取请求路径中带的参数
-        console.log(parameter,"parameter")
-        // let addressParam = parameter.split("_")
-        // setAddressParameters({
-        //     tenant_id:addressParam[0],
-        //     dept_id:addressParam[1],
-        //     salesman:addressParam[2],
-        //     pay_amount:addressParam[3],
-        // })
+                let _paramCode = param.split("&")[0];//code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9
 
+                let _param1 = param.split("&")[1];
 
-        // if (/MicroMessenger/.test(window.navigator.userAgent)) {
-        //     // 微信
-        //     // setBrowserType(1)
-        // } else if (/AlipayClient/.test(window.navigator.userAgent)) {
-        //     // 支付宝
-        //     setBrowserType(2)
-        // }
+                let _param2 = _param1.split("=")[1];
 
-        // 初始化数据接口
-        // getInit(parameter);
-        // 获取验证码图片
-        // getImgCode()
+                let _param3 = _param2.split("#")[0];
+
+                getProductTree(_param3,_paramCode.split("=")[1]);
+            }
+        }
 
     }, [])
 
+    //获取产品树
+    const getProductTree = (_param3,_paramCode) => {
+        getProductTree({
+            code:_paramCode
+        }).then(response=>{
+            if(!response.data){
+                alert("未查询到数据")
+                return false;
+            }
+            setVisible(true);
+            let _data = response.data;
+            setProducts(_data)
+        })
+    }
     // const getImgCode = () => {
     //     let random_code = randomCode(6);
     //     setRandomkey(random_code)
@@ -207,6 +218,8 @@ function OrderAdd(props) {
 
         props.form.validateFields({ force: true }, (error) => {
             if (!error) {
+                // 生成 exID
+                let exID = Date.parse(new Date());
                 let form = props.form.getFieldsValue()
                 console.log(form,cityName,"formformform")
                 let cityPark = cityName.split("_");
@@ -214,7 +227,8 @@ function OrderAdd(props) {
                     "user_name": form.user_name,
                     "user_phone": form.phone.replace(/\s/g,""),
                     "radioValue":radioValue,
-                    "address": form.address,
+                    "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
+                    "product_id":form.product,
                     "pay_amount": addressParameters.pay_amount,
                     "salesman": addressParameters.salesman,
                     "province": cityPark[0],
@@ -223,11 +237,11 @@ function OrderAdd(props) {
                     "money": form.money,
                     "tenant_id": addressParameters.tenant_id,
                     "dept_id": addressParameters.dept_id,
+                    exID:exID
                 }
-                console.log(param,"formformform")
 
-                return false;
-                placeAnOrder(param).then(response=>{
+
+                machinesaveOrder(param).then(response=>{
                     if(response.code === 200){
                         Toast.success(response.message);
                         history.push('/fakeAuthorization/success');
@@ -272,7 +286,6 @@ function OrderAdd(props) {
                 <List>
                     <InputItem
                         {...getFieldProps('user_name', {
-                            // initialValue:"谢文欣",
                             rules: [
                                 { required: true, message: '请输入您的姓名' },
                             ],
@@ -310,6 +323,25 @@ function OrderAdd(props) {
                         }}
                     >手机号</InputItem>
                     <div className={'borderBottom'}></div>
+                    <Picker extra="请选择(可选)"
+                            data={CITY}
+                            title="选择收货地址区域"
+                            {...getFieldProps('city', {
+                                rules: [
+                                    { required: true, message: '请选择收货地址区域' },
+                                ],
+                            })}
+                            value={cityData}
+                            format={(labels) => { return labels.join('/');}}
+                            onPickerChange={(e) => setCityData(e)}
+                            onOk={(e) => setCityData(e)}
+                            ref={user_city}
+                            onClick={()=>{
+                                user_city.current.focus();
+                            }}
+                    >
+                        <List.Item>收货地址区域</List.Item>
+                    </Picker>
                     <InputItem
                         {...getFieldProps('address', {
                             rules: [
@@ -333,24 +365,25 @@ function OrderAdd(props) {
             </div>
             <div className={"group"}>
                 <Picker extra="请选择(可选)"
-                        data={CITY}
+                        data={products}
                         title="选择发货产品"
-                        {...getFieldProps('city', {
+                        {...getFieldProps('product', {
                             rules: [
                                 { required: true, message: '请选择发货产品' },
                             ],
                         })}
-                        value={cityData}
+                        value={product}
                         format={(labels) => { return labels.join('/');}}
-                        onPickerChange={(e) => setCityData(e)}
-                        onOk={(e) => setCityData(e)}
-                        ref={user_city}
+                        onPickerChange={(e) => setProduct(e)}
+                        onOk={(e) => setProduct(e)}
+                        ref={user_product}
                         onClick={()=>{
-                            user_city.current.focus();
+                            user_product.current.focus();
                         }}
                 >
                     <List.Item>发货产品</List.Item>
                 </Picker>
+
                 <div className={'borderBottom'}></div>
                 <InputItem
                     {...getFieldProps('money', {
@@ -363,7 +396,7 @@ function OrderAdd(props) {
                     onErrorClick={() => {
                         Toast.info(getFieldError('money').join(';'));
                     }}
-                    placeholder="0.00"
+                    placeholder="请输入下单金额"
                     extra="元"
                     moneyKeyboardAlign={"left"}
                     ref={user_money}
