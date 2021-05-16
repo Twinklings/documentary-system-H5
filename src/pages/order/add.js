@@ -8,7 +8,7 @@ import $ from 'jquery'
 
 import { getUrlParam, randomCode, validationEmpty, getUrlCode } from '../../utils/utils'
 import { CITY } from '../../utils/city'
-import {getWeChatConfig,getProductTree,machinesaveOrder} from '../../servers/order'
+import {getWeChatConfig,getProductTree,machinesaveOrder,smAddress} from '../../servers/order'
 
 import './index.css'
 import {getOrderDetails} from "../../servers/api";
@@ -51,6 +51,10 @@ function OrderAdd(props) {
     const [products,setProducts] = useState([]);
 
     const [product,setProduct] = useState([]);
+
+    const [defaultParam,setDefaultParam] = useState({});
+
+    const [autoContent,setAutoContent] = useState(null);
 
     const getName = (data) => {
 
@@ -95,6 +99,7 @@ function OrderAdd(props) {
         // let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
         // var local = window.location.href;//获取当前页面路径，即回调地址
 
+        return false;
         if(getUrlCode('code') === 'false'){
             setVisible(false);
             getWeChatConfig().then(response=>{
@@ -213,6 +218,17 @@ function OrderAdd(props) {
     //         }
     //     }
     // }
+    const autoSmAddress =(v) =>{
+        setAutoContent(v);
+        if(v.length<10){
+            return false;
+        }
+        smAddress({
+            'address':v
+        }).then(res=>{
+            setDefaultParam(res);
+        })
+    }
 
     const onSubmit = () =>{
 
@@ -226,15 +242,15 @@ function OrderAdd(props) {
                 let param = {
                     "user_name": form.user_name,
                     "user_phone": form.phone.replace(/\s/g,""),
-                    "radioValue":radioValue,
+                    // "radioValue":radioValue,
                     "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
                     "product_id":form.product,
-                    "pay_amount": addressParameters.pay_amount,
+                    // "pay_amount": addressParameters.pay_amount,
                     "salesman": addressParameters.salesman,
                     "province": cityPark[0],
                     "city": cityPark[1],
                     "area": cityPark[2],
-                    "money": form.money,
+                    "pay_amount": form.money,
                     "tenant_id": addressParameters.tenant_id,
                     "dept_id": addressParameters.dept_id,
                     exID:exID
@@ -286,6 +302,7 @@ function OrderAdd(props) {
                 <List>
                     <InputItem
                         {...getFieldProps('user_name', {
+                            initialValue: defaultParam.name,
                             rules: [
                                 { required: true, message: '请输入您的姓名' },
                             ],
@@ -306,6 +323,7 @@ function OrderAdd(props) {
                     <div className={'borderBottom'}></div>
                     <InputItem
                         {...getFieldProps('phone', {
+                            initialValue: defaultParam.phone,
                             rules: [
                                 { required: true, validator: validatePhone },
                             ],
@@ -325,13 +343,14 @@ function OrderAdd(props) {
                     <div className={'borderBottom'}></div>
                     <Picker extra="请选择(可选)"
                             data={CITY}
-                            title="选择收货地址区域"
+                            title="选择收货地区"
                             {...getFieldProps('city', {
+                                initialValue: [defaultParam.provinceCode+'0000',defaultParam.cityCode+'00',defaultParam.countyCode],
                                 rules: [
-                                    { required: true, message: '请选择收货地址区域' },
+                                    { required: true, message: '请选择收货地区' },
                                 ],
                             })}
-                            value={cityData}
+                            // value={cityData}
                             format={(labels) => { return labels.join('/');}}
                             onPickerChange={(e) => setCityData(e)}
                             onOk={(e) => setCityData(e)}
@@ -340,25 +359,26 @@ function OrderAdd(props) {
                                 user_city.current.focus();
                             }}
                     >
-                        <List.Item>收货地址区域</List.Item>
+                        <List.Item>收货地区</List.Item>
                     </Picker>
                     <InputItem
                         {...getFieldProps('address', {
+                            initialValue: defaultParam.address,
                             rules: [
-                                { required: true, message: '请输入收货地址' },
+                                { required: true, message: '请输入详细地址' },
                             ],
                         })}
                         error={!!getFieldError('address')}
                         onErrorClick={() => {
                             Toast.info(getFieldError('address').join(';'));
                         }}
-                        placeholder="请输入收货地址"
+                        placeholder="请输入详细地址"
                         moneyKeyboardAlign={"left"}
                         ref={user_address}
                         onClick={()=>{
                             user_address.current.focus();
                         }}
-                    >收货地址</InputItem>
+                    >详细地址</InputItem>
 
                 </List>
 
@@ -414,6 +434,20 @@ function OrderAdd(props) {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className={"group"}>
+                <List>
+                    <TextareaItem
+                        {...getFieldProps('count', {
+                            initialValue: autoContent,
+                        })}
+                        placeholder="粘贴地址信息，自动拆分姓名、电话和地址"
+                        rows={2}
+                        onChange={(v)=>{
+                            autoSmAddress(v);
+                        }}
+                    />
+                </List>
             </div>
             <div className={"btns"}>
                 <Button

@@ -24,3 +24,10 @@ export function machinesaveOrder(params) {
         data:params
     })
 }
+export function smAddress(params) {
+    return request({
+        url:"https://wangzc.wang/smAddress",
+        method:'post',
+        data:params
+    })
+}

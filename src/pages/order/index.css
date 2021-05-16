@@ -90,3 +90,7 @@
     font-size: 16px;
 }
 .orderAdd .am-button-borderfix::before{ display: none; }
+
+.orderAdd .am-textarea-control textarea{
+    font-size: 13px;
+}
