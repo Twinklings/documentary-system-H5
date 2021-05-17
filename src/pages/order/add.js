@@ -57,7 +57,10 @@ function OrderAdd(props) {
     const [defaultParam,setDefaultParam] = useState({});
 
     const [autoContent,setAutoContent] = useState(null);
-    const [defaultPayamount,setDefaultPayamount] = useState(0)
+
+    const [defaultPayamount,setDefaultPayamount] = useState(0);
+
+    const [isSubmit,setIsSubmit] = useState(false)
 
     const getName = (data) => {
 
@@ -148,10 +151,15 @@ function OrderAdd(props) {
         getProductTree({
             code:_paramCode
         }).then(response=>{
-            if(!response.data){
-                alert("未查询到数据")
+            if(response.code != 200){
+                alert(response.message);
+                setIsSubmit(true);
                 return false;
             }
+            // if(!response.data){
+            //     alert("未查询到数据")
+            //     return false;
+            // }
             let datas = treeData(response.data);
 
             setVisible(true);
@@ -476,6 +484,7 @@ function OrderAdd(props) {
             <div className={"btns"}>
                 <Button
                     type="primary"
+                    disabled={isSubmit}
                     onClick={onSubmit}
                 >保存</Button>
                 <Button
