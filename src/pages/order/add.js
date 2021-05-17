@@ -27,6 +27,7 @@ let time = 60;
 
 let payamounts = {};
 let productNames = [];
+let defaultData = {};
 
 function OrderAdd(props) {
 
@@ -144,6 +145,9 @@ function OrderAdd(props) {
             j={
                 "label":item.value,
                 "value": item.id+'',
+                'tenant_id':item.tenant_id,
+                "dept_id":item.dept_id,
+                'salesman':item.salesman,
                 "children": item.children ? treeData(item.children):[]
             }
             arr.push(j)
@@ -169,82 +173,7 @@ function OrderAdd(props) {
             setVisible(true);
         })
     }
-    // const getImgCode = () => {
-    //     let random_code = randomCode(6);
-    //     setRandomkey(random_code)
-    //     getvcode(random_code).then(res=>{
-    //         setImgCode(res)
-    //     })
-    // }
 
-    // const getInit = (parameter) => {
-    //     console.log(parameter,"parameter")
-    //     init({parameter}).then(res=>{
-    //         if(res.code === 200){
-    //             console.log(res.data,"res")
-    //             setInitParam({
-    //                 ...res.data,
-    //                 isImgCode:true
-    //             })
-    //             document.title = res.data.prompt_content;
-    //         }else{
-    //             Toast.fail(res.message);
-    //         }
-    //     })
-    // }
-
-    // const selectAddress = () => {
-    //     if (/MicroMessenger/.test(window.navigator.userAgent)) {
-    //
-    //     } else if (/AlipayClient/.test(window.navigator.userAgent)) {
-    //         window.am.selectAddress(function (data) {
-    //             console.log(data,"data")
-    //             let _data = data.address.split("-")
-    //             props.form.setFieldsValue(
-    //                 {
-    //                     phone:data.mobilePhone,
-    //                     user_name:data.fullname,
-    //                     address:_data[_data.length-1],
-    //                 }
-    //             );
-    //             getProv(data.addressCode,"1")
-    //         })
-    //     }
-    // }
-    //
-    // let datas = []
-    //
-    // // 设置地址
-    // const getProv = (addressCode,time) => {
-    //     for(let i=0; i<CITY.length; i++){
-    //         if(CITY[i].children){
-    //             getCity(CITY[i],CITY[i].children,addressCode,time)
-    //         }
-    //     }
-    // }
-    //
-    // const getCity = (nextData,data,addressCode,time) => {
-    //     for(let i=0; i<data.length; i++){
-    //         if(data[i].value === addressCode){
-    //             if(time === "1"){
-    //                 datas[2] = data[i].value.toString()
-    //             }
-    //             if(time === "2"){
-    //                 datas[0] = nextData.value.toString()
-    //                 datas[1] = data[i].value.toString();
-    //                 setCityData(datas)
-    //                 props.form.setFieldsValue(
-    //                     {
-    //                         city:datas,
-    //                     }
-    //                 );
-    //             }
-    //             getProv(nextData.value,"2")
-    //         }else if(data[i].children){
-    //             getCity(data[i],data[i].children,addressCode,time)
-    //         }
-    //     }
-    // }
     const autoSmAddress =(v) =>{
         setAutoContent(v);
         if(v.length<10){
@@ -261,7 +190,13 @@ function OrderAdd(props) {
         setProduct(v);
         v[2] && setDefaultPayamount(payamounts[v[2]]);
         let a= [productNames[v[0]],productNames[v[1]],productNames[v[2]]];
-        setProductName(a)
+        setProductName(a);
+        defaultData = {};
+        products.map(item=>{
+            if(item.value == v[0]){
+                defaultData = item;
+            }
+        })
     }
 
     const onSubmit = () =>{
@@ -284,13 +219,13 @@ function OrderAdd(props) {
                     'product_type_id':form.product[1],
                     'pay_pany_id':form.product[0],
                     // "pay_amount": addressParameters.pay_amount,
-                    "salesman": addressParameters.salesman,
+                    "salesman": defaultData.salesman,
                     "province": form.city[0],
                     "city": form.city[1],
                     "area": form.city[2],
                     "pay_amount": form.money,
-                    "tenant_id": addressParameters.tenant_id,
-                    "dept_id": addressParameters.dept_id,
+                    "tenant_id": defaultData.tenant_id,
+                    "dept_id": defaultData.dept_id,
                     exID:exID
                 }
 
