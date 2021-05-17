@@ -269,7 +269,7 @@ function OrderAdd(props) {
         props.form.validateFields({ force: true }, (error) => {
             if (!error) {
                 // 生成 exID
-                let exID = Date.parse(new Date());
+                let exID = new Date().getTime();
                 let form = props.form.getFieldsValue()
                 console.log(form,cityName,"formformform")
                 let cityPark = cityName.split("_");

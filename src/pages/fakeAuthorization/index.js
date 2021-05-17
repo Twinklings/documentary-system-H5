@@ -512,7 +512,7 @@ function FakeAuthorization(props) {
             }else{
 
                 // 生成 exID
-                let exID = Date.parse(new Date());
+                let exID = new Date().getTime();
 
                 // 判断初始化是否成功
                 if(!window.JVerificationInterface.isInitSuccess()){
