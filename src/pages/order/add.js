@@ -25,6 +25,8 @@ let name = "";
 
 let time = 60;
 
+let payamounts = {};
+
 function OrderAdd(props) {
 
     const user_name = useRef();
@@ -55,6 +57,7 @@ function OrderAdd(props) {
     const [defaultParam,setDefaultParam] = useState({});
 
     const [autoContent,setAutoContent] = useState(null);
+    const [defaultPayamount,setDefaultPayamount] = useState(0)
 
     const getName = (data) => {
 
@@ -127,6 +130,19 @@ function OrderAdd(props) {
 
     }, [])
 
+    const treeData = (datas)=>{
+        let arr=[],j = {};
+        datas.map((item)=>{
+            if(item.payamount)payamounts[item.id] = item.payamount;
+            j={
+                "label":item.value,
+                "value": item.id,
+                "children": item.children ? treeData(item.children):[]
+            }
+            arr.push(j)
+        })
+        return arr;
+    }
     //获取产品树
     const getProductTrees = (_param3,_paramCode) => {
         getProductTree({
@@ -136,8 +152,10 @@ function OrderAdd(props) {
                 alert("未查询到数据")
                 return false;
             }
+            let datas = treeData(response.data);
+
             setVisible(true);
-            let _data = response.data;
+            let _data = datas;
             setProducts(_data)
         })
     }
@@ -229,6 +247,11 @@ function OrderAdd(props) {
         })
     }
 
+    const autoPayamount = (v)=>{
+        setProduct(v)
+        v[2] && setDefaultPayamount(v[2])
+    }
+
     const onSubmit = () =>{
 
         props.form.validateFields({ force: true }, (error) => {
@@ -246,9 +269,9 @@ function OrderAdd(props) {
                     "product_id":form.product,
                     // "pay_amount": addressParameters.pay_amount,
                     "salesman": addressParameters.salesman,
-                    "province": cityPark[0],
-                    "city": cityPark[1],
-                    "area": cityPark[2],
+                    "province": form.city[0],
+                    "city": form.city[1],
+                    "area": form.city[2],
                     "pay_amount": form.money,
                     "tenant_id": addressParameters.tenant_id,
                     "dept_id": addressParameters.dept_id,
@@ -344,7 +367,7 @@ function OrderAdd(props) {
                             data={CITY}
                             title="选择收货地区"
                             {...getFieldProps('city', {
-                                initialValue: [defaultParam.provinceCode+'0000',defaultParam.cityCode+'00',defaultParam.countyCode],
+                                initialValue: [defaultParam.provinceCode && defaultParam.provinceCode+'0000',defaultParam.cityCode && defaultParam.cityCode+'00',defaultParam.countyCode],
                                 rules: [
                                     { required: true, message: '请选择收货地区' },
                                 ],
@@ -395,7 +418,7 @@ function OrderAdd(props) {
                         value={product}
                         format={(labels) => { return labels.join('/');}}
                         onPickerChange={(e) => setProduct(e)}
-                        onOk={(e) => setProduct(e)}
+                        onOk={(e) => autoPayamount(e)}
                         ref={user_product}
                         onClick={()=>{
                             user_product.current.focus();
@@ -407,6 +430,7 @@ function OrderAdd(props) {
                 <div className={'borderBottom'}></div>
                 <InputItem
                     {...getFieldProps('money', {
+                        initialValue:defaultPayamount,
                         rules: [
                             { required: true, message: '请输入下单金额' },
                         ],
