@@ -26,6 +26,7 @@ let name = "";
 let time = 60;
 
 let payamounts = {};
+let productNames = [];
 
 function OrderAdd(props) {
 
@@ -53,6 +54,8 @@ function OrderAdd(props) {
     const [products,setProducts] = useState([]);
 
     const [product,setProduct] = useState([]);
+
+    const [productName,setProductName] = useState([]);
 
     const [defaultParam,setDefaultParam] = useState({});
 
@@ -137,6 +140,7 @@ function OrderAdd(props) {
         let arr=[],j = {};
         datas.map((item)=>{
             if(item.payamount)payamounts[item.id] = item.payamount;
+            productNames[item.id] = item.value;
             j={
                 "label":item.value,
                 "value": item.id,
@@ -161,10 +165,8 @@ function OrderAdd(props) {
             //     return false;
             // }
             let datas = treeData(response.data);
-
+            setProducts(datas)
             setVisible(true);
-            let _data = datas;
-            setProducts(_data)
         })
     }
     // const getImgCode = () => {
@@ -256,8 +258,10 @@ function OrderAdd(props) {
     }
 
     const autoPayamount = (v)=>{
-        setProduct(v)
-        v[2] && setDefaultPayamount(v[2])
+        setProduct(v);
+        v[2] && setDefaultPayamount(v[2]);
+        let a= [productNames[v[0]],productNames[v[1]],productNames[v[2]]];
+        setProductName(a)
     }
 
     const onSubmit = () =>{
@@ -274,7 +278,11 @@ function OrderAdd(props) {
                     "user_phone": form.phone.replace(/\s/g,""),
                     // "radioValue":radioValue,
                     "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
-                    "product_id":form.product,
+                    "product_type": `${productName[0]}/${productName[1]}`,
+                    "product_name":productName[2],
+                    "product_id":form.product[2],
+                    'product_type_id':form.product[1],
+                    'pay_pany_id':form.product[0],
                     // "pay_amount": addressParameters.pay_amount,
                     "salesman": addressParameters.salesman,
                     "province": form.city[0],
@@ -297,30 +305,27 @@ function OrderAdd(props) {
                 })
 
             } else {
-                if(error.user_name || error.phone || error.address){
-                    return Toast.fail('表单验证失败');
+                let k = null;
+                for(let key in error){
+                    k = key;
+                    break;
                 }
-
-                if(initParam.image_captcha_status === 1 && error.imgCode){
-                    return Toast.info(error.imgCode.errors[0].message);
-                }
-                if(error.code){
-                    return Toast.info(error.code.errors[0].message);
-                }
-                if(error.city){
-                    return Toast.info(error.city.errors[0].message);
-                }
-
+                return Toast.info(error[k].errors[0].message);
             }
         });
     }
 
     const validatePhone = (rule, value, callback) => {
-        if (!(/^1[3456789]\d{9}$/.test(value.replace(/\s/g,"")))) {
-            callback(new Error('请输入正确的手机号格式'));
+        if(value){
+            if (!(/^1[3456789]\d{9}$/.test(value.replace(/\s/g,"")))) {
+                callback(new Error('请输入正确的手机号格式'));
+            }else{
+                callback();
+            }
         }else{
             callback();
         }
+
     }
 
     const { getFieldProps, getFieldError } = props.form;
@@ -355,7 +360,8 @@ function OrderAdd(props) {
                         {...getFieldProps('phone', {
                             initialValue: defaultParam.phone,
                             rules: [
-                                { required: true, validator: validatePhone },
+                                { required: true, message:'请输入手机号' },
+                                {validator:validatePhone}
                             ],
                         })}
                         type="phone"
@@ -375,7 +381,7 @@ function OrderAdd(props) {
                             data={CITY}
                             title="选择收货地区"
                             {...getFieldProps('city', {
-                                initialValue: [defaultParam.provinceCode && defaultParam.provinceCode+'0000',defaultParam.cityCode && defaultParam.cityCode+'00',defaultParam.countyCode],
+                                initialValue:defaultParam.countyCode ? [defaultParam.provinceCode && defaultParam.provinceCode+'0000',defaultParam.cityCode && defaultParam.cityCode+'00',defaultParam.countyCode]:[],
                                 rules: [
                                     { required: true, message: '请选择收货地区' },
                                 ],
