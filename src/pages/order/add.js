@@ -143,7 +143,7 @@ function OrderAdd(props) {
             productNames[item.id] = item.value;
             j={
                 "label":item.value,
-                "value": item.id,
+                "value": item.id+'',
                 "children": item.children ? treeData(item.children):[]
             }
             arr.push(j)
@@ -259,7 +259,7 @@ function OrderAdd(props) {
 
     const autoPayamount = (v)=>{
         setProduct(v);
-        v[2] && setDefaultPayamount(v[2]);
+        v[2] && setDefaultPayamount(payamounts[v[2]]);
         let a= [productNames[v[0]],productNames[v[1]],productNames[v[2]]];
         setProductName(a)
     }
