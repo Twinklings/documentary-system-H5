@@ -321,7 +321,7 @@ function OrderAdd(props) {
                                     { required: true, message: '请选择收货地区' },
                                 ],
                             })}
-                            // value={cityData}
+                            value={cityData}
                             format={(labels) => { return labels.join('/');}}
                             onPickerChange={(e) => setCityData(e)}
                             onOk={(e) => setCityData(e)}
