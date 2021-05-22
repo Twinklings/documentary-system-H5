@@ -1,0 +1,76 @@
+.feedback{
+    background: #F2F5FB;
+}
+
+.feedback .list-label{
+    display: inline-block;
+    width: 4px;
+    height: 14px;
+    background: #108ee9;
+    vertical-align: middle;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.feedback .list-name{
+    vertical-align: middle; color: #030303;font-size: 16px;
+}
+
+.feedback .am-textarea-control textarea{
+    color: #333333;
+    font-size: 13px;
+}
+
+.feedback .group{
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+.feedback .am-list-item .am-input-control input{
+    color: #333333;
+    font-size: 13px;
+}
+
+.feedback .am-list-item .am-input-label{
+    font-size: 16px;
+    color: #333333;
+}
+
+.feedback .am-list .am-list-item.am-textarea-item{
+    background: #f4f4f4;
+    border-radius: 5px;
+    margin: 0 15px 0;
+}
+.feedback .borderBottom{
+    margin: 0 6%;
+    border-bottom: 1px solid #F0F1F2;
+}
+
+.feedback .btns{
+    margin-top: 60px;
+}
+.feedback .am-button-primary{
+    background: #1890FF;
+    margin: 0 10px;
+    border-radius:3px !important;
+    font-size: 16px;
+}
+
+.feedback .my-tabs{
+    display: flex;
+    margin: 0 15px;
+}
+.feedback .my-tab{
+    flex:1;
+    background: #f4f4f4;
+    color: #333333;
+    border-radius: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    font-size: 14px;
+}
+.feedback .my-tab.active{
+    background: #1890FF;
+    color: #fff;
+}
+

@@ -16,6 +16,7 @@ import FreeAdmission from '../pages/freeAdmission';
 import Successful from '../pages/recharge/successful';
 import Redirect from '../pages/redirect/'
 import OrderAdd from '../pages/order/add'
+import FeedBack from '../pages/feedback/index'
 
 const BasicRoute = () => (
     <HashRouter>
@@ -44,6 +45,8 @@ const BasicRoute = () => (
 
             {/*订单*/}
             <Route exact path="/details/order/add" component={OrderAdd}/>
+            {/*反馈意见*/}
+            <Route exact path="/feedback" component={FeedBack}/>
         </Switch>
     </HashRouter>
 );

@@ -56,3 +56,11 @@ export function viewLogistics(params) {
   })
 }
 
+//意见反馈
+export function submitFeedBack(params) {
+    return request({
+        url:serverIP+"portal/complaintsSave",
+        method:'post',
+        data:params
+    })
+}
