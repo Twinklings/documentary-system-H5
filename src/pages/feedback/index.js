@@ -1,13 +1,25 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem, Flex } from 'antd-mobile';
+import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem, ImagePicker } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import moment from 'moment'
+import { createHashHistory } from 'history'; // 如果是hash路由
 
 import {submitFeedBack} from '../../servers/api'
 
 import './index.css'
 import {getUrlParam} from "../../utils/utils";
+import OSS from 'ali-oss';
+
+const history = createHashHistory();
+
+const client = OSS({
+    region: "oss-cn-shenzhen", //  OSS 的区域
+    accessKeyId: "mU7nOJGJJ5B_4LjpziI0sI-lsrUFFbUbogsOEhoR", // 认证的账号
+    accessKeySecret: "oU4DpeD0wW4BGIkrb56fZrervgEXCbEcXESesmIU", // 认证的密码
+    bucket: "cdngdb", // 请设置成你的
+    // secure: true, // 上传链接返回支持https
+});
 
 function FeedBack(props) {
 
@@ -15,10 +27,10 @@ function FeedBack(props) {
     const user_phone = useRef();
     const user_content = useRef();
 
-    const [feedType,setFeedType] = useState('售前咨询');
+    const [feedType,setFeedType] = useState(1);
     const [ID,setID] = useState(null)
     const divRef = useRef();
-
+    const [files,setFiles]= useState([])
 
     const [isSubmit,setIsSubmit] = useState(false)
 
@@ -38,19 +50,61 @@ function FeedBack(props) {
     const changeLabel = (v) =>{
         setFeedType(v)
     }
+
+    const uploadImg = async(file)=>{
+        const date = new Date().getTime(); // 当前时间
+        const name = file.name || ".png";
+        const extensionName = name.substr(name.indexOf(".")); // 文件扩展名
+        const fileName ='h5/feedback/'+date + Math.floor(Math.random() * 1000) + extensionName;
+
+        console.log(fileName);
+        const result = await client.put(fileName, file);
+        console.log(result);
+    }
+
+    const onChange = async (_files, type, index) => {
+        console.log(type)
+        console.log(index)
+        if(type == 'add'){
+            const file = _files[_files.length-1];
+            uploadImg(file.file)
+
+
+            let fs = [],f = {};
+            _files.map((item,i)=>{
+                f.id = i;
+                f.url = item.url;
+                fs.push(f)
+            })
+            setFiles(fs)
+        }else{
+            setFiles(files.splice(index,1));
+        }
+    }
+
     const onSubmit = () =>{
         props.form.validateFields({ force: true }, (error) => {
             if (!error) {
                 let form = props.form.getFieldsValue()
                 const now = new Date();
+                const _files = files.map(item=>{
+                   return {
+                       pic_url:item.url,
+                       create_time:''
+                   }
+                });
+
                 let param = {
                     "user_name": form.user_name,
                     "user_phone": form.phone.replace(/\s/g,""),
                     "complaints_type": feedType,
-                    chat_records:{
+                    chat_records:JSON.stringify([{
+                        id:ID,
+                        identity:0,
                         context:form.content,
                         create_time:moment(now).format("YYYY-MM-DD HH:mm:ss")
-                    },
+                    }]),
+                    image_collection:[],
                     id:ID
                 }
 
@@ -59,6 +113,7 @@ function FeedBack(props) {
                 submitFeedBack(param).then(response=>{
                     if(response.code === 200){
                         Toast.success(response.message);
+                        history.push('/feedbackrecord?id='+ID);
                     }else{
                         Toast.fail(response.message);
                     }
@@ -98,11 +153,9 @@ function FeedBack(props) {
                     () => <span><label className={"list-label"}></label><span className={'list-name'}>反馈类型</span></span>
                 }>
                     <div className={'my-tabs'}>
-                        <div className={feedType == '售前咨询'?'my-tab active':'my-tab'} onClick={()=>changeLabel('售前咨询')}>售前咨询</div>
+                        <div className={feedType == 1?'my-tab active':'my-tab'} onClick={()=>changeLabel(1)}>售后咨询</div>
                         <div style={{width:'15px'}}></div>
-                        <div className={feedType == '售后咨询'?'my-tab active':'my-tab'} onClick={()=>changeLabel('售后咨询')}>售后咨询</div>
-                        <div style={{width:'15px'}}></div>
-                        <div className={feedType == '我要投诉'?'my-tab active':'my-tab'} onClick={()=>changeLabel('我要投诉')}>我要投诉</div>
+                        <div className={feedType == 2?'my-tab active':'my-tab'} onClick={()=>changeLabel(2)}>我要投诉</div>
                     </div>
                 </List>
 
@@ -129,6 +182,15 @@ function FeedBack(props) {
                         }}
                     />
                 </List>
+                <div style={{ margin: '0 10px'}}>
+                    <ImagePicker
+                        length="6"
+                        files={files}
+                        onChange={onChange}
+                        onImageClick={(index, fs) => console.log(index, fs)}
+                        selectable={files.length < 7}
+                    />
+                </div>
             </div>
             <div className={"group"}>
                 <List renderHeader={

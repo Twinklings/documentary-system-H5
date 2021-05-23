@@ -73,4 +73,187 @@
     background: #1890FF;
     color: #fff;
 }
+.feedback .am-image-picker-list .am-image-picker-item .am-image-picker-item-remove{
+    background-image: url("../../assets/close.svg");
+    right: 0;
+    top: 0;
+}
+.feedback .am-image-picker-list .am-image-picker-upload-btn{
+    background-image: url("../../assets/upload-pictures.svg");
+    background-size: 100% 100%;
+    border: 0;
+}
+.feedback .am-image-picker-list .am-image-picker-upload-btn:before,.feedback .am-image-picker-list .am-image-picker-upload-btn:after{
+    display: none;
+}
 
+.feedbacklist{
+    background: #F7F7F7;
+    padding-top: 10px;
+}
+.feedbacklist .listItem{
+    border-bottom: 1px solid #F0F1F2;
+    background: #fff;
+    padding: 16px;
+    color: #656667;
+    font-size: 11px;
+    line-height: 22px;
+    position: relative;
+}
+.feedbacklist .listItemTop{
+    display: flex;
+    font-size: 14px;
+    color: #333333;
+}
+.feedbacklist .listItemToplaebl{
+    flex: 1;
+    font-weight: 600;
+}
+
+.feedbacklist .state01{
+    color: #1890FF;
+}
+.feedbacklist .state00{
+    color: #FF7A45;
+}
+.feedbacklist .state02{
+    color: #20AC3E;
+}
+
+.feedbacklist .listBtn{
+    background: #1890FF;
+    width: 53px;
+    text-align: center;
+    height: 22px;
+    color: #FFFFFF;
+    border-radius: 12px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
+
+.feedbacklist .write-btn{
+    width: 65px;
+    height: 65px;
+    position: absolute;
+    left: 80%;
+    top: 80%;
+}
+
+.feedbackdetail .content-box{
+    height: calc(100% - 135px);
+    overflow: auto;
+    background: #F7F7F7;
+}
+.feedbackdetail .detailItem{
+    margin: 10px 15px;
+}
+.feedbackdetail .detailMesage{
+    display: flex;
+}
+.feedbackdetail .null{
+    width: 20%;
+}
+.feedbackdetail .message{
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
+    padding: 9px;
+    margin-left: 15px;
+}
+.feedbackdetail .creatime{
+    color: #B5B5B5;
+    font-size: 12px;
+}
+
+.feedbackdetail .userPhoto{
+    background: #1890FF;
+    color: #fff;
+    font-size: 14px;
+    width: 39px;
+    height: 39px;
+    line-height: 39px;
+    text-align: center;
+    border-radius: 50%;
+}
+.feedbackdetail .bottom-box-labels{
+    border-bottom: 1px solid #F0F1F2;
+    padding: 10px;
+}
+
+.feedbackdetail .bottom-box-label{
+    display: inline-block;
+    background: #BAE7FF;
+    width: 54px;
+    height: 22px;
+    line-height: 22px;
+    margin-right: 10px;
+    border-radius: 10px;
+    color: #1890FF;
+    font-size: 11px;
+    text-align: center;
+}
+.feedbackdetail .senbox{
+    display: flex;
+    padding: 10px 15px;
+}
+.feedbackdetail .senImg{
+    width: 30px;
+    margin-top: 10px;
+}
+.feedbackdetail .am-list-item{
+    flex: 1;
+    background: #F7F7F7;
+    border-radius: 18px;
+}
+.feedbackdetail .am-textarea-control textarea{
+    font-size: 12px;
+}
+
+.feedbackdetail .sendbtn{
+    background: #1890FF;
+    width: 52px;
+    height: 35px;
+    line-height: 35px;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 17px;
+    text-align: center;
+    margin-left: 10px;
+}
+
+.appraiseBox .am-modal-header{
+    padding-bottom: 8px;
+}
+.appraiseBox .am-modal-title{
+    font-size: 14px;
+    color: #404040;
+}
+.appraiseBox .sub{
+    color: #BBBBBB;
+    font-size: 10px;
+    border-bottom: 1px solid #F0F1F2;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+.appraiseBox .appraise{
+    width: 15px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.appraiseBox .appraiseItem{
+    padding: 10px;
+    color: #656667;
+    font-size: 12px;
+}
+.appraisebtn{
+    background: #1890FF;
+    width: 123px;
+    height: 35px;
+    line-height: 35px;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 17px;
+    text-align: center;
+    margin: 27px auto 0;
+}

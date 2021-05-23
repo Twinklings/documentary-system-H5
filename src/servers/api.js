@@ -64,3 +64,52 @@ export function submitFeedBack(params) {
         data:params
     })
 }
+
+//反馈列表
+export function repairOrderList(params) {
+    return request({
+        url:serverIP+"/portal/repairOrder/list",
+        method:'post',
+        data:params
+    })
+}
+
+/**
+ * 反馈详情
+ * id,complaints_type
+ */
+export function repairOrderDetail(params) {
+    return request({
+        url:serverIP+"/portal/repairOrder/details",
+        method:'post',
+        data:params
+    })
+}
+
+/**
+ * 发送消息
+ * id,complaints_type
+ */
+export function chatUpdate(params) {
+    return request({
+        url:serverIP+"/portal/chatUpdate",
+        method:'post',
+        data:params
+    })
+}
+
+/**
+ * 修改消息已读接口
+ * id,message_ids
+ */
+export function chatUpdateStatus(params) {
+    return request({
+        url:serverIP+"/portal/chatUpdateStatus",
+        method:'post',
+        data:params
+    })
+}
+
+
+
+

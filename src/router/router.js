@@ -17,6 +17,8 @@ import Successful from '../pages/recharge/successful';
 import Redirect from '../pages/redirect/'
 import OrderAdd from '../pages/order/add'
 import FeedBack from '../pages/feedback/index'
+import FeedBackRecord from '../pages/feedback/list'
+import FeedBackDetail from '../pages/feedback/detail'
 
 const BasicRoute = () => (
     <HashRouter>
@@ -47,6 +49,8 @@ const BasicRoute = () => (
             <Route exact path="/details/order/add" component={OrderAdd}/>
             {/*反馈意见*/}
             <Route exact path="/feedback" component={FeedBack}/>
+            <Route exact path="/feedbackrecord" component={FeedBackRecord}/>
+            <Route exact path="/feedbackdetail" component={FeedBackDetail}/>
         </Switch>
     </HashRouter>
 );

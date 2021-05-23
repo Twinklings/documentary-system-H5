@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="141px" height="141px" viewBox="0 0 141 141" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 8</title>
+    <defs>
+        <circle id="path-1" cx="50.5" cy="50.5" r="50.5"></circle>
+        <filter x="-29.7%" y="-29.7%" width="159.4%" height="159.4%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0941176471   0 0 0 0 0.564705882   0 0 0 0 1  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="用户端门户" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="反馈记录-无数据" transform="translate(-583.000000, -1010.000000)">
+            <g id="编组-8" transform="translate(603.000000, 1030.000000)">
+                <g id="椭圆形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#1890FF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="跟进" transform="translate(34.000000, 17.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <path d="M17.7306782,7.71874876 L24.2812944,14.2693649 L6.8140339,31.7350695 L0.329815823,31.8029993 L0.264973643,25.1860212 L17.7291223,7.71874876 L17.7306782,7.71874876 Z M24.2812944,1.16813259 L24.2812943,1.16813269 C24.8841709,0.565436919 25.8614352,0.565436919 26.4643155,1.16813249 L30.8318996,5.53571652 L30.8318995,5.53571647 C31.4345953,6.13859316 31.4345953,7.11585745 30.8318996,7.71873776 L27.5558244,10.9932679 L21.0067642,4.44420763 L24.2812943,1.16813244 L24.2812944,1.16813259 Z" id="形状"></path>
+                </g>
+                <text id="写反馈" font-family="PingFangSC-Regular, PingFang SC" font-size="22" font-weight="normal" fill="#FFFFFF">
+                    <tspan x="18" y="76">写反馈</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
