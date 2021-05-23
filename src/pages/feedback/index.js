@@ -9,17 +9,16 @@ import {submitFeedBack} from '../../servers/api'
 
 import './index.css'
 import {getUrlParam} from "../../utils/utils";
-import OSS from 'ali-oss';
 
 const history = createHashHistory();
 
-const client = OSS({
-    region: "oss-cn-shenzhen", //  OSS 的区域
-    accessKeyId: "mU7nOJGJJ5B_4LjpziI0sI-lsrUFFbUbogsOEhoR", // 认证的账号
-    accessKeySecret: "oU4DpeD0wW4BGIkrb56fZrervgEXCbEcXESesmIU", // 认证的密码
-    bucket: "cdngdb", // 请设置成你的
-    // secure: true, // 上传链接返回支持https
-});
+// const client = OSS({
+//     region: "oss-cn-shenzhen", //  OSS 的区域
+//     accessKeyId: "mU7nOJGJJ5B_4LjpziI0sI-lsrUFFbUbogsOEhoR", // 认证的账号
+//     accessKeySecret: "oU4DpeD0wW4BGIkrb56fZrervgEXCbEcXESesmIU", // 认证的密码
+//     bucket: "cdngdb", // 请设置成你的
+//     // secure: true, // 上传链接返回支持https
+// });
 
 function FeedBack(props) {
 
@@ -58,8 +57,6 @@ function FeedBack(props) {
         const fileName ='h5/feedback/'+date + Math.floor(Math.random() * 1000) + extensionName;
 
         console.log(fileName);
-        const result = await client.put(fileName, file);
-        console.log(result);
     }
 
     const onChange = async (_files, type, index) => {

@@ -151,6 +151,9 @@
 .feedbackdetail .detailMesage{
     display: flex;
 }
+.feedbackdetail .detailMessage1{
+    flex-direction: row-reverse;
+}
 .feedbackdetail .null{
     width: 20%;
 }
@@ -160,10 +163,18 @@
     box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
     padding: 9px;
     margin-left: 15px;
+    max-width: 200px;
+    font-size: 12px;
+}
+.feedbackdetail .message1{
+    background: #BAE7FF;
+    color: #656667;
 }
 .feedbackdetail .creatime{
     color: #B5B5B5;
     font-size: 12px;
+    text-align: center;
+    margin: 10px;
 }
 
 .feedbackdetail .userPhoto{

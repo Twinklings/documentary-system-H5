@@ -100,6 +100,22 @@ function FeedBackList(props) {
 
         <div className={"box feedbackdetail"} style={{display:"block"}}>
             <div className={'content-box'}>
+                {/*客户*/}
+                <div className={'detailItem'}>
+                    <div className={'creatime'}>{dataInfo.create_time}</div>
+                    <div className={'detailMesage detailMessage1'}>
+                        <div className={'userPhoto'}>我</div>
+                        <div className={'message message1'} style={{marginRight:'8px'}}>
+                            <div>反馈类型：{dataInfo.complaints_describe}</div>
+                            <div>反馈内容：</div>
+                            <br/>
+                            <div>联系方式</div>
+                            <div>姓名：{dataInfo.user_name}</div>
+                            <div>手机号：{dataInfo.user_phone}</div>
+                        </div>
+                        <div className={'null'}></div>
+                    </div>
+                </div>
             {
                 messages.map(item=>{
                     return  item.identity == '0' ?
@@ -107,10 +123,10 @@ function FeedBackList(props) {
                             //客户
                             <div className={'detailItem'}>
                                 <div className={'creatime'}>{item.creatime}</div>
-                                <div className={'detailMesage'}>
-                                    <div className={'null'}></div>
-                                    <div className={'message'}>{item.context}</div>
+                                <div className={'detailMesage detailMessage1'}>
                                     <div className={'userPhoto'}>我</div>
+                                    <div className={'message message1'} style={{marginRight:'8px'}}>{item.context}</div>
+                                    <div className={'null'}></div>
                                 </div>
                             </div>
                         ):(
