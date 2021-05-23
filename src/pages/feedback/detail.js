@@ -48,7 +48,8 @@ function FeedBackList(props) {
                 "pic_zoom_url": "",
                 "pic_url": "",
                 "read_status": "0",
-                "identity": "0"
+                "identity": "0",
+                complaints_type:dataInfo.complaints_type
             }
         chatUpdate(param).then(res=>{
             if(res.code == 200){
