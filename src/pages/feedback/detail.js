@@ -47,8 +47,8 @@ function FeedBackList(props) {
                 "context": message,
                 "pic_zoom_url": "",
                 "pic_url": "",
-                "read_status": "0",
-                "identity": "0",
+                "read_status": 0,
+                "identity": 0,
                 complaints_type:dataInfo.complaints_type
             }
         chatUpdate(param).then(res=>{
@@ -61,6 +61,11 @@ function FeedBackList(props) {
                 Toast.fail(res.message);
             }
         })
+    }
+
+    const submitApprais =()=>{
+        //成功后返回列表
+        history.go(-1);
     }
 
     const updateStatus =()=>{
@@ -101,14 +106,14 @@ function FeedBackList(props) {
 
         <div className={"box feedbackdetail"} style={{display:"block"}}>
             <div className={'content-box'}>
-                {/*客户*/}
+                {/*客户第一条*/}
                 <div className={'detailItem'}>
                     <div className={'creatime'}>{dataInfo.create_time}</div>
                     <div className={'detailMesage detailMessage1'}>
                         <div className={'userPhoto'}>我</div>
                         <div className={'message message1'} style={{marginRight:'8px'}}>
                             <div>反馈类型：{dataInfo.complaints_describe}</div>
-                            <div>反馈内容：</div>
+                            <div>反馈内容：{messages.length>0 && messages[0].context}</div>
                             <br/>
                             <div>联系方式</div>
                             <div>姓名：{dataInfo.user_name}</div>
@@ -118,8 +123,8 @@ function FeedBackList(props) {
                     </div>
                 </div>
             {
-                messages.map(item=>{
-                    return  item.identity == '0' ?
+                messages.map((item,i)=>{
+                    return i==0 ? '': item.identity == 0 ?
                         (
                             //客户
                             <div className={'detailItem'}>
@@ -146,8 +151,8 @@ function FeedBackList(props) {
             </div>
             <div className={'bottom-box'}>
                 <div className={'bottom-box-labels'}>
-                    <span className={'bottom-box-label'}>已解决</span>
-                    <span className={'bottom-box-label'}>未解决</span>
+                    {/*<span className={'bottom-box-label'}>已解决</span>*/}
+                    {/*<span className={'bottom-box-label'}>未解决</span>*/}
                     <span className={'bottom-box-label'} onClick={()=>setIsModal(true)}>评分</span>
                 </div>
                 <div className={'senbox'}>
@@ -199,7 +204,7 @@ function FeedBackList(props) {
                             })
                         }
                     </div>
-                    <div className={'appraisebtn'}>评分</div>
+                    <div className={'appraisebtn'} onClick={submitApprais}>评分</div>
                 </div>
             </Modal>
         </div>

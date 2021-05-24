@@ -11,6 +11,7 @@ import './index.css'
 import {getUrlParam} from "../../utils/utils";
 
 const history = createHashHistory();
+const qiniu = require('qiniu-js') // 需要加载qiniu模块的
 
 // const client = OSS({
 //     region: "oss-cn-shenzhen", //  OSS 的区域
@@ -19,6 +20,17 @@ const history = createHashHistory();
 //     bucket: "cdngdb", // 请设置成你的
 //     // secure: true, // 上传链接返回支持https
 // });
+
+let config = {
+    useCdnDomain: true,         // 表示是否使用 cdn 加速域名，为布尔值，true 表示使用，默认为 false。
+    region: qiniu.region.z2     // 上传域名区域（z1为华北）,当为 null 或 undefined 时，自动分析上传域名区域
+};
+let putExtra = {
+    fname: "",          // 文件原文件名
+    params: {},         // 放置自定义变量： 'x:name': 'sex'
+    mimeType: null      // 限制上传文件类型，为 null 时表示不对文件类型限制；限制类型放到数组里： ["image/png", "image/jpeg", "image/gif"]
+};
+
 
 function FeedBack(props) {
 
@@ -50,11 +62,49 @@ function FeedBack(props) {
         setFeedType(v)
     }
 
-    const uploadImg = async(file)=>{
+    const uploadImg = (file)=>{
         const date = new Date().getTime(); // 当前时间
         const name = file.name || ".png";
         const extensionName = name.substr(name.indexOf(".")); // 文件扩展名
         const fileName ='h5/feedback/'+date + Math.floor(Math.random() * 1000) + extensionName;
+
+        /*
+		bucket: 上传的目标空间
+
+		file: File 对象，上传的文件
+
+		key: 文件资源名
+
+		token: 上传验证信息，前端通过接口请求后端获得
+
+		config: object，其中的每一项都为可选
+	*/
+
+        // qiniu.upload(file: File, key: string, token: string, putExtra?: object, config?: object): observable
+
+        // const token = null;
+        // const observable = qiniu.upload(file, name, token, putExtra, config)
+        // const subscription = observable.subscribe({
+        //     next: (result) => {
+        //         // 接收上传进度信息，result是带有total字段的 Object
+        //         // loaded: 已上传大小; size: 上传总信息; percent: 当前上传进度
+        //         console.log(result);    // 形如：{total: {loaded: 1671168, size: 2249260, percent: 74.29856930723882}}
+        //         // this.percent = result.total.percent.toFixed(0);
+        //     },
+        //     error: (errResult) => {
+        //         // 上传错误后失败报错
+        //         console.log(errResult)
+        //         this.message.error('上传失败');
+        //     },
+        //     complete: (result) => {
+        //         // 接收成功后返回的信息
+        //         console.log(result);   // 形如：{hash: "Fp5_DtYW4gHiPEBiXIjVsZ1TtmPc", key: "%TStC006TEyVY5lLIBt7Eg.jpg"}
+        //         if (result.key) {
+        //             this.message.success('上传成功');
+        //         }
+        //     }
+        // }) // 上传开始
+
 
         console.log(fileName);
     }
@@ -98,6 +148,7 @@ function FeedBack(props) {
                     chat_records:JSON.stringify([{
                         id:ID,
                         identity:0,
+                        read_status: 0,
                         context:form.content,
                         create_time:moment(now).format("YYYY-MM-DD HH:mm:ss")
                     }]),
