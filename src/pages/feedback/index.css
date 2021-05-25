@@ -149,7 +149,7 @@
     background: #F7F7F7;
 }
 .feedbackdetail .detailItem{
-    margin: 25px 15px;
+    margin: 40px 15px;
 }
 .feedbackdetail .detailMesage{
     display: flex;
@@ -168,11 +168,26 @@
     margin-left: 15px;
     max-width: 200px;
     font-size: 14px;
+    min-width: 20px;
+    position: relative;
 }
 .feedbackdetail .message1{
     background: #BAE7FF;
     color: #656667;
 }
+.feedbackdetail .message-state01,.feedbackdetail .message-state02{
+    position: absolute;
+    bottom: -22px;
+    right: 2px;
+    font-size: 12px;
+}
+.feedbackdetail .message-state01{
+    color: #cccccc;
+}
+.feedbackdetail .message-state02{
+    color: #5497fd;
+}
+
 .feedbackdetail .creatime{
     color: #B5B5B5;
     font-size: 14px;

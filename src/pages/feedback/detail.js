@@ -203,6 +203,7 @@ function FeedBackList(props) {
                             <div>联系方式</div>
                             <div>姓名：{dataInfo.user_name}</div>
                             <div>手机号：{dataInfo.user_phone}</div>
+                            <div className={dataInfo.read_status == 0 ? 'message-state02':'message-state01'}>{dataInfo.read_status == 0 ? '未读':'已读'}</div>
                         </div>
                         <div className={'null'}></div>
                     </div>
@@ -221,6 +222,7 @@ function FeedBackList(props) {
                                         {item.pic_url && (
                                             <img style={{width:'100%'}} src={imgHttp+item.pic_url} onClick={(e)=>viewImgBig(e,item.pic_url)}/>
                                         )}
+                                        <div className={dataInfo.read_status == 0 ? 'message-state02':'message-state01'}>{dataInfo.read_status == 0 ? '未读':'已读'}</div>
                                     </div>
                                     <div className={'null'}></div>
                                 </div>
