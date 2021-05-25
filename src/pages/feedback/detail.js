@@ -86,7 +86,8 @@ function FeedBackList(props) {
     const updateStatus =()=>{
         let ids = [];
         messages.map(item=>{
-            if(item.read_status == 0){
+            //未读并且后台标识
+            if(item.read_status == 0 && item.identity == 1){
                 ids.push(item.id)
             }
         })
