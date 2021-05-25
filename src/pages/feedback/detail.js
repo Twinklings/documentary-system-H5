@@ -263,7 +263,7 @@ function FeedBackList(props) {
                         value={message}
                         onChange={(v)=>setMessage(v)}
                     />
-                    <div className={'sendbtn'} onClick={submit}>发送</div>
+                    <div className={'sendbtn'} onClick={()=>submit('')}>发送</div>
                 </div>
             </div>
 
@@ -315,7 +315,7 @@ function FeedBackList(props) {
                 onClose={()=>{setIsImgModal(false)}}
                 closable={true}
                 className={'imgBox'}
-                style={{ width:'90%'}}
+                style={{ width:'80%'}}
             >
                 <div>
                     <img style={{width:'100%'}} src={imgHttp+viewImgModal}/>
