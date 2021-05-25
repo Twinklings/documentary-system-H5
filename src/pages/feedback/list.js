@@ -46,7 +46,7 @@ function FeedBackList(props) {
     }
 
     const types = {0:'待回复', 1:'已回复',  2:'已完成'};
-    const btnTests ={0:'回复', 2:'评价'};
+    const btnTests ={0:'回复', 1:'查看', 2:'评价'};
 
 
     // 悬浮图标拖动
@@ -106,11 +106,7 @@ function FeedBackList(props) {
                             <div>{item.latest_records}</div>
                             <div>反馈时间：{item.create_time}</div>
                             <div>受理时间</div>
-                            {
-                                (item.platform_reply_status == 0 || item.platform_reply_status == 2) && (
-                                    <div className={'listBtn'} onClick={()=>listMethod(item)}>{btnTests[item.platform_reply_status]}</div>
-                                )
-                            }
+                            <div className={'listBtn'} onClick={()=>listMethod(item)}>{btnTests[item.platform_reply_status]}</div>
                         </div>
                     )
                 })

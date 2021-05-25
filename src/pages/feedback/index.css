@@ -13,11 +13,12 @@
 }
 .feedback .list-name{
     vertical-align: middle; color: #030303;font-size: 16px;
+    font-weight: bold;
 }
 
 .feedback .am-textarea-control textarea{
     color: #333333;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .feedback .group{
@@ -27,7 +28,7 @@
 
 .feedback .am-list-item .am-input-control input{
     color: #333333;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .feedback .am-list-item .am-input-label{
@@ -94,10 +95,10 @@
 .feedbacklist .listItem{
     border-bottom: 1px solid #F0F1F2;
     background: #fff;
-    padding: 16px;
+    padding: 30px;
     color: #656667;
-    font-size: 11px;
-    line-height: 22px;
+    font-size: 14px;
+    line-height: 26px;
     position: relative;
 }
 .feedbacklist .listItemTop{
@@ -108,6 +109,7 @@
 .feedbacklist .listItemToplaebl{
     flex: 1;
     font-weight: 600;
+    font-size: 16px;
 }
 
 .feedbacklist .state01{
@@ -125,11 +127,12 @@
     width: 53px;
     text-align: center;
     height: 22px;
+    line-height: 22px;
     color: #FFFFFF;
     border-radius: 12px;
     position: absolute;
-    bottom: 16px;
-    right: 16px;
+    bottom: 30px;
+    right: 30px;
 }
 
 .feedbacklist .write-btn{
@@ -141,12 +144,12 @@
 }
 
 .feedbackdetail .content-box{
-    height: calc(100% - 135px);
+    height: calc(100% - 115px);
     overflow: auto;
     background: #F7F7F7;
 }
 .feedbackdetail .detailItem{
-    margin: 10px 15px;
+    margin: 25px 15px;
 }
 .feedbackdetail .detailMesage{
     display: flex;
@@ -164,7 +167,7 @@
     padding: 9px;
     margin-left: 15px;
     max-width: 200px;
-    font-size: 12px;
+    font-size: 14px;
 }
 .feedbackdetail .message1{
     background: #BAE7FF;
@@ -172,7 +175,7 @@
 }
 .feedbackdetail .creatime{
     color: #B5B5B5;
-    font-size: 12px;
+    font-size: 14px;
     text-align: center;
     margin: 10px;
 }
@@ -201,7 +204,7 @@
     margin-right: 10px;
     border-radius: 10px;
     color: #1890FF;
-    font-size: 11px;
+    font-size: 14px;
     text-align: center;
 }
 .feedbackdetail .senbox{
@@ -211,6 +214,7 @@
 .feedbackdetail .senImg{
     width: 30px;
     margin-top: 10px;
+    position: relative;
 }
 .feedbackdetail .am-list-item{
     flex: 1;
@@ -218,7 +222,7 @@
     border-radius: 18px;
 }
 .feedbackdetail .am-textarea-control textarea{
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .feedbackdetail .sendbtn{
@@ -227,10 +231,21 @@
     height: 35px;
     line-height: 35px;
     color: #fff;
-    font-size: 12px;
+    font-size: 16px;
     border-radius: 17px;
     text-align: center;
     margin-left: 10px;
+}
+
+.feedbackdetail .file{
+    position:absolute;
+    top:0;
+    left: 0;
+    filter:alpha(opacity:0);
+    opacity: 0;
+    z-index:10;
+    width:100%;
+    height:1.2rem;
 }
 
 .appraiseBox .am-modal-header{

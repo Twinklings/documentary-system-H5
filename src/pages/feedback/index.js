@@ -5,21 +5,14 @@ import { createForm } from 'rc-form';
 import moment from 'moment'
 import { createHashHistory } from 'history'; // 如果是hash路由
 
-import {submitFeedBack} from '../../servers/api'
+import {submitFeedBack,getUpToken} from '../../servers/api'
 
 import './index.css'
 import {getUrlParam} from "../../utils/utils";
 
 const history = createHashHistory();
 const qiniu = require('qiniu-js') // 需要加载qiniu模块的
-
-// const client = OSS({
-//     region: "oss-cn-shenzhen", //  OSS 的区域
-//     accessKeyId: "mU7nOJGJJ5B_4LjpziI0sI-lsrUFFbUbogsOEhoR", // 认证的账号
-//     accessKeySecret: "oU4DpeD0wW4BGIkrb56fZrervgEXCbEcXESesmIU", // 认证的密码
-//     bucket: "cdngdb", // 请设置成你的
-//     // secure: true, // 上传链接返回支持https
-// });
+const imgHttp = 'https://oss.gendanbao.com.cn/';
 
 let config = {
     useCdnDomain: true,         // 表示是否使用 cdn 加速域名，为布尔值，true 表示使用，默认为 false。
@@ -62,70 +55,80 @@ function FeedBack(props) {
         setFeedType(v)
     }
 
-    const uploadImg = (file)=>{
-        const date = new Date().getTime(); // 当前时间
-        const name = file.name || ".png";
-        const extensionName = name.substr(name.indexOf(".")); // 文件扩展名
-        const fileName ='h5/feedback/'+date + Math.floor(Math.random() * 1000) + extensionName;
+    const UpToken =  (name) =>{
+        return new Promise((resolve,reject) => {
+            getUpToken(name).then(res=>{
+                if(res.code == 200){
+                    resolve(res.data)
+                }else{
+                    reject(res.message)
+                }
+            })
+        });
+    }
 
-        /*
-		bucket: 上传的目标空间
+    const uploadImg = async (file)=>{
+        return new Promise(async (resolve,reject) => {
+            const date = new Date().getTime(); // 当前时间
+            const name = file.name || ".png";
+            const extensionName = name.substr(name.indexOf(".")); // 文件扩展名
+            const fileName ='h5/feedback/'+date + Math.floor(Math.random() * 1000) + extensionName;
 
-		file: File 对象，上传的文件
+            const tokenJson = await UpToken(name);
+            /*
+            file: File 对象，上传的文件
+            key: 文件资源名
+            token: 上传验证信息，前端通过接口请求后端获得
+            config: object，其中的每一项都为可选
+        */
 
-		key: 文件资源名
+            const observable = qiniu.upload(file, tokenJson.imgUrl, tokenJson.token, putExtra, config)
+            const subscription = observable.subscribe({
+                next: (result) => {
+                    // 接收上传进度信息，result是带有total字段的 Object
+                    // loaded: 已上传大小; size: 上传总信息; percent: 当前上传进度
+                    console.log(result);    // 形如：{total: {loaded: 1671168, size: 2249260, percent: 74.29856930723882}}
+                    // this.percent = result.total.percent.toFixed(0);
+                },
+                error: (errResult) => {
+                    // 上传错误后失败报错
+                    console.log(errResult)
+                    Toast.fail('上传失败');
+                    reject(errResult)
+                },
+                complete: (result) => {
+                    // 接收成功后返回的信息
+                    console.log(result);   // 形如：{hash: "Fp5_DtYW4gHiPEBiXIjVsZ1TtmPc", key: "%TStC006TEyVY5lLIBt7Eg.jpg"}
+                    if (result.key) {
+                        // this.message.success('上传成功');
+                        resolve(result.key)
+                    }
+                }
+            }) // 上传开始
 
-		token: 上传验证信息，前端通过接口请求后端获得
+        });
 
-		config: object，其中的每一项都为可选
-	*/
-
-        // qiniu.upload(file: File, key: string, token: string, putExtra?: object, config?: object): observable
-
-        // const token = null;
-        // const observable = qiniu.upload(file, name, token, putExtra, config)
-        // const subscription = observable.subscribe({
-        //     next: (result) => {
-        //         // 接收上传进度信息，result是带有total字段的 Object
-        //         // loaded: 已上传大小; size: 上传总信息; percent: 当前上传进度
-        //         console.log(result);    // 形如：{total: {loaded: 1671168, size: 2249260, percent: 74.29856930723882}}
-        //         // this.percent = result.total.percent.toFixed(0);
-        //     },
-        //     error: (errResult) => {
-        //         // 上传错误后失败报错
-        //         console.log(errResult)
-        //         this.message.error('上传失败');
-        //     },
-        //     complete: (result) => {
-        //         // 接收成功后返回的信息
-        //         console.log(result);   // 形如：{hash: "Fp5_DtYW4gHiPEBiXIjVsZ1TtmPc", key: "%TStC006TEyVY5lLIBt7Eg.jpg"}
-        //         if (result.key) {
-        //             this.message.success('上传成功');
-        //         }
-        //     }
-        // }) // 上传开始
-
-
-        console.log(fileName);
     }
 
     const onChange = async (_files, type, index) => {
-        console.log(type)
-        console.log(index)
         if(type == 'add'){
             const file = _files[_files.length-1];
-            uploadImg(file.file)
+            let url = await uploadImg(file.file)
 
-
-            let fs = [],f = {};
-            _files.map((item,i)=>{
-                f.id = i;
-                f.url = item.url;
-                fs.push(f)
-            })
+            const now = new Date();
+            let fs = Object.assign([],files);
+            let f = {
+                id : files.length,
+                url : file.url,
+                imgurl:imgHttp+url,
+                create_time:moment(now).format("YYYY-MM-DD HH:mm:ss")
+            };
+            fs.push(f)
             setFiles(fs)
         }else{
-            setFiles(files.splice(index,1));
+            let fs = Object.assign([],files);
+            fs.splice(index,1)
+            setFiles(fs);
         }
     }
 
@@ -136,8 +139,8 @@ function FeedBack(props) {
                 const now = new Date();
                 const _files = files.map(item=>{
                    return {
-                       pic_url:item.url,
-                       create_time:''
+                       pic_url:item.imgurl,
+                       create_time:item.create_time
                    }
                 });
 
@@ -152,7 +155,7 @@ function FeedBack(props) {
                         context:form.content,
                         create_time:moment(now).format("YYYY-MM-DD HH:mm:ss")
                     }]),
-                    image_collection:[],
+                    image_collection:_files,
                     id:ID
                 }
 
@@ -223,7 +226,7 @@ function FeedBack(props) {
                         onErrorClick={() => {
                             Toast.info(getFieldError('content').join(';'));
                         }}
-                        autoHeight
+                        // autoHeight
                         ref={user_content}
                         onClick={()=>{
                             user_content.current.focus();

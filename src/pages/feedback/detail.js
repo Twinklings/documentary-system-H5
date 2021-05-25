@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem, Flex } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
-import {repairOrderDetail,chatUpdate,chatUpdateStatus} from '../../servers/api'
+import {repairOrderDetail, chatUpdate, chatUpdateStatus, getUpToken} from '../../servers/api'
 import pictureO from '../../assets/picture-outline.svg'
 import starHollow from '../../assets/star-hollow.svg'
 import starSolid from '../../assets/star-solid.svg'
@@ -12,13 +12,25 @@ import './index.css'
 import {getLogisticsCompany, getUrlParam} from "../../utils/utils";
 import moment from "moment/moment";
 import $ from "jquery";
+const qiniu = require('qiniu-js') // 需要加载qiniu模块的
+const imgHttp = 'https://oss.gendanbao.com.cn/';
 
 const history = createHashHistory();
+let config = {
+    useCdnDomain: true,         // 表示是否使用 cdn 加速域名，为布尔值，true 表示使用，默认为 false。
+    region: qiniu.region.z2     // 上传域名区域（z1为华北）,当为 null 或 undefined 时，自动分析上传域名区域
+};
+let putExtra = {
+    fname: "",          // 文件原文件名
+    params: {},         // 放置自定义变量： 'x:name': 'sex'
+    mimeType: null      // 限制上传文件类型，为 null 时表示不对文件类型限制；限制类型放到数组里： ["image/png", "image/jpeg", "image/gif"]
+};
+
 
 function FeedBackList(props) {
     const [dataInfo,setDataInfo] = useState([]);
     const [messages,setMessages] = useState([]);
-    const [message,setMessage] = useState(null);
+    const [message,setMessage] = useState('');
     const [isModal,setIsModal] = useState(false);
 
     const [appraiseSpeed,setAppraiseSpeed] = useState(0)
@@ -39,20 +51,21 @@ function FeedBackList(props) {
         })
     }, [])
 
-    const submit = () =>{
+    const submit = (url) =>{
         const now = new Date();
         let param = {
                 "id": dataInfo.id,
-                "creatime": moment(now).format("YYYY-MM-DD HH:mm:ss"),
+                "create_time": moment(now).format("YYYY-MM-DD HH:mm:ss"),
                 "context": message,
                 "pic_zoom_url": "",
-                "pic_url": "",
+                "pic_url": url,
                 "read_status": 0,
                 "identity": 0,
                 complaints_type:dataInfo.complaints_type
             }
         chatUpdate(param).then(res=>{
             if(res.code == 200){
+                setMessage(null);
                 getDetailData({
                     id:dataInfo.id,
                     complaints_type:dataInfo.complaints_type
@@ -75,6 +88,7 @@ function FeedBackList(props) {
                 ids.push(item.id)
             }
         })
+        if(ids.length==0) return false;
         chatUpdateStatus({
             id:dataInfo.id,
             message_ids:ids
@@ -100,6 +114,67 @@ function FeedBackList(props) {
             }
 
         })
+    }
+
+    const UpToken =  (name) =>{
+        return new Promise((resolve,reject) => {
+            getUpToken(name).then(res=>{
+                if(res.code == 200){
+                    resolve(res.data)
+                }else{
+                    reject(res.message)
+                }
+            })
+        });
+    }
+
+    const uploadImg = async (file)=>{
+        return new Promise(async (resolve,reject) => {
+            const date = new Date().getTime(); // 当前时间
+            const name = file.name || ".png";
+            const extensionName = name.substr(name.indexOf(".")); // 文件扩展名
+            const fileName ='h5/feedback/'+date + Math.floor(Math.random() * 1000) + extensionName;
+
+            const tokenJson = await UpToken(name);
+            /*
+            file: File 对象，上传的文件
+            key: 文件资源名
+            token: 上传验证信息，前端通过接口请求后端获得
+            config: object，其中的每一项都为可选
+        */
+
+            const observable = qiniu.upload(file, tokenJson.imgUrl, tokenJson.token, putExtra, config)
+            const subscription = observable.subscribe({
+                next: (result) => {
+                    // 接收上传进度信息，result是带有total字段的 Object
+                    // loaded: 已上传大小; size: 上传总信息; percent: 当前上传进度
+                    console.log(result);    // 形如：{total: {loaded: 1671168, size: 2249260, percent: 74.29856930723882}}
+                    // this.percent = result.total.percent.toFixed(0);
+                },
+                error: (errResult) => {
+                    // 上传错误后失败报错
+                    console.log(errResult)
+                    Toast.fail('上传失败');
+                    reject(errResult)
+                },
+                complete: (result) => {
+                    // 接收成功后返回的信息
+                    console.log(result);   // 形如：{hash: "Fp5_DtYW4gHiPEBiXIjVsZ1TtmPc", key: "%TStC006TEyVY5lLIBt7Eg.jpg"}
+                    if (result.key) {
+                        // this.message.success('上传成功');
+                        resolve(result.key)
+                    }
+                }
+            }) // 上传开始
+
+        });
+
+    }
+
+    const uploadImgSubmit = async (event)=>{
+        let file = event.target.files[0];
+        let url = await uploadImg(file);
+        submit(url);
     }
     var appraise=[1,2,3,4,5];
     return (
@@ -131,7 +206,12 @@ function FeedBackList(props) {
                                 <div className={'creatime'}>{item.creatime}</div>
                                 <div className={'detailMesage detailMessage1'}>
                                     <div className={'userPhoto'}>我</div>
-                                    <div className={'message message1'} style={{marginRight:'8px'}}>{item.context}</div>
+                                    <div className={'message message1'} style={{marginRight:'8px'}}>
+                                        {item.context}
+                                        {item.pic_url && (
+                                            <img style={{width:'100%'}} src={imgHttp+item.pic_url}/>
+                                        )}
+                                    </div>
                                     <div className={'null'}></div>
                                 </div>
                             </div>
@@ -141,7 +221,12 @@ function FeedBackList(props) {
                                 <div className={'creatime'}>{item.creatime}</div>
                                 <div className={'detailMesage'}>
                                     <div className={'userPhoto'}>客服</div>
-                                    <div className={'message'}>{item.context}</div>
+                                    <div className={'message'}>
+                                        {item.context}
+                                        {item.pic_url && (
+                                            <img style={{width:'100%'}} src={imgHttp+item.pic_url}/>
+                                        )}
+                                    </div>
                                     <div className={'null'}></div>
                                 </div>
                             </div>
@@ -158,11 +243,13 @@ function FeedBackList(props) {
                 <div className={'senbox'}>
                     <div className={'senImg'}>
                         <img src={pictureO} style={{width:'20px'}}/>
+                        <input type="file" id="id-pic-file" accept="image/*" className={'file'} onChange={uploadImgSubmit}/>
                     </div>
                     <TextareaItem
                         placeholder="输入文字"
                         rows={1}
-                        onBlur={(v)=>setMessage(v)}
+                        value={message}
+                        onChange={(v)=>setMessage(v)}
                     />
                     <div className={'sendbtn'} onClick={submit}>发送</div>
                 </div>

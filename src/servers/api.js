@@ -110,6 +110,14 @@ export function chatUpdateStatus(params) {
     })
 }
 
+//获取上传图片token
+export function getUpToken(fileName) {
+    // type 修改1 跟进2
+    return request({
+        url:serverIP+"/qiniu/UpToken?suffix="+fileName,
+        method:'get',
+    })
+}
 
 
 
