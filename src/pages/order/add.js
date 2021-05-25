@@ -56,8 +56,6 @@ function OrderAdd(props) {
 
     const [product,setProduct] = useState([]);
 
-    const [productName,setProductName] = useState([]);
-
     const [defaultParam,setDefaultParam] = useState({});
 
     const [autoContent,setAutoContent] = useState(null);
@@ -189,8 +187,6 @@ function OrderAdd(props) {
     const autoPayamount = (v)=>{
         setProduct(v);
         v[2] && setDefaultPayamount(payamounts[v[2]]);
-        let a= [productNames[v[0]],productNames[v[1]],productNames[v[2]]];
-        setProductName(a);
         defaultData = {};
         products.map(item=>{
             if(item.value == v[0]){
@@ -213,8 +209,8 @@ function OrderAdd(props) {
                     "user_phone": form.phone.replace(/\s/g,""),
                     // "radioValue":radioValue,
                     "user_address": `${cityPark[0] || ""}${cityPark[1] || ""}${cityPark[2] || ""}${form.address}`,
-                    "product_type": `${productName[0]}/${productName[1]}`,
-                    "product_name":productName[2],
+                    "product_type": `${productNames[form.product[0]]}/${productNames[form.product[1]]}`,
+                    "product_name":productNames[form.product[2]],
                     "product_id":form.product[2],
                     'product_type_id':form.product[1],
                     'pay_pany_id':form.product[0],
