@@ -248,6 +248,8 @@
     height:1.2rem;
 }
 
+.imgBox .am-modal-content{ width: 100%; }
+
 .appraiseBox .am-modal-header{
     padding-bottom: 8px;
 }

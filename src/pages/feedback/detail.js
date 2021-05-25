@@ -32,6 +32,8 @@ function FeedBackList(props) {
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState('');
     const [isModal,setIsModal] = useState(false);
+    const [isImgModal,setIsImgModal] = useState(false);
+    const [viewImgModal,setViewImgModal] = useState(false);
 
     const [appraiseSpeed,setAppraiseSpeed] = useState(0)
     const [appraiseServer,setAppraiseServer] = useState(0)
@@ -176,6 +178,13 @@ function FeedBackList(props) {
         let url = await uploadImg(file);
         submit(url);
     }
+
+    const viewImgBig = (e,url)=>{
+        e.stopPropagation();
+        setViewImgModal(url)
+        setIsImgModal(true)
+    }
+
     var appraise=[1,2,3,4,5];
     return (
 
@@ -203,13 +212,13 @@ function FeedBackList(props) {
                         (
                             //客户
                             <div className={'detailItem'}>
-                                <div className={'creatime'}>{item.creatime}</div>
+                                <div className={'creatime'}>{item.create_time}</div>
                                 <div className={'detailMesage detailMessage1'}>
                                     <div className={'userPhoto'}>我</div>
                                     <div className={'message message1'} style={{marginRight:'8px'}}>
                                         {item.context}
                                         {item.pic_url && (
-                                            <img style={{width:'100%'}} src={imgHttp+item.pic_url}/>
+                                            <img style={{width:'100%'}} src={imgHttp+item.pic_url} onClick={(e)=>viewImgBig(e,item.pic_url)}/>
                                         )}
                                     </div>
                                     <div className={'null'}></div>
@@ -255,6 +264,7 @@ function FeedBackList(props) {
                 </div>
             </div>
 
+            {/*评论*/}
             <Modal
                 visible={isModal}
                 transparent
@@ -292,6 +302,20 @@ function FeedBackList(props) {
                         }
                     </div>
                     <div className={'appraisebtn'} onClick={submitApprais}>评分</div>
+                </div>
+            </Modal>
+            {/*查看大图*/}
+            <Modal
+                visible={isImgModal}
+                transparent
+                maskClosable={true}
+                onClose={()=>{setIsImgModal(false)}}
+                closable={true}
+                className={'imgBox'}
+                style={{ width:'90%'}}
+            >
+                <div>
+                    <img style={{width:'100%'}} src={imgHttp+viewImgModal}/>
                 </div>
             </Modal>
         </div>
