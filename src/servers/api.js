@@ -119,5 +119,16 @@ export function getUpToken(fileName) {
     })
 }
 
+/**
+ * 评论
+ * id,message_ids
+ */
+export function feedBackScore(params) {
+    return request({
+        url:serverIP+"/portal/repairOrder/score",
+        method:'post',
+        data:params
+    })
+}
 
 

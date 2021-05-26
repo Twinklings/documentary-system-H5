@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { List, Button, WhiteSpace, Modal, Toast, InputItem, Radio, Picker, TextareaItem, Flex } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { createHashHistory } from 'history'; // 如果是hash路由
-import {repairOrderDetail, chatUpdate, chatUpdateStatus, getUpToken} from '../../servers/api'
+import {repairOrderDetail, chatUpdate, chatUpdateStatus, getUpToken,feedBackScore} from '../../servers/api'
 import pictureO from '../../assets/picture-outline.svg'
 import starHollow from '../../assets/star-hollow.svg'
 import starSolid from '../../assets/star-solid.svg'
@@ -79,8 +79,18 @@ function FeedBackList(props) {
     }
 
     const submitApprais =()=>{
-        //成功后返回列表
-        history.go(-1);
+        let a = [appraiseSpeed,appraiseServer,appraiseResult];
+        feedBackScore( {
+            id:dataInfo.id,
+            score_array:a.join(",")
+        }).then(res=>{
+            if(res.code==200){
+                //成功后返回列表
+                history.go(-1);
+            }else{
+                Toast.info(res.message, 30);
+            }
+        })
     }
 
     const updateStatus =()=>{
@@ -110,6 +120,8 @@ function FeedBackList(props) {
                 if(res.data){
                     setMessages(JSON.parse(res.data.chat_records))
 
+                    let feedbackContent = document.getElementById('feedbackContent');
+                    feedbackContent.scrollTop = feedbackContent.scrollHeight;
                     updateStatus();
                 }
             }else{
@@ -190,61 +202,63 @@ function FeedBackList(props) {
     return (
 
         <div className={"box feedbackdetail"} style={{display:"block"}}>
-            <div className={'content-box'}>
+            <div className={'content-box'} id={'feedbackContent'}>
                 {/*客户第一条*/}
-                <div className={'detailItem'}>
-                    <div className={'creatime'}>{dataInfo.create_time}</div>
-                    <div className={'detailMesage detailMessage1'}>
-                        <div className={'userPhoto'}>我</div>
-                        <div className={'message message1'} style={{marginRight:'8px'}}>
-                            <div>反馈类型：{dataInfo.complaints_describe}</div>
-                            <div>反馈内容：{messages.length>0 && messages[0].context}</div>
-                            <br/>
-                            <div>联系方式</div>
-                            <div>姓名：{dataInfo.user_name}</div>
-                            <div>手机号：{dataInfo.user_phone}</div>
-                            <div className={dataInfo.read_status == 0 ? 'message-state02':'message-state01'}>{dataInfo.read_status == 0 ? '未读':'已读'}</div>
+                {messages.length>0 && (
+                    <div className={'detailItem'}>
+                        <div className={'creatime'}>{dataInfo.create_time}</div>
+                        <div className={'detailMesage detailMessage1'}>
+                            <div className={'userPhoto'}>我</div>
+                            <div className={'message message1'} style={{marginRight:'8px'}}>
+                                <div>反馈类型：{dataInfo.complaints_describe}</div>
+                                <div>反馈内容：{messages[0].context}</div>
+                                <br/>
+                                <div>联系方式</div>
+                                <div>姓名：{dataInfo.user_name}</div>
+                                <div>手机号：{dataInfo.user_phone}</div>
+                                <div className={messages[0].read_status == 0 ? 'message-state02':'message-state01'}>{messages[0].read_status == 0 ? '未读':'已读'}</div>
+                            </div>
+                            <div className={'null'}></div>
                         </div>
-                        <div className={'null'}></div>
                     </div>
-                </div>
-            {
-                messages.map((item,i)=>{
-                    return i==0 ? '': item.identity == 0 ?
-                        (
-                            //客户
-                            <div className={'detailItem'}>
-                                <div className={'creatime'}>{item.create_time}</div>
-                                <div className={'detailMesage detailMessage1'}>
-                                    <div className={'userPhoto'}>我</div>
-                                    <div className={'message message1'} style={{marginRight:'8px'}}>
-                                        {item.context}
-                                        {item.pic_url && (
-                                            <img style={{width:'100%'}} src={imgHttp+item.pic_url} onClick={(e)=>viewImgBig(e,item.pic_url)}/>
-                                        )}
-                                        <div className={dataInfo.read_status == 0 ? 'message-state02':'message-state01'}>{dataInfo.read_status == 0 ? '未读':'已读'}</div>
+                )}
+                {
+                    messages.map((item,i)=>{
+                        return i==0 ? '': item.identity == 0 ?
+                            (
+                                //客户
+                                <div className={'detailItem'}>
+                                    <div className={'creatime'}>{item.create_time}</div>
+                                    <div className={'detailMesage detailMessage1'}>
+                                        <div className={'userPhoto'}>我</div>
+                                        <div className={'message message1'} style={{marginRight:'8px'}}>
+                                            {item.context}
+                                            {item.pic_url && (
+                                                <img style={{width:'100%'}} src={imgHttp+item.pic_url} onClick={(e)=>viewImgBig(e,item.pic_url)}/>
+                                            )}
+                                            <div className={item.read_status == 0 ? 'message-state02':'message-state01'}>{item.read_status == 0 ? '未读':'已读'}</div>
+                                        </div>
+                                        <div className={'null'}></div>
                                     </div>
-                                    <div className={'null'}></div>
                                 </div>
-                            </div>
-                        ):(
-                            //后台
-                            <div className={'detailItem'}>
-                                <div className={'creatime'}>{item.creatime}</div>
-                                <div className={'detailMesage'}>
-                                    <div className={'userPhoto'}>客服</div>
-                                    <div className={'message'}>
-                                        {item.context}
-                                        {item.pic_url && (
-                                            <img style={{width:'100%'}} src={imgHttp+item.pic_url}/>
-                                        )}
+                            ):(
+                                //后台
+                                <div className={'detailItem'}>
+                                    <div className={'creatime'}>{item.creatime}</div>
+                                    <div className={'detailMesage'}>
+                                        <div className={'userPhoto'}>客服</div>
+                                        <div className={'message'}>
+                                            {item.context}
+                                            {item.pic_url && (
+                                                <img style={{width:'100%'}} src={imgHttp+item.pic_url}/>
+                                            )}
+                                        </div>
+                                        <div className={'null'}></div>
                                     </div>
-                                    <div className={'null'}></div>
                                 </div>
-                            </div>
-                        )
-                })
-            }
+                            )
+                    })
+                }
             </div>
             <div className={'bottom-box'}>
                 <div className={'bottom-box-labels'}>

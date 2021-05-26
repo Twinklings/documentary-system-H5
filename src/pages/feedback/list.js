@@ -105,7 +105,7 @@ function FeedBackList(props) {
                             </div>
                             <div>{item.latest_records}</div>
                             <div>反馈时间：{item.create_time}</div>
-                            <div>受理时间</div>
+                            <div>受理时间：{item.latest_feedback_time}</div>
                             <div className={'listBtn'} onClick={()=>listMethod(item)}>{btnTests[item.platform_reply_status]}</div>
                         </div>
                     )
