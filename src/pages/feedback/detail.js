@@ -93,9 +93,9 @@ function FeedBackList(props) {
         })
     }
 
-    const updateStatus =()=>{
+    const updateStatus =(j,m)=>{
         let ids = [];
-        messages.map(item=>{
+        m.map(item=>{
             //未读并且后台标识
             if(item.read_status == 0 && item.identity == 1){
                 ids.push(item.id)
@@ -103,8 +103,9 @@ function FeedBackList(props) {
         })
         if(ids.length==0) return false;
         chatUpdateStatus({
-            id:dataInfo.id,
-            message_ids:ids
+            id:j.id,
+            message_ids:ids,
+            complaints_type:j.complaints_type
         }).then(res=>{
             if(res.code == 200){
 
@@ -122,7 +123,7 @@ function FeedBackList(props) {
 
                     let feedbackContent = document.getElementById('feedbackContent');
                     feedbackContent.scrollTop = feedbackContent.scrollHeight;
-                    updateStatus();
+                    updateStatus(json,JSON.parse(res.data.chat_records));
                 }
             }else{
                 Toast.info(res.message, 30);
