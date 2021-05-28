@@ -244,7 +244,7 @@ function FeedBackList(props) {
                             ):(
                                 //后台
                                 <div className={'detailItem'}>
-                                    <div className={'creatime'}>{item.creatime}</div>
+                                    <div className={'creatime'}>{item.create_time}</div>
                                     <div className={'detailMesage'}>
                                         <div className={'userPhoto'}>客服</div>
                                         <div className={'message'}>
