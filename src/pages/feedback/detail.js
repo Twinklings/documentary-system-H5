@@ -98,13 +98,13 @@ function FeedBackList(props) {
         m.map(item=>{
             //未读并且后台标识
             if(item.read_status == 0 && item.identity == 1){
-                ids.push(item.id)
+                ids.push(item.message_id)
             }
         })
         if(ids.length==0) return false;
         chatUpdateStatus({
             id:j.id,
-            message_ids:ids,
+            // message_ids:ids,
             complaints_type:j.complaints_type
         }).then(res=>{
             if(res.code == 200){
