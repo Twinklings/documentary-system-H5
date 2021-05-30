@@ -24,6 +24,7 @@ import {
     smsCertification,
     verifyWeb,
     certificationRecord,
+    pageLogSave
 } from '../../servers/authorizationApi'
 
 import './index.css'
@@ -485,7 +486,7 @@ function FakeAuthorization(props) {
         setCountDown(60);
     }
 
-    const authentication = () =>{
+    const authenticationData = () =>{
         if(!initType){
             Toast.fail(initMsg || "没有找到当前销售人员的基本信息,请联系销售咨询!",toastTime);
             return false;
@@ -519,22 +520,22 @@ function FakeAuthorization(props) {
                     window.JVerificationInterface.init({
                         appkey: "b724ac6a699f0ef0f1d07501",
                         debugMode: true,
-                        success: function(data) { 
+                        success: function(data) {
                             //TODO 初始化成功回调
                             console.log(data,"初始化成功回调")
-                            
+
                             setEXID(exID);
 
                             // SDK 获取号码认证 token
                             window.JVerificationInterface.getToken({
                                 operater:"CM",
-                                success: function(data)  { 
+                                success: function(data)  {
                                     console.log(data,"获取token成功回调")
                                     //TODO 获取token成功回调
                                     var operater =data.operater;
                                     var token =data.content;
                                     authenticationNumber(data,form,exID);
-                                }, fail: function(data)  { 
+                                }, fail: function(data)  {
                                     //TODO 获取token失败回调
                                     console.log(data,"获取token失败回调");
                                     setLoading(false);
@@ -551,10 +552,10 @@ function FakeAuthorization(props) {
                                         setOrderVerification(1);
                                     }
                                     setTipsCount(tipsCount+1);
-                                } 
+                                }
                             })
-                        }, 
-                        fail: function(data) { 
+                        },
+                        fail: function(data) {
                             //TODO 初始化失败回调
                             console.log(data,"初始化失败回调")
                             setLoading(false);
@@ -569,14 +570,14 @@ function FakeAuthorization(props) {
                     // SDK 获取号码认证 token
                     window.JVerificationInterface.getToken({
                         operater:"CM",
-                        success: function(data)  { 
+                        success: function(data)  {
                             console.log(data,"获取token成功回调")
                             //TODO 获取token成功回调
                             var operater =data.operater;
                             var token =data.content;
                             authenticationNumber(data,form,exID);
-                        }, 
-                        fail: function(data)  { 
+                        },
+                        fail: function(data)  {
                             //TODO 获取token失败回调
                             console.log(data,"获取token失败回调");
                             setLoading(false);
@@ -597,7 +598,7 @@ function FakeAuthorization(props) {
                                 setOrderVerification(1);
                             }
                             setTipsCount(tipsCount+1);
-                        } 
+                        }
                     })
                 }
             }
@@ -624,6 +625,14 @@ function FakeAuthorization(props) {
             // }
           }
         });
+    }
+
+    const authentication = () =>{
+       try{
+           authenticationData();
+       } catch(e){
+           pageLogSave({log:e.message}).then(res=>{})
+       }
     }
 
     const onSubmit = () =>{

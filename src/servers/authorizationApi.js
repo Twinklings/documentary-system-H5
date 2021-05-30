@@ -94,4 +94,12 @@ export function certificationRecord(params) {
   //   }
   // })
 }
- 
+
+//日志收集
+export function pageLogSave(json) {
+    return request({
+        url: serverIP+"/pushlog/save",
+        method:'post',
+        data:json
+    })
+}
