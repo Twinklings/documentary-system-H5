@@ -55,7 +55,7 @@ export function placeAnOrder(params) {
 // 本机认证下单接口
 export function machinesaveOrder(params) {
   return request({
-    url:serverIP+"/placeorder/machinesaveOrder",
+    url:serverIP+"/placeorder/moveOrderSave",
     method:'post',
     data:params
   })
