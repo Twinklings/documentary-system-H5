@@ -107,31 +107,31 @@ function OrderAdd(props) {
         // let payAmount = getUrlParam('payAmount');// 这是获取请求路径中带code字段参数的方法
         // var local = window.location.href;//获取当前页面路径，即回调地址
 
-        // if(getUrlCode('code') === 'false'){
-        //     setVisible(false);
-        //     getWeChatConfig().then(response=>{
-        //         const {appid,STATE,redirect_uri} = response;
-        //         let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_base&state=${STATE}#wechat_redirect`
-        //         window.location.href = url
-        //     })
-        // }else{
-        //     if(validationEmpty(getUrlCode('code'))){
-        //         alert("请关闭窗口从新进入")
-        //     }else{
-        //         // http://h1.genleme.com/?code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9&state=mf20201022231202164794#/details
-        //         let param = window.location.href.split("?")[1];
+        if(getUrlCode('code') === 'false'){
+            setVisible(false);
+            getWeChatConfig().then(response=>{
+                const {appid,STATE,redirect_uri} = response;
+                let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_base&state=${STATE}#wechat_redirect`
+                window.location.href = url
+            })
+        }else{
+            if(validationEmpty(getUrlCode('code'))){
+                alert("请关闭窗口从新进入")
+            }else{
+                // http://h1.genleme.com/?code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9&state=mf20201022231202164794#/details
+                let param = window.location.href.split("?")[1];
 
-        //         let _paramCode = param.split("&")[0];//code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9
+                let _paramCode = param.split("&")[0];//code=081JQIkl2nWkQ54aqAll2CbqBq1JQIk9
 
-        //         let _param1 = param.split("&")[1];
+                let _param1 = param.split("&")[1];
 
-        //         let _param2 = _param1.split("=")[1];
+                let _param2 = _param1.split("=")[1];
 
-        //         let _param3 = _param2.split("#")[0];
+                let _param3 = _param2.split("#")[0];
 
-        //         getProductTrees(_param3,_paramCode.split("=")[1]);
-        //     }
-        // }
+                getProductTrees(_param3,_paramCode.split("=")[1]);
+            }
+        }
 
     }, [])
 
