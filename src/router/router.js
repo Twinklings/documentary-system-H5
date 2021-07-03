@@ -20,6 +20,8 @@ import FeedBack from '../pages/feedback/index'
 import FeedBackRecord from '../pages/feedback/list'
 import FeedBackDetail from '../pages/feedback/detail'
 
+import Test from '../pages/test';
+
 const BasicRoute = () => (
     <HashRouter>
         <Switch>
@@ -51,6 +53,8 @@ const BasicRoute = () => (
             <Route exact path="/feedback" component={FeedBack}/>
             <Route exact path="/feedbackrecord" component={FeedBackRecord}/>
             <Route exact path="/feedbackdetail" component={FeedBackDetail}/>
+
+            <Route exact path="/test" component={Test}/>
         </Switch>
     </HashRouter>
 );
