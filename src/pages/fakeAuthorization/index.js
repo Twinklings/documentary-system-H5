@@ -107,6 +107,10 @@ function FakeAuthorization(props) {
     const [initType,setInitType] = useState(false);
     const [initMsg,setInitMsg] = useState("");
 
+    const [iPdata,setIPdata] = useState({});
+
+    
+
     const getName = (data) => {
         
         for(let i=0; i<data.length; i++){
@@ -171,8 +175,77 @@ function FakeAuthorization(props) {
         getInit(parameter);
         // 获取验证码图片
         // getImgCode();
-
+        getIPdata();
     }, [])
+
+    const getIPdata = () => {
+        try{
+            if(!sessionStorage.returnCitySN){
+                return false;
+            }
+            let returnCitySN = JSON.parse(sessionStorage.returnCitySN);
+        
+            console.log(returnCitySN,"123123")
+    
+            let _data = {};
+            if(returnCitySN.cid){
+                _data.ip_address_code = returnCitySN.cid
+            }
+            if(returnCitySN.cip){
+                _data.ip_address = returnCitySN.cip
+            }
+            if(returnCitySN.cname){
+                _data.ip_address_describe = returnCitySN.cname
+            }
+            _data.equip_ua = window.navigator.userAgent;
+
+            console.log(_data,"_data");
+            setIPdata(_data);
+        }catch{
+
+        }
+    }
+    useEffect(()=>{
+        getCode(iPdata.ip_address_code,"1");
+    },[iPdata.ip_address]);
+
+    let addressList = [];
+
+    const getCode = (addressCode,time) => {
+        console.log(addressCode)
+        for(let i=0; i<CITY.length; i++){
+            if(CITY[i].children){
+                geIPcode(CITY[i],CITY[i].children,addressCode,time)
+            }
+        }
+    }
+
+    const geIPcode = (nextData,data,addressCode,time) => {
+        for(let i=0; i<data.length; i++){
+            if(data[i].value === addressCode){
+                if(time === "1"){
+                    addressList[2] = data[i]
+                }
+                if(time === "2"){
+                    addressList[0] = nextData
+                    addressList[1] = data[i];
+                    let code = '', text = '';
+                    addressList.map((item,index)=>{
+                        code = code === '' ? item.value : code+'|'+item.value;
+                        text = text === '' ? item.label : text+''+item.label
+                    })
+                    let _iPdata = {...iPdata}
+                    _iPdata.ip_address_code = code;
+                    _iPdata.ip_address_describe = text;
+                    console.log(_iPdata,"_iPdata")
+                    setIPdata(_iPdata);
+                }
+                getCode(nextData.value,"2")
+            }else if(data[i].children){
+                geIPcode(data[i],data[i].children,addressCode,time)
+            }
+        }
+    }
 
 
     useEffect(()=>{
@@ -504,13 +577,12 @@ function FakeAuthorization(props) {
         props.form.validateFields({ force: true }, (error) => {
           if (!error) {
             let form = props.form.getFieldsValue();
-
             // 是否需要短信验证
             if(orderVerification === 1){
                 setSMSvisibleModal(true);
                 resetPopUps();
                 setLoading(false);
-            }else{
+            }else if(orderVerification === 2){
 
                 // 生成 exID
                 let exID = new Date().getTime();
@@ -601,6 +673,8 @@ function FakeAuthorization(props) {
                         }
                     })
                 }
+            }else{
+                saveParam(form);
             }
 
           } else {
@@ -689,7 +763,10 @@ function FakeAuthorization(props) {
     const saveParam = (form,exID) => {
 
         console.log(form,cityName,"formformform")
+        // 中文
         let cityPark = cityName.split("_");
+        // code
+        // let cityPark = form.city
         console.log(cityPark)
         
         let param = {
@@ -712,25 +789,14 @@ function FakeAuthorization(props) {
             'product_id':initParam.product_id,
             'product_type_id':initParam.product_type_id,
             'pay_pany_id':initParam.pay_pany_id,
+            ...iPdata
         }
         console.log(param,"formformform")
 
         // authorization_type 免费2 伪授权 1
         if(initParam.authorization_type === 2){
-            if(orderVerification === 1){
-                placeAnOrder(param).then(response=>{
-                    setLoading(false);
-                    if(response.code === 200){
-                        Toast.success(response.message,toastTime);
-                        history.push('/fakeAuthorization/success');
-                    }else{
-                        Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
-                    }
-                }).catch(res=>{
-                    setLoading(false);
-                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
-                })
-            }else{
+             // 2 = 本机+短信   1 = 短信   0 = 无
+            if(orderVerification === 2){
                 if(exID){
                     machinesaveOrder({
                         ...param,
@@ -751,9 +817,84 @@ function FakeAuthorization(props) {
                     setLoading(false);
                     Toast.info('当前提交参数异常,请联系销售协助!',toastTime);
                 }
+            }else if(orderVerification === 1){
+                placeAnOrder(param).then(response=>{
+                    setLoading(false);
+                    if(response.code === 200){
+                        Toast.success(response.message,toastTime);
+                        history.push('/fakeAuthorization/success');
+                    }else{
+                        Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                    }
+                }).catch(res=>{
+                    setLoading(false);
+                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                })
+            }else{
+                machinesaveOrder({
+                    ...param
+                }).then(response=>{
+                    setLoading(false);
+                    if(response.code === 200){
+                        Toast.success(response.message,toastTime);
+                        history.push('/fakeAuthorization/success');
+                    }else{
+                        Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                    }
+                }).catch(res=>{
+                    setLoading(false);
+                    Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                })
             }
         }else{
-            if(orderVerification === 1){
+            // 2 = 本机+短信   1 = 短信   0 = 无
+            if(orderVerification === 2){
+                setLoading(false);
+                sessionStorage.saveParam = JSON.stringify({
+                    ...param,
+                    exID
+                });
+
+                if (/MicroMessenger/.test(window.navigator.userAgent)) {
+                    // 微信
+                    history.push('/fakeAuthorization/weixin');
+                } else if (/AlipayClient/.test(window.navigator.userAgent)) {
+                    // 支付宝
+                    history.push('/fakeAuthorization/alipay');
+                }else{
+                    // 浏览器打开的时候
+                    if(exID){
+                        machinesaveOrder({
+                            ...param,
+                            exID
+                        }).then(response=>{
+                            setLoading(false);
+                            if(response.code === 200){
+                                Toast.success(response.message,toastTime);
+                                history.push('/fakeAuthorization/success');
+                            }else{
+                                Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                            }
+                        }).catch(res=>{
+                            setLoading(false);
+                            Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                        })
+                    }else{
+                        placeAnOrder(param).then(response=>{
+                            setLoading(false);
+                            if(response.code === 200){
+                                Toast.success(response.message,toastTime);
+                                history.push('/fakeAuthorization/success');
+                            }else{
+                                Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                            }
+                        }).catch(res=>{
+                            setLoading(false);
+                            Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                        })
+                    }
+                }
+            }else if(orderVerification === 1){
                 smsCertification(param).then(res=>{
                     setLoading(false);
                     if(res.code === 200){
@@ -806,12 +947,9 @@ function FakeAuthorization(props) {
                     Toast.info(res.message || "当前提交异常,请联系销售协助!");
                 })
             }else{
-                setLoading(false);
-                sessionStorage.saveParam = JSON.stringify({
-                    ...param,
-                    exID
-                });
-
+                sessionStorage.orderVerification = orderVerification;
+                sessionStorage.saveParam = JSON.stringify(param);
+    
                 if (/MicroMessenger/.test(window.navigator.userAgent)) {
                     // 微信
                     history.push('/fakeAuthorization/weixin');
@@ -820,37 +958,20 @@ function FakeAuthorization(props) {
                     history.push('/fakeAuthorization/alipay');
                 }else{
                     // 浏览器打开的时候
-                    if(exID){
-                        machinesaveOrder({
-                            ...param,
-                            exID
-                        }).then(response=>{
-                            setLoading(false);
-                            if(response.code === 200){
-                                Toast.success(response.message,toastTime);
-                                history.push('/fakeAuthorization/success');
-                            }else{
-                                Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
-                            }
-                        }).catch(res=>{
-                            setLoading(false);
-                            Toast.info(res.message || "当前提交异常,请联系销售协助!");
-                        })
-                    }else{
-                        placeAnOrder(param).then(response=>{
-                            setLoading(false);
-                            if(response.code === 200){
-                                Toast.success(response.message,toastTime);
-                                history.push('/fakeAuthorization/success');
-                            }else{
-                                Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
-                            }
-                        }).catch(res=>{
-                            setLoading(false);
-                            Toast.info(res.message || "当前提交异常,请联系销售协助!");
-                        })
-                    }
-
+                    machinesaveOrder({
+                        ...param,
+                    }).then(response=>{
+                        setLoading(false);
+                        if(response.code === 200){
+                            Toast.success(response.message,toastTime);
+                            history.push('/fakeAuthorization/success');
+                        }else{
+                            Toast.fail(response.message || "当前提交异常,请联系销售协助!",toastTime);
+                        }
+                    }).catch(res=>{
+                        setLoading(false);
+                        Toast.info(res.message || "当前提交异常,请联系销售协助!");
+                    })
                 }
             }
         }
@@ -1120,10 +1241,10 @@ function FakeAuthorization(props) {
                 >
                     提交申请{smsCountDown != 30 ? `${smsCountDown}s` : ""}
                 </Button><WhiteSpace />
-
+                {/* // 2 = 本机+短信   1 = 短信   0 = 无 */}
                 {
                     // 是否是短信验证
-                    orderVerification != 1?(
+                    orderVerification === 2?(
                     <span
                         style={{
                             display: 'inline-block',
@@ -1262,6 +1383,7 @@ function FakeAuthorization(props) {
                         </div>
                     ):""
                 }
+                 {/* // 2 = 本机+短信   1 = 短信   0 = 无 */}
                 {
                 // 是否是短信验证
                 orderVerification === 1?(

@@ -66,7 +66,7 @@ function Alipay() {
             return false;
         }
         setLoading(true);
-        if(param.exID){
+        if(param.exID || sessionStorage.orderVerification === '0'){
             machinesaveOrder(param).then(response=>{
                 setLoading(false);
                 if(response.code === 200){
